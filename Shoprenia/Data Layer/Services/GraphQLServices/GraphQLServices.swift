@@ -46,6 +46,61 @@ class GraphQLServices : GraphQLServicesProtocol {
     }
     
     
+    func fetchProductDetails(
+        id: GraphQL.ID,
+        completion: @escaping (Result<Storefront.Product,Error>) -> Void){
+        
+        let query = Storefront.buildQuery { $0
+            
+            .product(id: id){ $0
+                
+                .availableForSale()
+                .description()
+                .id()
+                .isGiftCard()
+                .title()
+                .totalInventory()
+                .vendor()
+                .productType()
+                .tags()
+                .variants(first: 1){ $0
+                    .nodes{ $0
+                        .currentlyNotInStock()
+                        .price { $0
+                            .amount()
+                            .currencyCode()
+                        }
+                    }
+                }
+                .options(first: 2){ $0
+                    .name()
+                    .id()
+                    .values()
+                    
+                }
+                .featuredImage { $0
+                    .url()
+                }
+            }
+        }
+        
+            // Call the Database Request
+            client.queryGraphWith(query) { queryResponse, error in
+                guard let details = queryResponse?.product else {
+                    print(error!.localizedDescription)
+                    completion(.failure(error!))
+                    return
+                }
+                
+                
+                let productDetails: Storefront.Product = details
+                
+                completion(.success(productDetails))
+                //Execute the call
+            }.resume()
+    }
+    
+    
     func loginCustomer(email : String , password : String , completionhandler : @escaping (Bool) -> Void){
         let mutation = Storefront.buildMutation { $0
             .customerAccessTokenCreate(input: Storefront.CustomerAccessTokenCreateInput.create(email: email, password: password)) { $0
