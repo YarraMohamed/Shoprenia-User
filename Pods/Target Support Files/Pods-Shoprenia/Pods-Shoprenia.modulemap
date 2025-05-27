@@ -1,0 +1,6 @@
+framework module Pods_Shoprenia {
+  umbrella header "Pods-Shoprenia-umbrella.h"
+
+  export *
+  module * { export * }
+}

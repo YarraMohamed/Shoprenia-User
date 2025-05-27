@@ -1,11 +1,5 @@
-//
-//  ContentView.swift
-//  Shoprenia
-//
-//  Created by Yara Mohamed on 27/05/2025.
-//
-
 import SwiftUI
+import MobileBuySDK
 
 struct ContentView: View {
     var body: some View {
