@@ -1,16 +1,20 @@
 PODS:
+  - Kingfisher (7.12.0)
   - Mobile-Buy-SDK (2025.4.0)
 
 DEPENDENCIES:
+  - Kingfisher (~> 7.0)
   - Mobile-Buy-SDK
 
 SPEC REPOS:
   trunk:
+    - Kingfisher
     - Mobile-Buy-SDK
 
 SPEC CHECKSUMS:
+  Kingfisher: 53a10ea35051a436b5fb626ca2dd8f3144d755e9
   Mobile-Buy-SDK: 484638073ed665fbe4669b5b88f59a32163b0af0
 
-PODFILE CHECKSUM: 0134c5d76e3e6f46f752fbc4d6acc4ecfc5b8291
+PODFILE CHECKSUM: 118cce755e11143503a286023e0cde87ca170a05
 
 COCOAPODS: 1.16.2

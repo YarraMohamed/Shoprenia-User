@@ -4,7 +4,7 @@ import SwiftUI
 struct ShopreniaApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ProductDetailsView(productId:"gid://shopify/Product/7936016351306")
         }
     }
 }
