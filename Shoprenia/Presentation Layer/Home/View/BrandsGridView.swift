@@ -6,25 +6,18 @@
 //
 
 import SwiftUI
+import MobileBuySDK
 
 struct BrandsGridView: View {
-    var brands : [BrandDummyData] = [
-        BrandDummyData(),BrandDummyData(),
-        BrandDummyData(),BrandDummyData(),
-        BrandDummyData(),BrandDummyData(),
-        BrandDummyData(),BrandDummyData(),
-        BrandDummyData(),BrandDummyData(),
-        BrandDummyData(),BrandDummyData(),
-        BrandDummyData(),BrandDummyData(),
-    ]
+    let brands: [Storefront.Collection]
     
     let columns : [GridItem] = [GridItem(.flexible()),GridItem(.flexible())]
     
     var body: some View {
         ScrollView{
             LazyVGrid(columns: columns,spacing: 20){
-                ForEach(brands) { brand in
-                    BrandView()
+                ForEach(brands, id: \.id) { brand in
+                    BrandView(brand: brand)
                 }
             }
         }
@@ -32,5 +25,5 @@ struct BrandsGridView: View {
 }
 
 #Preview {
-    BrandsGridView()
+   // BrandsGridView()
 }

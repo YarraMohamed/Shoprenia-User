@@ -148,26 +148,4 @@ class GraphQLServices : GraphQLServicesProtocol {
             completionHandler(.success(customer))
         }.resume()
     }
-    
-    
-    func fetchVendors(completionHandler : @escaping (Result<Storefront.Collection,Error>)->Void){
-        let query = Storefront.buildQuery { $0
-            .collections(first:10 ){ $0
-                .nodes{ $0
-                    .id()
-                    .title()
-                }
-            }
-        }
-        
-        client.queryGraphWith(query) { queryResponse, error in
-            guard let title = queryResponse?.collections.nodes.first?.title else {
-                print(error?.localizedDescription ?? "error")
-                completionHandler(.failure(error!))
-                return
-            }
-            print(title)
-            
-        }.resume()
-    }
 }

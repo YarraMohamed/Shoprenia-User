@@ -6,19 +6,40 @@
 //
 
 import SwiftUI
+import MobileBuySDK
 
 struct BrandView: View {
+    var brand : Storefront.Collection?
     var body: some View {
         VStack{
-            Image(.brandImg)
-                .resizable()
-                .frame(width: 150, height: 150)
+            AsyncImage(url: brandImageURL(for: brand?.title ?? "")) { phase in
+                switch phase {
+                case .empty:
+                    ProgressView()
+                        .frame(width: 150, height: 150)
+                case .success(let image):
+                    image
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 150, height: 160)
+                        .clipped()
+                case .failure:
+                    Image(.brandImg)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width:150, height: 160)
+                        .clipped()
+                @unknown default:
+                    EmptyView()
+                }
+            }
             Spacer()
-            Text("Addidas")
-                .font(.title)
+            Text(brand?.title ?? "")
+                .font(.title3)
                 .fontWeight(.semibold)
                 .foregroundColor(.black)
                 .fontDesign(.rounded)
+                .padding(.bottom,10)
             
         }.frame(width: 170,height: 200)
             .background(Color.white)

@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct CustomNavigationBar: View {
+   // @Binding var showSearch: Bool
     var body: some View {
         HStack{
             Text("Shoprenia")
@@ -17,15 +18,20 @@ struct CustomNavigationBar: View {
                 .foregroundColor(.app)
             Spacer()
             HStack(spacing: 20) {
-                NavigationLink(destination: PlaceholderView()) {
-                    Image(.search)
-                }
-                NavigationLink(destination: PlaceholderView()) {
-                    Image(.trolley)
-                }
-                NavigationLink(destination: PlaceholderView()) {
-                    Image(.heart)
-                }
+                Image(.search)
+                Image(.trolley)
+                Image(.heart)
+//                Button(action: {
+//                                   showSearch = true
+//                               }) {
+//                                   Image(.search)
+//                               }
+//                NavigationLink(destination: PlaceholderView()) {
+//                    Image(.trolley)
+//                }
+//                NavigationLink(destination: PlaceholderView()) {
+//                    Image(.heart)
+//                }
             }
         }
         .padding(.horizontal)
@@ -34,6 +40,7 @@ struct CustomNavigationBar: View {
 }
 
 #Preview {
+   // CustomNavigationBar(showSearch: .constant(false))
     CustomNavigationBar()
 }
 
