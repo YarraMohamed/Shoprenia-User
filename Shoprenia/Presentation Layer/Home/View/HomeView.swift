@@ -9,13 +9,10 @@ import SwiftUI
 
 struct HomeView: View {
     @StateObject private var viewModel: HomeViewModel
-//    @State private var showSearch = false
+    @Binding var path : NavigationPath
     var body: some View {
         VStack(alignment: .leading){
-            CustomNavigationBar()
-//                .fullScreenCover(isPresented: $showSearch) {
-//                            PlaceholderView()
-//                        }
+            CustomNavigationBar(path: $path)
             CouponsView()
             Text("Brands")
                 .font(.title3)
@@ -28,6 +25,9 @@ struct HomeView: View {
             }else{
                 BrandsGridView(brands: viewModel.brands)
                     .frame(height: 350)
+                    .onTapGesture {
+                        path.append(AppRoute.productDetails)
+                    }
             }
             
         }
@@ -39,14 +39,15 @@ struct HomeView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
     }
 
-    init() {
+    init(path: Binding<NavigationPath>) {
         let service = VendorService()
         let repo = VendorsRepository(vendorService: service)
         let useCase = GetVendors(repository: repo)
         _viewModel = StateObject(wrappedValue: HomeViewModel(fetchBrandsUseCase: useCase))
+        self._path = path
     }
 }
 
 #Preview {
-    HomeView()
+    HomeView(path: .constant(NavigationPath()))
 }
