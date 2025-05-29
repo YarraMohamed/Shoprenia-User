@@ -1,15 +1,15 @@
 //
-//  CategoriesView.swift
+//  ProductsView.swift
 //  Shoprenia
 //
-//  Created by Yara Mohamed on 29/05/2025.
+//  Created by Yara Mohamed on 30/05/2025.
 //
 
 import SwiftUI
 
-struct CategoriesView: View {
+struct ProductsView: View {
     var body: some View {
-        Text("CategoriesView")
+        Text("Products")
             .font(.largeTitle)
             .fontWeight(.medium)
             .foregroundColor(.app)
@@ -17,5 +17,5 @@ struct CategoriesView: View {
 }
 
 #Preview {
-    CategoriesView()
+    ProductsView()
 }

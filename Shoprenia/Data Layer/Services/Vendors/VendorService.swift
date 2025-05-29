@@ -27,7 +27,6 @@ class VendorService: VendorServiceProtocol {
             if let error = error {
                 completion(.failure(error))
             }else if let data = query?.collections.nodes {
-                print(data)
                 completion(.success(data))
             } else {
                 completion(.failure(NSError(domain: "Unknown error", code: -1)))
