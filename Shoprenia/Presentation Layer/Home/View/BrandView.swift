@@ -12,7 +12,7 @@ struct BrandView: View {
     var brand : Storefront.Collection?
     var body: some View {
         VStack{
-            AsyncImage(url: brandImageURL(for: brand?.title ?? "")) { phase in
+            AsyncImage(url: brand?.image?.url) { phase in
                 switch phase {
                 case .empty:
                     ProgressView()

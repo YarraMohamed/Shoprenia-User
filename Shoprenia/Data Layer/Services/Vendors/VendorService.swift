@@ -16,6 +16,9 @@ class VendorService: VendorServiceProtocol {
                 .nodes{ $0
                     .id()
                     .title()
+                    .image {$0
+                        .url()
+                    }
                 }
             }
         }
