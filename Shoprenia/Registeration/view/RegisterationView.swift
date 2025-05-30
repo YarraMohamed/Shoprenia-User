@@ -3,14 +3,9 @@ import FirebaseCore
 import FirebaseAuth
 
 struct RegisterationView: View {
-    @State private var name = ""
-    @State private var email = ""
-    @State private var password = ""
-    @State private var showNameErrorMsg = false
-    @State private var showEmailErrorMsg = false
-    @State private var showPasswordErrorMsg = false
-    @StateObject private var validator = RegisterationValidator()
-
+    @StateObject private var viewModel = RegistarationViewModel()
+    @StateObject private var authManager = FirebaseAuthenticationManager.shared
+    
     var body: some View {
         VStack{
             HStack{
@@ -23,55 +18,63 @@ struct RegisterationView: View {
                 Spacer()
             }
             
-           
-            HStack{
-                TextField("Name",text: $name)
-                    .autocorrectionDisabled()
+            VStack{
+                
+                Spacer()
+                
+                TextField("Name...",text: $viewModel.name)
                     .padding()
-                    .textFieldStyle(.roundedBorder)
-            }
-            .padding()
-            
-            if showNameErrorMsg {
-                Text("Name should be more than 3 charachters")
-                    .foregroundStyle(.red)
-                    .font(.system(size: 10,weight: .semibold))
-            }
-            
-            HStack{
-                TextField("Email",text: $email)
+                    .background(Color.gray.opacity(0.4))
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                    .onChange(of: viewModel.name) { oldValue,newValue in
+                            viewModel.nameEdited = true
+                        }
+
+                    if viewModel.nameEdited && !viewModel.isValidName() {
+                        Text("Name should be more than 3 characters")
+                            .foregroundStyle(.red)
+                            .font(.system(size: 10, weight: .semibold))
+                    }
+                
+                TextField("Email...",text:$viewModel.email)
                     .keyboardType(.emailAddress)
                     .textContentType(.emailAddress)
-                    .textInputAutocapitalization(.none)
+                    .textInputAutocapitalization(.never)
                     .autocorrectionDisabled()
                     .padding()
-                    .textFieldStyle(.roundedBorder)
-            }
-            .padding()
-            
-            if showEmailErrorMsg{
-                Text("Invalid email address")
-                    .foregroundStyle(.red)
-                    .font(.system(size: 10,weight: .semibold))
-            }
-            
-            HStack{
-                SecureField("Password",text: $password)
-                    .textInputAutocapitalization(.none)
+                    .background(Color.gray.opacity(0.4))
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                    .onChange(of: viewModel.email) { oldValue,newValue in
+                            viewModel.emailEdited = true
+                        }
+
+                    if viewModel.emailEdited && !viewModel.isValidEmail() {
+                        Text("Email should be in a valid format")
+                            .foregroundStyle(.red)
+                            .font(.system(size: 10, weight: .semibold))
+                    }
+                
+                
+                SecureField("Password",text: $viewModel.password)
+                    .textInputAutocapitalization(.never)
                     .autocorrectionDisabled()
                     .padding()
-                    .textFieldStyle(.roundedBorder)
+                    .background(Color.gray.opacity(0.4))
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                    .onChange(of: viewModel.password) { oldValue,newValue in
+                            viewModel.passwordEdited = true
+                        }
+
+                    if viewModel.passwordEdited && !viewModel.isValidPassword() {
+                        Text("Password should be longer than 7 charachters")
+                            .foregroundStyle(.red)
+                            .font(.system(size: 10, weight: .semibold))
+                    }
             }
             .padding()
-            
-            if showPasswordErrorMsg{
-                Text("Password should be longer than 7 characters")
-                    .foregroundStyle(.red)
-                    .font(.system(size: 10,weight: .semibold))
-            }
             
             NavigationLink {
-               // LoginView() msln y3ne
+               Text("Login Page")
             } label: {
                 HStack {
                     Spacer()
@@ -87,35 +90,27 @@ struct RegisterationView: View {
                     .padding(.trailing, 16)
                 }
             }
-            
-            NavigationLink{
-                //HomeView() Msln lw 3ml registeration
-            } label: {
                 
                 HStack{
                     Button("Sign Up"){
                         
-                       showEmailErrorMsg =  validator.isValidEmail(email)
-                        
-                       showNameErrorMsg =  validator.isValidName(name)
-                        
-                       showPasswordErrorMsg =  validator.isValidPassword(password)
-                        
-                        if showNameErrorMsg == true && showEmailErrorMsg == true && showPasswordErrorMsg == true {
-                            //register in firebase && navigate to home
+                        if viewModel.isValidEmail() && viewModel.isValidName() && viewModel.isValidPassword() {
+                            
+                            authManager.createUser(email: viewModel.email, password: viewModel.password, name: viewModel.name)
+                            
                         }
                         
                     }
                     .font(.system(size: 16, weight: .semibold))
                     .foregroundStyle(.white)
-                    .frame(width: 343, height: 48) // Fixed width & height
+                    .frame(width: 343, height: 48)
                     .background {
                         RoundedRectangle(cornerRadius: 30)
                             .fill(.blue)
                     }
                 }
                 .padding(.vertical)
-            }
+            
             
             VStack{
                 Spacer()
@@ -123,7 +118,7 @@ struct RegisterationView: View {
                 HStack(spacing: 10){
                     
                     Button(action:{
-                        //logic firebase
+                        
                     }){
                         Image("g")
                             .resizable()
@@ -172,5 +167,4 @@ struct RegisterationView: View {
     NavigationStack{
         RegisterationView()
     }
-    
 }

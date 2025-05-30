@@ -15,15 +15,10 @@ struct ProductDetailsView: View {
                     .placeholder{
                         ProgressView()
                     }
-                    .onFailure{ error in
-                        print("Failed to get product image in details \(error.localizedDescription)")
-                    }
                     .aspectRatio(contentMode: .fit)
                     .frame(height: 310)
             }
-            
-            
-                
+             
                 HStack{
                     Text(productDetails?.title ?? "No Name")
                         .font(.system(size: 20,weight: .semibold))

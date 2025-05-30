@@ -127,6 +127,32 @@ class GraphQLServices : GraphQLServicesProtocol {
     }
     
     
+    func createCustomer(email : String , password : String ,firstName : String, lastName : String, phone : String, acceptsMarketing : String,  completionhandler : @escaping (Bool) -> Void){
+        let mutation = Storefront.buildMutation { $0
+            .customerAccessTokenCreate(input: Storefront.CustomerAccessTokenCreateInput.create(email: email, password: password)) { $0
+                .customerAccessToken { $0
+                    .accessToken()
+                    .expiresAt()
+                }.customerUserErrors { $0
+                    .field()
+                    .message()
+                }
+            }
+        }
+        
+        client.mutateGraphWith(mutation) { mutationResponse, error in
+            guard let accessToken = mutationResponse?.customerAccessTokenCreate?.customerAccessToken?.accessToken else {
+                print(error!.localizedDescription)
+                completionhandler(false)
+                return
+            }
+            
+            self.accessToken = accessToken
+            completionhandler(true)
+        }.resume()
+    }
+    
+    
     func fetchCustomer(completionHandler : @escaping (Result<Storefront.Customer,Error>)->Void){
         guard let accessToken = accessToken else{
             return
