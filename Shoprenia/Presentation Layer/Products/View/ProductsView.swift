@@ -8,11 +8,22 @@
 import SwiftUI
 
 struct ProductsView: View {
+    var vendor : String?
     var body: some View {
-        Text("Products")
-            .font(.largeTitle)
-            .fontWeight(.medium)
-            .foregroundColor(.app)
+        VStack{
+           Divider()
+            HStack{
+                Image(systemName: "magnifyingglass")
+                    .foregroundColor(.gray)
+                TextField("Search", text: .constant(""))
+            }
+            .padding(10)
+            .background(Color(.systemGray6))
+            .cornerRadius(8)
+            .padding()
+            ProductsGridView()
+        }.navigationTitle(vendor ?? "Products")
+      
     }
 }
 

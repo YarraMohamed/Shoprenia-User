@@ -11,6 +11,6 @@ enum AppRoute: Hashable {
     case search
     case cart
     case favorites
-    case productDetails
+    case Products(vendor: String)
    // case productDetails(id:Int)
 }

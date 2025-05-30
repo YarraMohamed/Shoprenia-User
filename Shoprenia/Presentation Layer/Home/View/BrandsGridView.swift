@@ -9,6 +9,7 @@ import SwiftUI
 import MobileBuySDK
 
 struct BrandsGridView: View {
+    @Binding var path : NavigationPath
     let brands: [Storefront.Collection]
     
     let columns : [GridItem] = [GridItem(.flexible()),GridItem(.flexible())]
@@ -18,6 +19,10 @@ struct BrandsGridView: View {
             LazyVGrid(columns: columns,spacing: 20){
                 ForEach(brands, id: \.id) { brand in
                     BrandView(brand: brand)
+                        .onTapGesture {
+                            path.append(AppRoute.Products(vendor: brand.title))
+                        }
+                        
                 }
             }
         }

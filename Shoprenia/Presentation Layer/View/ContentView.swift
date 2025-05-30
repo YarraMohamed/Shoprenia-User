@@ -9,13 +9,13 @@ struct ContentView: View {
                 .navigationDestination(for: AppRoute.self) { route in
                     switch route {
                     case .search :
-                        PlaceholderView()
+                       ProductsView()
                     case .cart:
                         PlaceholderView()
                     case .favorites:
                         PlaceholderView()
-                    case .productDetails:
-                        ProductsView()
+                    case .Products(let vendor):
+                        ProductsView(vendor: vendor)
                     }
                 }
         }
