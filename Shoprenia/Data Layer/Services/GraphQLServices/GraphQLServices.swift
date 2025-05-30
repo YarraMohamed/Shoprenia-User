@@ -75,7 +75,10 @@ class GraphQLServices : GraphQLServicesProtocol {
                 .options(first: 2){ $0
                     .name()
                     .id()
-                    .values()
+                    .optionValues { $0
+                        .id()
+                        .name()
+                    }
                     
                 }
                 .featuredImage { $0

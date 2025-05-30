@@ -64,10 +64,10 @@ struct ProductDetailsView: View {
             
             HStack {
                 Menu {
-                    ForEach(productDetails?.options[0].values ?? [], id: \.self) { size in
+                    ForEach(productDetails?.options.first?.optionValues ?? [], id: \.id) { sizeObj in
                         
-                        Button(size) {
-                            self.selectedSize = size
+                        Button(sizeObj.name) {
+                            self.selectedSize = sizeObj.name
                         }
                     }
                 } label: {
@@ -96,10 +96,10 @@ struct ProductDetailsView: View {
             
             HStack{
                 Menu{
-                    ForEach(productDetails?.options[1].values ?? [],id:\.self){ color in
+                    ForEach(productDetails?.options[1].optionValues ?? [],id:\.id){ colorObj in
                         
-                        Button(color){
-                            selectedColor = color
+                        Button(colorObj.name){
+                            selectedColor = colorObj.name
                         }
                     }
                 } label: {

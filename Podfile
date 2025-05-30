@@ -9,6 +9,4 @@ target 'Shoprenia' do
 
 	pod "Mobile-Buy-SDK"
 	pod 'Kingfisher', '~> 7.0'
-	pod 'FirebaseAnalytics'
-	pod 'FirebaseAuth' 
 end

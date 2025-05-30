@@ -1,10 +1,10 @@
 import SwiftUI
-import FirebaseCore
-import FirebaseAuth
+//import FirebaseCore
+//import FirebaseAuth
 
 struct RegisterationView: View {
     @StateObject private var viewModel = RegistarationViewModel()
-    @StateObject private var authManager = FirebaseAuthenticationManager.shared
+//    @StateObject private var authManager = FirebaseAuthenticationManager.shared
     
     var body: some View {
         VStack{
@@ -96,7 +96,7 @@ struct RegisterationView: View {
                         
                         if viewModel.isValidEmail() && viewModel.isValidName() && viewModel.isValidPassword() {
                             
-                            authManager.createUser(email: viewModel.email, password: viewModel.password, name: viewModel.name)
+                            ///
                             
                         }
                         
