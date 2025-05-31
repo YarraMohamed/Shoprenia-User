@@ -18,7 +18,7 @@ struct ProductsGridView: View {
             LazyVGrid(columns: columns,spacing: 20){
                 ForEach(products, id: \.id) { product in
                     ProductItem(product: product)
-                }
+                }.padding(.top,5)
             }
         }
     }
