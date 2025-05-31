@@ -24,15 +24,16 @@ struct BrandView: View {
                         .frame(width: 150, height: 160)
                         .clipped()
                 case .failure:
-                    Image(.brandImg)
+                    Image(.brandPlaceholder)
                         .resizable()
                         .scaledToFit()
-                        .frame(width:150, height: 160)
+                        .frame(width: 150,height: 150)
                         .clipped()
                 @unknown default:
                     EmptyView()
                 }
             }
+            
             Spacer()
             Text(brand?.title ?? "")
                 .font(.title3)
@@ -45,6 +46,7 @@ struct BrandView: View {
             .background(Color.white)
             .cornerRadius(16)
             .shadow(radius: 3)
+            
     }
 }
 

@@ -23,11 +23,8 @@ struct HomeView: View {
                 ProgressView("Loading...")
                    .frame(height: 350)
             }else{
-                BrandsGridView(brands: viewModel.brands)
+                BrandsGridView(path: $path, brands: viewModel.brands)
                     .frame(height: 350)
-                    .onTapGesture {
-                        path.append(AppRoute.productDetails)
-                    }
             }
             
         }
