@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		049663032DE856A600D4B083 /* Buy in Frameworks */ = {isa = PBXBuildFile; productRef = 049663022DE856A600D4B083 /* Buy */; };
 		BBB83FD65FE549F07DE35849 /* Pods_Shoprenia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4C6E8F4A8C24CA87A12C72D /* Pods_Shoprenia.framework */; };
 /* End PBXBuildFile section */
 
@@ -17,9 +18,22 @@
 		E3A2FD752BAE50625AC369F2 /* Pods-Shoprenia.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Shoprenia.debug.xcconfig"; path = "Target Support Files/Pods-Shoprenia/Pods-Shoprenia.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		04FDA9062DE87B120025F7F5 /* Exceptions for "Shoprenia" folder in "Shoprenia" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = C11217612DE6390C00C7C2B8 /* Shoprenia */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		C11217642DE6390C00C7C2B8 /* Shoprenia */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				04FDA9062DE87B120025F7F5 /* Exceptions for "Shoprenia" folder in "Shoprenia" target */,
+			);
 			path = Shoprenia;
 			sourceTree = "<group>";
 		};
@@ -31,6 +45,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BBB83FD65FE549F07DE35849 /* Pods_Shoprenia.framework in Frameworks */,
+				049663032DE856A600D4B083 /* Buy in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -121,6 +136,9 @@
 			);
 			mainGroup = C11217592DE6390C00C7C2B8;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				049663012DE856A600D4B083 /* XCRemoteSwiftPackageReference "mobile-buy-sdk-ios" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = C11217632DE6390C00C7C2B8 /* Products */;
 			projectDirPath = "";
@@ -325,21 +343,23 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = WCP4N8G9J9;
+				DEVELOPMENT_TEAM = GV332GP2NF;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Shoprenia/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = ITI.Shoprenia;
+				PRODUCT_BUNDLE_IDENTIFIER = ITI.Shopreniar;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -355,21 +375,23 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = WCP4N8G9J9;
+				DEVELOPMENT_TEAM = GV332GP2NF;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Shoprenia/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = ITI.Shoprenia;
+				PRODUCT_BUNDLE_IDENTIFIER = ITI.Shopreniar;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -399,6 +421,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		049663012DE856A600D4B083 /* XCRemoteSwiftPackageReference "mobile-buy-sdk-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Shopify/mobile-buy-sdk-ios.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2025.4.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		049663022DE856A600D4B083 /* Buy */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 049663012DE856A600D4B083 /* XCRemoteSwiftPackageReference "mobile-buy-sdk-ios" */;
+			productName = Buy;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = C112175A2DE6390C00C7C2B8 /* Project object */;
 }
