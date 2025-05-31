@@ -1,10 +1,9 @@
 import SwiftUI
-//import FirebaseCore
-//import FirebaseAuth
+import FirebaseCore
+import FirebaseAuth
 
 struct RegisterationView: View {
     @StateObject private var viewModel = RegistarationViewModel()
-//    @StateObject private var authManager = FirebaseAuthenticationManager.shared
     
     var body: some View {
         VStack{
@@ -22,16 +21,31 @@ struct RegisterationView: View {
                 
                 Spacer()
                 
-                TextField("Name...",text: $viewModel.name)
+                TextField("First name...",text: $viewModel.firstName)
                     .padding()
                     .background(Color.gray.opacity(0.4))
                     .clipShape(RoundedRectangle(cornerRadius: 10))
-                    .onChange(of: viewModel.name) { oldValue,newValue in
-                            viewModel.nameEdited = true
+                    .onChange(of: viewModel.firstName) { oldValue,newValue in
+                            viewModel.firstNameEdited = true
                         }
 
-                    if viewModel.nameEdited && !viewModel.isValidName() {
-                        Text("Name should be more than 3 characters")
+                if viewModel.firstNameEdited && !viewModel.isValidName(viewModel.firstName) {
+                        Text("First Name should be more than 3 characters")
+                            .foregroundStyle(.red)
+                            .font(.system(size: 10, weight: .semibold))
+                    }
+                
+                
+                TextField("Last name...",text: $viewModel.lastName)
+                    .padding()
+                    .background(Color.gray.opacity(0.4))
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                    .onChange(of: viewModel.lastName) { oldValue,newValue in
+                            viewModel.lastNameEdited = true
+                        }
+
+                if viewModel.lastNameEdited && !viewModel.isValidName(viewModel.lastName) {
+                        Text("Last Name should be more than 3 characters")
                             .foregroundStyle(.red)
                             .font(.system(size: 10, weight: .semibold))
                     }
@@ -55,6 +69,22 @@ struct RegisterationView: View {
                     }
                 
                 
+                TextField("Phone Number...",text:$viewModel.phoneNumber)
+                    .keyboardType(.numberPad)
+                    .textContentType(.telephoneNumber)
+                    .padding()
+                    .background(Color.gray.opacity(0.4))
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                    .onChange(of: viewModel.phoneNumber) { oldValue,newValue in
+                            viewModel.phoneEdited = true
+                        }
+
+                    if viewModel.phoneEdited && !viewModel.isValidPhoneNumber() {
+                        Text("Phone number should consist of 11 numbers")
+                            .foregroundStyle(.red)
+                            .font(.system(size: 10, weight: .semibold))
+                    }
+                
                 SecureField("Password",text: $viewModel.password)
                     .textInputAutocapitalization(.never)
                     .autocorrectionDisabled()
@@ -70,6 +100,7 @@ struct RegisterationView: View {
                             .foregroundStyle(.red)
                             .font(.system(size: 10, weight: .semibold))
                     }
+                
             }
             .padding()
             
@@ -94,9 +125,12 @@ struct RegisterationView: View {
                 HStack{
                     Button("Sign Up"){
                         
-                        if viewModel.isValidEmail() && viewModel.isValidName() && viewModel.isValidPassword() {
+                        if viewModel.allValidation()
+                            {
                             
-                            ///
+                            viewModel.createUser(email: viewModel.email, password: viewModel.password, name: viewModel.firstName)
+                            
+                            viewModel.createShopifyCustomer(email: viewModel.email, password: viewModel.password, firstName: viewModel.firstName, lastName: viewModel.lastName, phone: viewModel.phoneNumber)
                             
                         }
                         
@@ -114,28 +148,13 @@ struct RegisterationView: View {
             
             VStack{
                 Spacer()
-                Text("Or Sign up with social account")
+                Text("Or Sign up with Google")
                 HStack(spacing: 10){
                     
                     Button(action:{
-                        
+                        //method google
                     }){
                         Image("g")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 50,height: 50)
-                            .overlay(
-                                        RoundedRectangle(cornerRadius: 10)
-                                            .stroke(Color.black,
-                                            lineWidth: 1
-                                        )
-                                    )
-                    }
-                    
-                    Button(action:{
-                        //logic firebase
-                    }){
-                        Image("apple")
                             .resizable()
                             .scaledToFit()
                             .frame(width: 50,height: 50)
@@ -151,6 +170,11 @@ struct RegisterationView: View {
             
             Spacer()
         }
+        .alert("Verify Your Email", isPresented: $viewModel.showVerificationAlert) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text("We've sent a verification email to \(viewModel.email) . Please check your inbox, click the verification link and login.")
+        }
         .toolbar{
             ToolbarItem(placement: .topBarLeading) {
                     VStack {
@@ -162,7 +186,6 @@ struct RegisterationView: View {
         }
     }
 }
-
 #Preview {
     NavigationStack{
         RegisterationView()

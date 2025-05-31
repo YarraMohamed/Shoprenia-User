@@ -2,7 +2,7 @@ import Foundation
 import MobileBuySDK
 
 class GraphQLServices : GraphQLServicesProtocol {
-    
+   
     static let shared = GraphQLServices()
     
     let client: Graph.Client
@@ -87,11 +87,12 @@ class GraphQLServices : GraphQLServicesProtocol {
             }
         }
         
-            // Call the Database Request
+            // Call the api with query Request
             client.queryGraphWith(query) { queryResponse, error in
                 guard let details = queryResponse?.product else {
-                    print(error!.localizedDescription)
-                    completion(.failure(error!))
+                    guard let error = error else {return}
+                    print(error.localizedDescription)
+                    completion(.failure(error))
                     return
                 }
                 
@@ -104,7 +105,8 @@ class GraphQLServices : GraphQLServicesProtocol {
     }
     
     
-    func loginCustomer(email : String , password : String , completionhandler : @escaping (Bool) -> Void){
+    func getCustomerAccessToken(email : String , password : String , completionhandler : @escaping (Bool) -> Void){
+        //build query
         let mutation = Storefront.buildMutation { $0
             .customerAccessTokenCreate(input: Storefront.CustomerAccessTokenCreateInput.create(email: email, password: password)) { $0
                 .customerAccessToken { $0
@@ -117,6 +119,7 @@ class GraphQLServices : GraphQLServicesProtocol {
             }
         }
         
+        //call api with mutation
         client.mutateGraphWith(mutation) { mutationResponse, error in
             guard let accessToken = mutationResponse?.customerAccessTokenCreate?.customerAccessToken?.accessToken else {
                 print(error!.localizedDescription)
@@ -126,32 +129,49 @@ class GraphQLServices : GraphQLServicesProtocol {
             
             self.accessToken = accessToken
             completionhandler(true)
+            //execute call
         }.resume()
     }
     
     
-    func createCustomer(email : String , password : String ,firstName : String, lastName : String, phone : String, acceptsMarketing : String,  completionhandler : @escaping (Bool) -> Void){
-        let mutation = Storefront.buildMutation { $0
-            .customerAccessTokenCreate(input: Storefront.CustomerAccessTokenCreateInput.create(email: email, password: password)) { $0
-                .customerAccessToken { $0
-                    .accessToken()
-                    .expiresAt()
-                }.customerUserErrors { $0
+    func createCustomer(email : String ,
+                        password : String ,
+                        firstName : String,
+                        lastName : String,
+                        phone : String,
+                        completion: @escaping (Result<Storefront.Customer,Error>) -> Void){
+
+        let mutation = Storefront.buildMutation{$0
+            .customerCreate(input: Storefront.CustomerCreateInput.create(email: email, password: password, firstName: .value(firstName), lastName: .value(lastName), phone: .value(phone))) { $0
+                
+                .customer { $0
+                    .id()
+                    .firstName()
+                    .lastName()
+                    .email()
+                    .phone()
+                    .displayName()
+                }
+                .customerUserErrors { $0
+                
                     .field()
                     .message()
+                    
                 }
             }
         }
         
+        
         client.mutateGraphWith(mutation) { mutationResponse, error in
-            guard let accessToken = mutationResponse?.customerAccessTokenCreate?.customerAccessToken?.accessToken else {
-                print(error!.localizedDescription)
-                completionhandler(false)
+            guard let createdCustomer = mutationResponse?.customerCreate?.customer else {
+                guard let error = error else {return}
+                print(error)
+                completion(.failure(error))
                 return
             }
             
-            self.accessToken = accessToken
-            completionhandler(true)
+            
+            completion(.success(createdCustomer))
         }.resume()
     }
     
