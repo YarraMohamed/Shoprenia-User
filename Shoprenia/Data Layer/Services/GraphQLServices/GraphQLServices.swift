@@ -2,12 +2,10 @@ import Foundation
 import MobileBuySDK
 
 class GraphQLServices : GraphQLServicesProtocol {
-   
+  
     static let shared = GraphQLServices()
     
     let client: Graph.Client
-    
-    var accessToken: String?
     
     private init() {
         self.client = Graph.Client(shopDomain: ShopifyKeys.shopDomain.rawValue, apiKey: ShopifyKeys.storefrontToken.rawValue)
@@ -105,35 +103,6 @@ class GraphQLServices : GraphQLServicesProtocol {
     }
     
     
-    func getCustomerAccessToken(email : String , password : String , completionhandler : @escaping (Bool) -> Void){
-        //build query
-        let mutation = Storefront.buildMutation { $0
-            .customerAccessTokenCreate(input: Storefront.CustomerAccessTokenCreateInput.create(email: email, password: password)) { $0
-                .customerAccessToken { $0
-                    .accessToken()
-                    .expiresAt()
-                }.customerUserErrors { $0
-                    .field()
-                    .message()
-                }
-            }
-        }
-        
-        //call api with mutation
-        client.mutateGraphWith(mutation) { mutationResponse, error in
-            guard let accessToken = mutationResponse?.customerAccessTokenCreate?.customerAccessToken?.accessToken else {
-                print(error!.localizedDescription)
-                completionhandler(false)
-                return
-            }
-            
-            self.accessToken = accessToken
-            completionhandler(true)
-            //execute call
-        }.resume()
-    }
-    
-    
     func createCustomer(email : String ,
                         password : String ,
                         firstName : String,
@@ -151,6 +120,8 @@ class GraphQLServices : GraphQLServicesProtocol {
                     .email()
                     .phone()
                     .displayName()
+                    .createdAt()
+                    
                 }
                 .customerUserErrors { $0
                 
@@ -176,22 +147,51 @@ class GraphQLServices : GraphQLServicesProtocol {
     }
     
     
-    func fetchCustomer(completionHandler : @escaping (Result<Storefront.Customer,Error>)->Void){
-        guard let accessToken = accessToken else{
-            return
+    func createCustomerAccessToken(email : String , password : String , completionhandler : @escaping (Result<String, Error>) -> Void){
+        
+        let mutation = Storefront.buildMutation { $0
+            .customerAccessTokenCreate(input: Storefront.CustomerAccessTokenCreateInput.create(email: email, password: password)) { $0
+                .customerAccessToken { $0
+                    .accessToken()
+                }.customerUserErrors { $0
+                    .field()
+                    .message()
+                }
+            }
         }
+        
+        client.mutateGraphWith(mutation) { mutationResponse, error in
+            guard let accessToken = mutationResponse?.customerAccessTokenCreate?.customerAccessToken?.accessToken else {
+                guard let error = error else {return}
+                completionhandler(.failure(error))
+                return
+            }
+            
+            completionhandler(.success(accessToken))
+            //execute call
+        }.resume()
+    }
+    
+    
+    func getCustomerByAccessToken(accessToken:String,completionHandler : @escaping (Result<Storefront.Customer,Error>)->Void){
         
         let query = Storefront.buildQuery { $0
             .customer(customerAccessToken: accessToken) { $0
                 .firstName()
-                .id()
                 .lastName()
+                .displayName()
+                .email()
+                .phone()
+                .numberOfOrders()
+                .id()
+                
             }
         }
         
         client.queryGraphWith(query) { queryResponse, error in
             guard let customer = queryResponse?.customer else {
-                completionHandler(.failure(error!))
+                guard let error = error else { return }
+                completionHandler(.failure(error))
                 return
             }
             completionHandler(.success(customer))

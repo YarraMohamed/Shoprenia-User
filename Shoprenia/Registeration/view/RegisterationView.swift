@@ -70,7 +70,7 @@ struct RegisterationView: View {
                 
                 
                 TextField("Phone Number...",text:$viewModel.phoneNumber)
-                    .keyboardType(.numberPad)
+                    .keyboardType(.phonePad)
                     .textContentType(.telephoneNumber)
                     .padding()
                     .background(Color.gray.opacity(0.4))
@@ -80,7 +80,7 @@ struct RegisterationView: View {
                         }
 
                     if viewModel.phoneEdited && !viewModel.isValidPhoneNumber() {
-                        Text("Phone number should consist of 11 numbers")
+                        Text("Number should start with +2 and be 11 digits long")
                             .foregroundStyle(.red)
                             .font(.system(size: 10, weight: .semibold))
                     }
@@ -96,9 +96,9 @@ struct RegisterationView: View {
                         }
 
                     if viewModel.passwordEdited && !viewModel.isValidPassword() {
-                        Text("Password should be longer than 7 charachters")
+                        Text("Password should be minimum 8 characters, capital letter, small letter, and a number")
                             .foregroundStyle(.red)
-                            .font(.system(size: 10, weight: .semibold))
+                            .font(.system(size: 8, weight: .semibold))
                     }
                 
             }
@@ -128,9 +128,9 @@ struct RegisterationView: View {
                         if viewModel.allValidation()
                             {
                             
-                            viewModel.createUser(email: viewModel.email, password: viewModel.password, name: viewModel.firstName)
+                            viewModel.createUser()
                             
-                            viewModel.createShopifyCustomer(email: viewModel.email, password: viewModel.password, firstName: viewModel.firstName, lastName: viewModel.lastName, phone: viewModel.phoneNumber)
+                            viewModel.createShopifyCustomer()
                             
                         }
                         
@@ -145,10 +145,9 @@ struct RegisterationView: View {
                 }
                 .padding(.vertical)
             
-            
             VStack{
                 Spacer()
-                Text("Or Sign up with Google")
+                Text("Or Sign Up with Google")
                 HStack(spacing: 10){
                     
                     Button(action:{
@@ -167,6 +166,8 @@ struct RegisterationView: View {
                     }
                 }
             }
+            
+            
             
             Spacer()
         }

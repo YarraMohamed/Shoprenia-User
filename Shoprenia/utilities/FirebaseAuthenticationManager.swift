@@ -3,14 +3,14 @@ import FirebaseCore
 import FirebaseAuth
 
 
-final class FirebaseAuthenticationManager : AuthenticationManagerProtocol, ObservableObject{
+final class FirebaseAuthenticationManager : AuthenticationManagerProtocol{
     
     @Published var showVerificationAlert : Bool = false
     static let shared = FirebaseAuthenticationManager()
     
     private init () {}
     
-    func createUser(email : String, password : String, name : String,completion:@escaping (Bool) -> Void) {
+    func createUser(email : String, password : String, firstname:String, lastname : String,completion:@escaping (Bool) -> Void) {
         
         Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
             
@@ -21,12 +21,12 @@ final class FirebaseAuthenticationManager : AuthenticationManagerProtocol, Obser
             
             
             let changeRequest = authResult?.user.createProfileChangeRequest()
-            changeRequest?.displayName = name
+            changeRequest?.displayName = "\(firstname) \(lastname)"
             changeRequest?.commitChanges {error in
                 if let error = error {
                     print("Error updating profile: \(error.localizedDescription)")
                 } else {
-                    print("User created with name: \(name)")
+                    print("User created with name: \(firstname) \(lastname)")
                 }
             }
             
@@ -47,7 +47,7 @@ final class FirebaseAuthenticationManager : AuthenticationManagerProtocol, Obser
         Auth.auth().signIn(withEmail: email, password: password) { [weak self] authResult, error in
           guard let strongSelf = self else { return }
           
-            print("\(authResult?.user.displayName ?? "John doe") signed in with id : \(authResult?.user.uid ?? "No id")")
+            print("\(authResult?.user.displayName ?? "John doe") signed in with Firebase id : \(authResult?.user.uid ?? "No id")")
             
         }
     }

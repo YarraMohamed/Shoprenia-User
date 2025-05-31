@@ -1,6 +1,7 @@
 import SwiftUI
 import MobileBuySDK
 import Kingfisher
+
 struct ProductDetailsView: View {
     @State var productId : String
     @State var productDetails : Storefront.Product? = nil
@@ -120,7 +121,7 @@ struct ProductDetailsView: View {
             .frame(maxWidth: .infinity)
             
             HStack{
-                Button("Buy Now"){
+                Button("Add to cart"){
                     //Logic hna w bta3
                 }
                 .font(.system(size: 16, weight: .semibold))
