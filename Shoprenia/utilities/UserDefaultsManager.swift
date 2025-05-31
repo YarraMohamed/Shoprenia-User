@@ -1,8 +1,6 @@
 import Foundation
-
-
-
-class UserDefaultsManager {
+import MobileBuySDK
+class UserDefaultsManager : UserDefaultsManagerProtocol {
     
     static let shared = UserDefaultsManager()
     

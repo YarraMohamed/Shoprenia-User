@@ -1,5 +1,5 @@
 import Foundation
-
+import MobileBuySDK
 
 class LoginViewModel: ObservableObject {
     @Published var email: String = ""
@@ -8,13 +8,17 @@ class LoginViewModel: ObservableObject {
     private var credentialValidator : CredentialsValidationProtocol
     private var graphQLService : GraphQLServicesProtocol
     private var authenticationManager : AuthenticationManagerProtocol
+    private var userDefaultsManager : UserDefaultsManagerProtocol
     
     init(credentialValidator : CredentialsValidationProtocol = CredentialsValidation(),
          graphQLService : GraphQLServicesProtocol = GraphQLServices.shared,
-         authenticationManager : AuthenticationManagerProtocol = FirebaseAuthenticationManager.shared) {
+         authenticationManager : AuthenticationManagerProtocol = FirebaseAuthenticationManager.shared,
+         userDefaultsManager : UserDefaultsManagerProtocol = UserDefaultsManager.shared) {
+       
         self.credentialValidator = credentialValidator
         self.graphQLService = graphQLService
         self.authenticationManager = authenticationManager
+        self.userDefaultsManager = userDefaultsManager
     }
     
     func isValidEmail() -> Bool{
@@ -38,13 +42,13 @@ class LoginViewModel: ObservableObject {
     }
     
     func getCustomerByAccessToken(accessToken : String){
-        graphQLService.getCustomerByAccessToken(accessToken: accessToken){ result in
+        graphQLService.getCustomerByAccessToken(accessToken: accessToken){[weak self] result in
             switch result {
             case .success(let customer):
                 print("In Login ViewModel Customer fetched with id: \(customer.id)")
                 print("In Login ViewModel Customer fetched with email: \(customer.email ?? "no mail")")
                 print("In Login ViewModel Customer fetched with email: \(customer.phone ?? "no mail")")
-                
+                self?.insertInUserDefaults(accessToken, customer)
             case .failure(let error):
                 print("In Login Viewmodel Error: \(error)")
             }
@@ -53,5 +57,16 @@ class LoginViewModel: ObservableObject {
     
     func logCustomerIn(){
         authenticationManager.signInUser(email: email, password: password)
+    }
+    
+    func insertInUserDefaults(_ accessToken : String,_ customer : Storefront.Customer){
+        guard let email = customer.email else {return}
+        guard let phone = customer.phone else {return}
+        userDefaultsManager.insertShopifyCustomerId(customer.id.rawValue)
+        userDefaultsManager.insertShopifyCustomerEmail(email)
+        userDefaultsManager.insertShopifyCustomerPhoneNumber(phone)
+        userDefaultsManager.insertShopifyCustomerAccessToken(accessToken)
+        userDefaultsManager.insertShopifyCustomerDisplayName(customer.displayName)
+        
     }
 }
