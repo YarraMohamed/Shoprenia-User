@@ -22,9 +22,8 @@ struct BrandsGridView: View {
                         .onTapGesture {
                             path.append(AppRoute.Products(vendor: brand.title))
                         }
-                        
                 }
-            }
+            }.padding(.top,2)
         }
     }
 }

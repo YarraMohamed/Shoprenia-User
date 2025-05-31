@@ -21,7 +21,7 @@ struct ProductsView: View {
             .padding(10)
             .background(Color(.systemGray6))
             .cornerRadius(8)
-            .padding()
+            .padding(10)
             if viewModel.products.isEmpty{
                 ProgressView()
                     .frame(height: 350)
