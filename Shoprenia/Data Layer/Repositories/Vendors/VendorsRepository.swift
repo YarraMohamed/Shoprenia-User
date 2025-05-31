@@ -11,7 +11,7 @@ import MobileBuySDK
 class VendorsRepository : VendorsRepositoryProtocol {
     let vendorService: VendorServiceProtocol
     
-    init(vendorService: VendorServiceProtocol = VendorService()) {
+    init(vendorService: VendorServiceProtocol) {
         self.vendorService = vendorService
     }
     
