@@ -7,13 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		946CB492619709D6C0790A52 /* Pods_Shoprenia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 450773341ADAB2FDEF2E8F8D /* Pods_Shoprenia.framework */; };
+		4EF17F3F6363FD8B85329630 /* Pods_Shoprenia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E7ADE94D45930B19983377F /* Pods_Shoprenia.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		10C356B597F2D2CCB9C84C7D /* Pods-Shoprenia.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Shoprenia.debug.xcconfig"; path = "Target Support Files/Pods-Shoprenia/Pods-Shoprenia.debug.xcconfig"; sourceTree = "<group>"; };
-		450773341ADAB2FDEF2E8F8D /* Pods_Shoprenia.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Shoprenia.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		72C358FDE33337E7977A458C /* Pods-Shoprenia.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Shoprenia.release.xcconfig"; path = "Target Support Files/Pods-Shoprenia/Pods-Shoprenia.release.xcconfig"; sourceTree = "<group>"; };
+		08DCD45B401C61984B0F1FDA /* Pods-Shoprenia.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Shoprenia.debug.xcconfig"; path = "Target Support Files/Pods-Shoprenia/Pods-Shoprenia.debug.xcconfig"; sourceTree = "<group>"; };
+		3E7ADE94D45930B19983377F /* Pods_Shoprenia.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Shoprenia.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		538A222A6FAA897AD58E9280 /* Pods-Shoprenia.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Shoprenia.release.xcconfig"; path = "Target Support Files/Pods-Shoprenia/Pods-Shoprenia.release.xcconfig"; sourceTree = "<group>"; };
 		C11217622DE6390C00C7C2B8 /* Shoprenia.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Shoprenia.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -43,28 +43,20 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				946CB492619709D6C0790A52 /* Pods_Shoprenia.framework in Frameworks */,
+				4EF17F3F6363FD8B85329630 /* Pods_Shoprenia.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		0B2A72D8486FF8D723F9CB37 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				450773341ADAB2FDEF2E8F8D /* Pods_Shoprenia.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 		C11217592DE6390C00C7C2B8 = {
 			isa = PBXGroup;
 			children = (
 				C11217642DE6390C00C7C2B8 /* Shoprenia */,
 				C11217632DE6390C00C7C2B8 /* Products */,
 				DCBDC20924A25473DD6B37B2 /* Pods */,
-				0B2A72D8486FF8D723F9CB37 /* Frameworks */,
+				FF2F5AD242244F1983B0C98F /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -79,10 +71,18 @@
 		DCBDC20924A25473DD6B37B2 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				10C356B597F2D2CCB9C84C7D /* Pods-Shoprenia.debug.xcconfig */,
-				72C358FDE33337E7977A458C /* Pods-Shoprenia.release.xcconfig */,
+				08DCD45B401C61984B0F1FDA /* Pods-Shoprenia.debug.xcconfig */,
+				538A222A6FAA897AD58E9280 /* Pods-Shoprenia.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		FF2F5AD242244F1983B0C98F /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				3E7ADE94D45930B19983377F /* Pods_Shoprenia.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -92,11 +92,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = C112176D2DE6390E00C7C2B8 /* Build configuration list for PBXNativeTarget "Shoprenia" */;
 			buildPhases = (
-				9ABA09702174FFE0ED460A37 /* [CP] Check Pods Manifest.lock */,
+				6A27694C5D7DBC0FE6FB943F /* [CP] Check Pods Manifest.lock */,
 				C112175E2DE6390C00C7C2B8 /* Sources */,
 				C112175F2DE6390C00C7C2B8 /* Frameworks */,
 				C11217602DE6390C00C7C2B8 /* Resources */,
-				564F1A6314B77D491235BC3F /* [CP] Embed Pods Frameworks */,
+				D37098C177F6CBA8757B1632 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -155,28 +155,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		564F1A6314B77D491235BC3F /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Shoprenia/Pods-Shoprenia-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Shoprenia/Pods-Shoprenia-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Shoprenia/Pods-Shoprenia-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		9ABA09702174FFE0ED460A37 /* [CP] Check Pods Manifest.lock */ = {
+		6A27694C5D7DBC0FE6FB943F /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -196,6 +175,27 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D37098C177F6CBA8757B1632 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Shoprenia/Pods-Shoprenia-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Shoprenia/Pods-Shoprenia-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Shoprenia/Pods-Shoprenia-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -332,7 +332,7 @@
 		};
 		C112176E2DE6390E00C7C2B8 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 10C356B597F2D2CCB9C84C7D /* Pods-Shoprenia.debug.xcconfig */;
+			baseConfigurationReference = 08DCD45B401C61984B0F1FDA /* Pods-Shoprenia.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -343,6 +343,7 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Shoprenia/Info.plist;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We need your location to show you on the map";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -364,7 +365,7 @@
 		};
 		C112176F2DE6390E00C7C2B8 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 72C358FDE33337E7977A458C /* Pods-Shoprenia.release.xcconfig */;
+			baseConfigurationReference = 538A222A6FAA897AD58E9280 /* Pods-Shoprenia.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -375,6 +376,7 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Shoprenia/Info.plist;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We need your location to show you on the map";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

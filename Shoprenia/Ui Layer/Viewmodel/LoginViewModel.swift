@@ -1,10 +1,11 @@
 import Foundation
 import MobileBuySDK
+import GoogleSignIn
 
 class LoginViewModel: ObservableObject {
     @Published var email: String = ""
     @Published var password: String = ""
-
+    
     private var credentialValidator : CredentialsValidationProtocol
     private var userDefaultsManager : UserDefaultsManagerProtocol
     private var loginRepo : LoginRepoProtocol
@@ -25,8 +26,26 @@ class LoginViewModel: ObservableObject {
         return credentialValidator.isValidPassword(password: password)
     }
     
-    func createCustomerAccessToken(){
-        loginRepo.createCustomerAccessToken(email: email, password: password){[weak self] result in
+    func createCustomerWithoutPhone(user:GIDGoogleUser){
+        loginRepo.createCustomerWithoutPhone(email: user.profile?.email ?? "No mail",
+                                             password: "Password123",
+                                             firstName: user.profile?.givenName ?? "no first name",
+                                             lastName: user.profile?.familyName ?? "no last name"){result in
+            
+            switch result {
+            case .success(let customer):
+                print("In Login ViewModel shopify customer created using google with name : \(customer.displayName)")
+                print("In Login ViewModel shopify customer created using google with email : \(customer.email ?? "no mail")")
+                self.createCustomerAccessToken(mail: customer.email ?? "no mail", pass: "Password123")
+            case .failure(let error):
+                print("In Login Viewmodel Error: \(error)")
+            }
+            
+        }
+    }
+    
+    func createCustomerAccessToken(mail:String, pass:String){
+        loginRepo.createCustomerAccessToken(email: mail, password: pass){[weak self] result in
             
             switch result {
             case .success(let accessToken):
@@ -35,7 +54,6 @@ class LoginViewModel: ObservableObject {
             case .failure(let error):
                 print("In Login Viewmodel Error: \(error)")
             }
-            
         }
     }
     
@@ -47,7 +65,7 @@ class LoginViewModel: ObservableObject {
                 print("Fetched Customer")
                 print("id: \(customer.id)")
                 print("email: \(customer.email ?? "no mail")")
-                print("phone: \(customer.phone ?? "no mail")")
+                print("phone: \(customer.phone ?? "no phone")")
                 self?.insertInUserDefaults(accessToken, customer)
             case .failure(let error):
                 print("In Login Viewmodel Error: \(error)")
@@ -57,6 +75,19 @@ class LoginViewModel: ObservableObject {
     
     func signFirebaseUserIn(){
         loginRepo.signInFirebaseUser(email: email, password: password)
+    }
+    
+    func googleSignIn(rootController : UIViewController) {
+       
+        loginRepo.googleSignIn(rootController: rootController){ result in
+            
+            switch result {
+            case .success(let googleUser):
+                self.createCustomerWithoutPhone(user: googleUser)
+            case .failure(let error):
+                print("ERR in g sign in \(error.localizedDescription)")
+            }
+        }
     }
     
     func insertInUserDefaults(_ accessToken : String,_ customer : Storefront.Customer){

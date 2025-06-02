@@ -14,4 +14,10 @@ protocol GraphQLServicesProtocol {
                         phone : String,
                         completion: @escaping (Result<Storefront.Customer,Error>) -> Void)
     
+    func createCustomerWithoutPhone(email : String ,
+                        password : String ,
+                        firstName : String,
+                        lastName : String,
+                        completion: @escaping (Result<Storefront.Customer,Error>) -> Void)
+    
 }

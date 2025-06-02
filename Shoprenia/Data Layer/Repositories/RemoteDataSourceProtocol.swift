@@ -1,5 +1,6 @@
 import Foundation
 import MobileBuySDK
+import GoogleSignIn
 
 protocol RemoteDataSourceProtocol {
     
@@ -14,6 +15,12 @@ protocol RemoteDataSourceProtocol {
                         phone : String,
                         completion: @escaping (Result<Storefront.Customer,Error>) -> Void)
     
+    func createCustomerWithoutPhone(email : String ,
+                        password : String ,
+                        firstName : String,
+                        lastName : String,
+                        completion: @escaping (Result<Storefront.Customer,Error>) -> Void)
+    
     func createCustomerAccessToken(email : String ,
                                    password : String ,
                                    completionhandler : @escaping (Result<String, Error>) -> Void)
@@ -24,5 +31,9 @@ protocol RemoteDataSourceProtocol {
     func createFirebaseUser(email : String, password : String, firstname:String, lastname : String,completion:@escaping (Bool) -> Void)
     
     func signInFirebaseUser(email : String, password : String)
+    
+    func googleSignOut()
+    
+    func googleSignIn(rootController : UIViewController,completion: @escaping(Result<GIDGoogleUser, Error>)->Void) 
     
 }

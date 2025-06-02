@@ -1,5 +1,7 @@
 import SwiftUI
-
+import GoogleSignIn
+import FirebaseCore
+import FirebaseAuth
 struct LoginView: View {
     @StateObject private var viewModel = LoginViewModel()
     
@@ -42,7 +44,8 @@ struct LoginView: View {
                HStack{
                     Button("Login"){
                         
-                        viewModel.createCustomerAccessToken()
+                        viewModel.createCustomerAccessToken(mail: viewModel.email,
+                                                            pass: viewModel.password)
                         viewModel.signFirebaseUserIn()
                         
                     }
@@ -63,7 +66,7 @@ struct LoginView: View {
                 HStack(spacing: 10){
                     
                     Button(action:{
-                        //method google
+                        viewModel.googleSignIn(rootController: getRootViewController())
                     }){
                         Image("g")
                             .resizable()

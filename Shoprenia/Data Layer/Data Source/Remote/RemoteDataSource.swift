@@ -1,15 +1,21 @@
 import Foundation
 import MobileBuySDK
-
+import GoogleSignIn
 final class RemoteDataSource : RemoteDataSourceProtocol {
-   
+    
     static let shared = RemoteDataSource()
+    
     private let graphQLService : GraphQLServicesProtocol
     private let firebaseService : FirebaseManagerProtocol
+    private let googleService : GoogleAuthenticationServicesProtocol
    
-    private init(graphQLService : GraphQLServicesProtocol = GraphQLServices.shared,firebaseService : FirebaseManagerProtocol = FirebaseAuthenticationManager.shared) {
+    private init(graphQLService : GraphQLServicesProtocol = GraphQLServices.shared,
+                 firebaseService : FirebaseManagerProtocol = FirebaseAuthenticationManager.shared,
+                 googleService : GoogleAuthenticationServicesProtocol = GoogleAuthenticationServices.shared) {
+        
         self.graphQLService = graphQLService
         self.firebaseService = firebaseService
+        self.googleService = googleService
     }
     
     func fetchProductDetails(
@@ -27,6 +33,10 @@ final class RemoteDataSource : RemoteDataSourceProtocol {
                         completion: @escaping (Result<Storefront.Customer,Error>) -> Void){
 
         graphQLService.createCustomer(email: email, password: password, firstName: firstName, lastName: lastName, phone: phone, completion: completion)
+    }
+    
+    func createCustomerWithoutPhone(email: String, password: String, firstName: String, lastName: String, completion: @escaping (Result<Storefront.Customer, any Error>) -> Void) {
+        graphQLService.createCustomerWithoutPhone(email: email, password: password, firstName: firstName, lastName: lastName, completion: completion)
     }
     
     
@@ -47,4 +57,13 @@ final class RemoteDataSource : RemoteDataSourceProtocol {
     func signInFirebaseUser(email: String, password: String) {
         firebaseService.signInFirebaseUser(email: email, password: password)
     }
+    
+    func googleSignOut() {
+        googleService.googleSignOut()
+    }
+    
+    func googleSignIn(rootController : UIViewController,completion: @escaping(Result<GIDGoogleUser, Error>)->Void) {
+        googleService.googleSignIn(rootController: rootController, completion: completion)
+    }
+    
 }
