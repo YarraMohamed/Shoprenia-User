@@ -11,38 +11,6 @@ class GraphQLServices : GraphQLServicesProtocol {
         self.client = Graph.Client(shopDomain: ShopifyKeys.shopDomain.rawValue, apiKey: ShopifyKeys.storefrontToken.rawValue)
     }
     
-    func fetchProducts(completion: @escaping (Result<[Storefront.Product], Error>) -> Void) {
-        //Build Query
-        let query = Storefront.buildQuery { $0
-            .products(first: 20) { $0
-                .edges { $0
-                    .cursor()
-                    .node{ $0
-                        .title()
-                        .id()
-                    }
-                }
-            }
-        }
-        
-        // Call the Database Request
-        client.queryGraphWith(query) { queryResponse, error in
-            guard let edges = queryResponse?.products.edges else {
-                print(error!.localizedDescription)
-                completion(.failure(error!))
-                return
-            }
-            
-            
-            let products: [Storefront.Product] = edges.compactMap { edge in
-                edge.node
-            }
-            
-            completion(.success(products))
-            //Execute the call
-        }.resume()
-    }
-    
     
     func fetchProductDetails(
         id: GraphQL.ID,
@@ -195,28 +163,6 @@ class GraphQLServices : GraphQLServicesProtocol {
                 return
             }
             completionHandler(.success(customer))
-        }.resume()
-    }
-    
-    
-    func fetchVendors(completionHandler : @escaping (Result<Storefront.Collection,Error>)->Void){
-        let query = Storefront.buildQuery { $0
-            .collections(first:10 ){ $0
-                .nodes{ $0
-                    .id()
-                    .title()
-                }
-            }
-        }
-        
-        client.queryGraphWith(query) { queryResponse, error in
-            guard let title = queryResponse?.collections.nodes.first?.title else {
-                print(error?.localizedDescription ?? "error")
-                completionHandler(.failure(error!))
-                return
-            }
-            print(title)
-            
         }.resume()
     }
 }

@@ -3,14 +3,14 @@ import FirebaseCore
 import FirebaseAuth
 
 
-final class FirebaseAuthenticationManager : AuthenticationManagerProtocol{
+final class FirebaseAuthenticationManager : FirebaseManagerProtocol{
     
     @Published var showVerificationAlert : Bool = false
     static let shared = FirebaseAuthenticationManager()
     
     private init () {}
     
-    func createUser(email : String, password : String, firstname:String, lastname : String,completion:@escaping (Bool) -> Void) {
+    func createFirebaseUser(email : String, password : String, firstname:String, lastname : String,completion:@escaping (Bool) -> Void) {
         
         Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
             
@@ -42,7 +42,7 @@ final class FirebaseAuthenticationManager : AuthenticationManagerProtocol{
     }
     
     
-    func signInUser(email : String, password : String){
+    func signInFirebaseUser(email : String, password : String){
         
         Auth.auth().signIn(withEmail: email, password: password) { [weak self] authResult, error in
           guard let strongSelf = self else { return }

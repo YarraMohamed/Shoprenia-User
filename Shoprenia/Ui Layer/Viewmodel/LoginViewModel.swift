@@ -6,19 +6,15 @@ class LoginViewModel: ObservableObject {
     @Published var password: String = ""
 
     private var credentialValidator : CredentialsValidationProtocol
-    private var graphQLService : GraphQLServicesProtocol
-    private var authenticationManager : AuthenticationManagerProtocol
     private var userDefaultsManager : UserDefaultsManagerProtocol
-    
+    private var loginRepo : LoginRepoProtocol
     init(credentialValidator : CredentialsValidationProtocol = CredentialsValidation(),
-         graphQLService : GraphQLServicesProtocol = GraphQLServices.shared,
-         authenticationManager : AuthenticationManagerProtocol = FirebaseAuthenticationManager.shared,
+         loginRepo : LoginRepoProtocol = LoginRepo.shared,
          userDefaultsManager : UserDefaultsManagerProtocol = UserDefaultsManager.shared) {
        
         self.credentialValidator = credentialValidator
-        self.graphQLService = graphQLService
-        self.authenticationManager = authenticationManager
         self.userDefaultsManager = userDefaultsManager
+        self.loginRepo = loginRepo
     }
     
     func isValidEmail() -> Bool{
@@ -30,7 +26,8 @@ class LoginViewModel: ObservableObject {
     }
     
     func createCustomerAccessToken(){
-        graphQLService.createCustomerAccessToken(email: email, password: password){[weak self] result in
+        loginRepo.createCustomerAccessToken(email: email, password: password){[weak self] result in
+            
             switch result {
             case .success(let accessToken):
                 print("In Login ViewModel Access Token created: \(accessToken)")
@@ -38,16 +35,19 @@ class LoginViewModel: ObservableObject {
             case .failure(let error):
                 print("In Login Viewmodel Error: \(error)")
             }
+            
         }
     }
     
     func getCustomerByAccessToken(accessToken : String){
-        graphQLService.getCustomerByAccessToken(accessToken: accessToken){[weak self] result in
+
+        loginRepo.getCustomerByAccessToken(accessToken: accessToken){[weak self]result in
             switch result {
             case .success(let customer):
-                print("In Login ViewModel Customer fetched with id: \(customer.id)")
-                print("In Login ViewModel Customer fetched with email: \(customer.email ?? "no mail")")
-                print("In Login ViewModel Customer fetched with email: \(customer.phone ?? "no mail")")
+                print("Fetched Customer")
+                print("id: \(customer.id)")
+                print("email: \(customer.email ?? "no mail")")
+                print("phone: \(customer.phone ?? "no mail")")
                 self?.insertInUserDefaults(accessToken, customer)
             case .failure(let error):
                 print("In Login Viewmodel Error: \(error)")
@@ -55,8 +55,8 @@ class LoginViewModel: ObservableObject {
         }
     }
     
-    func logCustomerIn(){
-        authenticationManager.signInUser(email: email, password: password)
+    func signFirebaseUserIn(){
+        loginRepo.signInFirebaseUser(email: email, password: password)
     }
     
     func insertInUserDefaults(_ accessToken : String,_ customer : Storefront.Customer){

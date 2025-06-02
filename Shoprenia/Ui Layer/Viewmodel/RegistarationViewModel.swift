@@ -15,16 +15,17 @@ final class RegistarationViewModel : ObservableObject {
     @Published var phoneEdited = false
     @Published var showVerificationAlert = false
     
-    private var authManager : AuthenticationManagerProtocol
-    private var graphQL : GraphQLServicesProtocol
+    private let shopifyUserCase : CreateShopifyCustomerUseCase
+    private let firebaseUserCase : CreateFirebaseUserUseCase
     private var credentialValidator : CredentialsValidationProtocol
     
-    init(authManager : AuthenticationManagerProtocol = FirebaseAuthenticationManager.shared,
-         graphQL : GraphQLServicesProtocol = GraphQLServices.shared,
+    init(createShopifyCustomer : CreateShopifyCustomerUseCase = CreateShopifyCustomerUseCase(),
+         createFirebaseUser : CreateFirebaseUserUseCase = CreateFirebaseUserUseCase(),
          credentialValidator : CredentialsValidationProtocol = CredentialsValidation()){
-        self.authManager = authManager
-        self.graphQL = graphQL
+    
         self.credentialValidator = credentialValidator
+        self.shopifyUserCase = createShopifyCustomer
+        self.firebaseUserCase = createFirebaseUser
     }
     
     func isValidName(_ name : String) -> Bool {
@@ -36,7 +37,6 @@ final class RegistarationViewModel : ObservableObject {
     }
     
     func isValidPassword() -> Bool {
-       
         credentialValidator.isValidPassword(password: self.password)
     }
     
@@ -49,28 +49,23 @@ final class RegistarationViewModel : ObservableObject {
     }
     
     func createUser(){
-        authManager.createUser(email: email, password: password, firstname: firstName, lastname: lastName){[weak self] showAlert in
+        firebaseUserCase.createFirebaseUser(email: email, password: password, firstname: firstName, lastname: lastName){[weak self] showAlert in
             self?.showVerificationAlert = showAlert
         }
     }
     
-    func signInUser(){
-        authManager.signInUser(email: email, password: password)
-    }
-    
     func createShopifyCustomer(){
         
-        graphQL.createCustomer(email: email, password: password, firstName: firstName, lastName: lastName, phone: phoneNumber){ result in
-            
+        shopifyUserCase.createShopifyCustomer(email: email, password: password, firstName: firstName, lastName: lastName, phone: phoneNumber){ result in
             switch result{
             case .success(let customer):
-                print("in view model shopify customer successfully created")
-                print("in view model customer created and returned with first name: \(customer.firstName ?? "No name")")
-                print("in view model customer created and returned with last name: \(customer.lastName ?? "No name")")
-                print("in view model customer created and returned with phone: \(customer.phone ?? "No phone")")
-                print("in view model customer created and returned with customer created at: \(customer.createdAt)")
-                print("in view model customer created and returned with id: \(customer.id)")
-                print("in view model customer created and returned with email: \(customer.email ?? "No mail")")
+                print("shopify customer created")
+                print("first name: \(customer.firstName ?? "No name")")
+                print("last name: \(customer.lastName ?? "No name")")
+                print("phone: \(customer.phone ?? "No phone")")
+                print("created at: \(customer.createdAt)")
+                print("id: \(customer.id)")
+                print("email: \(customer.email ?? "No mail")")
                 
             case .failure(let failure):
                 print(failure.localizedDescription)

@@ -43,7 +43,7 @@ struct LoginView: View {
                     Button("Login"){
                         
                         viewModel.createCustomerAccessToken()
-                        viewModel.logCustomerIn()
+                        viewModel.signFirebaseUserIn()
                         
                     }
                     .font(.system(size: 16, weight: .semibold))

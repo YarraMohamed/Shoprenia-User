@@ -187,6 +187,7 @@ struct RegisterationView: View {
         }
     }
 }
+
 #Preview {
     NavigationStack{
         RegisterationView()

@@ -1,8 +1,8 @@
-//
-//  ProductDetailsRepoProtocol.swift
-//  Shoprenia
-//
-//  Created by Ahmad Fawzy on 01/06/2025.
-//
-
 import Foundation
+import MobileBuySDK
+
+protocol ProductDetailsRepoProtocol{
+    func fetchProductDetails(
+        id: GraphQL.ID,
+        completion: @escaping (Result<Storefront.Product,Error>) -> Void)
+}
