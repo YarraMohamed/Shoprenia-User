@@ -12,20 +12,20 @@ struct ProductsView: View {
     var vendor : String?
     var body: some View {
         VStack{
-           Divider()
-            HStack{
-                Image(systemName: "magnifyingglass")
-                    .foregroundColor(.gray)
-                TextField("Search", text: .constant(""))
-            }
-            .padding(10)
-            .background(Color(.systemGray6))
-            .cornerRadius(8)
-            .padding(10)
             if viewModel.products.isEmpty{
                 ProgressView()
                     .frame(height: 350)
             }else{
+                Divider()
+                 HStack{
+                     Image(systemName: "magnifyingglass")
+                         .foregroundColor(.gray)
+                     TextField("Search", text: .constant(""))
+                 }
+                 .padding(10)
+                 .background(Color(.systemGray6))
+                 .cornerRadius(8)
+                 .padding(10)
                 ProductsGridView(products: viewModel.products)
             }
         }

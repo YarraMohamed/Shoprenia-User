@@ -16,7 +16,6 @@ struct ContentView: View {
                         PlaceholderView()
                     case .Products(let vendor):
                         ProductsView(vendor: vendor)
-                       // ProductsView(vendor: vendor)
                     }
                 }
         }
