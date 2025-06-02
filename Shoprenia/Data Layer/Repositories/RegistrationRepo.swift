@@ -1,7 +1,9 @@
 import Foundation
 import MobileBuySDK
+import GoogleSignIn
 
 final class RegistrationRepo : RegistrationRepoProtocol{
+   
     static let shared = RegistrationRepo()
     private let remoteSource : RemoteDataSourceProtocol
     
@@ -37,6 +39,22 @@ final class RegistrationRepo : RegistrationRepoProtocol{
                                         lastname: lastname,
                                         completion: completion)
         
+    }
+    
+    func createCustomerWithoutPhone(email: String, password: String = "Password123", firstName: String, lastName: String, completion: @escaping (Result<MobileBuySDK.Storefront.Customer, any Error>) -> Void) {
+        remoteSource.createCustomerWithoutPhone(email: email, password: password, firstName: firstName, lastName: lastName, completion: completion)
+    }
+    
+    func createCustomerAccessToken(email: String, password: String, completionhandler: @escaping (Result<String, any Error>) -> Void) {
+        remoteSource.createCustomerAccessToken(email: email, password: password, completionhandler: completionhandler)
+    }
+    
+    func getCustomerByAccessToken(accessToken: String, completionHandler: @escaping (Result<MobileBuySDK.Storefront.Customer, any Error>) -> Void) {
+        remoteSource.getCustomerByAccessToken(accessToken: accessToken, completionHandler: completionHandler)
+    }
+    
+    func googleSignIn(rootController : UIViewController,completion: @escaping(Result<GIDGoogleUser, Error>)->Void){
+        remoteSource.googleSignIn(rootController: rootController, completion: completion)
     }
     
 }

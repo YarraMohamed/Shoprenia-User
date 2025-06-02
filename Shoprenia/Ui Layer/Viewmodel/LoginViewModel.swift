@@ -26,6 +26,19 @@ class LoginViewModel: ObservableObject {
         return credentialValidator.isValidPassword(password: password)
     }
     
+    func googleSignIn(rootController : UIViewController) {
+       
+        loginRepo.googleSignIn(rootController: rootController){ result in
+            
+            switch result {
+            case .success(let googleUser):
+                self.createCustomerWithoutPhone(user: googleUser)
+            case .failure(let error):
+                print("ERR in g sign in \(error.localizedDescription)")
+            }
+        }
+    }
+    
     func createCustomerWithoutPhone(user:GIDGoogleUser){
         loginRepo.createCustomerWithoutPhone(email: user.profile?.email ?? "No mail",
                                              password: "Password123",
@@ -66,7 +79,7 @@ class LoginViewModel: ObservableObject {
                 print("id: \(customer.id)")
                 print("email: \(customer.email ?? "no mail")")
                 print("phone: \(customer.phone ?? "no phone")")
-                self?.insertInUserDefaults(accessToken, customer)
+                self?.insertInUserDefaultsWithoutPhone(accessToken, customer)
             case .failure(let error):
                 print("In Login Viewmodel Error: \(error)")
             }
@@ -77,17 +90,14 @@ class LoginViewModel: ObservableObject {
         loginRepo.signInFirebaseUser(email: email, password: password)
     }
     
-    func googleSignIn(rootController : UIViewController) {
-       
-        loginRepo.googleSignIn(rootController: rootController){ result in
-            
-            switch result {
-            case .success(let googleUser):
-                self.createCustomerWithoutPhone(user: googleUser)
-            case .failure(let error):
-                print("ERR in g sign in \(error.localizedDescription)")
-            }
-        }
+    func insertInUserDefaultsWithoutPhone(_ accessToken : String,_ customer : Storefront.Customer){
+        
+        guard let email = customer.email else {return}
+        userDefaultsManager.insertShopifyCustomerId(customer.id.rawValue)
+        userDefaultsManager.insertShopifyCustomerEmail(email)
+        userDefaultsManager.insertShopifyCustomerAccessToken(accessToken)
+        userDefaultsManager.insertShopifyCustomerDisplayName(customer.displayName)
+        
     }
     
     func insertInUserDefaults(_ accessToken : String,_ customer : Storefront.Customer){

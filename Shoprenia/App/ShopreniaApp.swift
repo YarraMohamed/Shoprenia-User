@@ -9,8 +9,8 @@ struct ShopreniaApp: App {
     
     var body: some Scene {
         WindowGroup {
-            //RegisterationView()
-            LoginView()
+            RegisterationView()
+            //LoginView()
             //ProductDetailsView(productId: "gid://shopify/Product/7936016351306")
         }
     }

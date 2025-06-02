@@ -130,10 +130,7 @@ struct RegisterationView: View {
                             
                             viewModel.createUser()
                             
-                            viewModel.createShopifyCustomer()
-                            
                         }
-                        
                     }
                     .font(.system(size: 16, weight: .semibold))
                     .foregroundStyle(.white)
@@ -151,7 +148,7 @@ struct RegisterationView: View {
                 HStack(spacing: 10){
                     
                     Button(action:{
-                        //method google
+                        viewModel.googleSignIn(rootController: getRootViewController())
                     }){
                         Image("g")
                             .resizable()
