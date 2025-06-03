@@ -15,6 +15,7 @@ class ProductService : ProductServiceProtocol{
                 .nodes { $0
                     .id()
                     .title()
+                    .productType()
                     .images(first: 1) { $0
                         .nodes { $0
                             .url()
