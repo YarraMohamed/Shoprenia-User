@@ -11,6 +11,9 @@ struct CategoriesView: View {
     @StateObject var viewModel: CategoriesViewModel = CategoriesViewModel(fetchProductsUseCase: GetProducts(repository: ProductsRepository(productService: ProductService())))
     @Binding var path : NavigationPath
     
+    @State var isMenuExpanded = false
+
+    
     let options = ["Men", "Women", "Kids","Sale"]
     
     var body: some View {
@@ -27,10 +30,14 @@ struct CategoriesView: View {
             if $viewModel.products.isEmpty {
                 ProgressView()
                     .frame(width: 200,height: 200)
+                Spacer()
             }else{
                 ProductsGridView(products: $viewModel.products.wrappedValue)
             }
         }
+        .overlay(
+            FloatingButtonView(isMenuExpanded: $isMenuExpanded, viewModel: viewModel)
+        )
         .padding()
         
     }
