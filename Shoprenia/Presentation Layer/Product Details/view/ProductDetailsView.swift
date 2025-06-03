@@ -36,7 +36,7 @@ struct ProductDetailsView: View {
                     HStack{
                         Spacer()
                         
-                        Text("\(viewModel.productDetails?.variants.nodes[0].price.amount ?? 100) \(viewModel.productDetails?.variants.nodes[0].price.currencyCode ?? Storefront.CurrencyCode.egp)")
+                        Text("Price : \(viewModel.productDetails?.variants.nodes[0].price.amount ?? 100) \(viewModel.productDetails?.variants.nodes[0].price.currencyCode ?? Storefront.CurrencyCode.egp)")
                                 .foregroundStyle(.blue)
                                 .font(.system(size: 16,weight: .semibold))
                                 .padding(.trailing,16)
