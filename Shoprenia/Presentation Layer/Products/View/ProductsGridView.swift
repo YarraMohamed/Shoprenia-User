@@ -9,6 +9,7 @@ import SwiftUI
 import MobileBuySDK
 
 struct ProductsGridView: View {
+    @Binding var path : NavigationPath
     let products: [Storefront.Product]
     
     let columns : [GridItem] = [GridItem(.flexible()),GridItem(.flexible())]
@@ -18,6 +19,9 @@ struct ProductsGridView: View {
             LazyVGrid(columns: columns,spacing: 20){
                 ForEach(products, id: \.id) { product in
                     ProductItem(product: product)
+                        .onTapGesture {
+                            path.append(AppRouter.productDetails(productId: product.id))
+                        }
                 }.padding(.top,5)
             }
         }

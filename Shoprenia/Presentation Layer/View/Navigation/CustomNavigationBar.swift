@@ -22,15 +22,15 @@ struct CustomNavigationBar: View {
                     .resizable()
                     .frame(width: 28,height: 28)
                     .onTapGesture {
-                        path.append(AppRoute.search)
+                        path.append(AppRouter.search)
                     }
                 Image(.cart)
                     .onTapGesture {
-                        path.append(AppRoute.cart)
+                        path.append(AppRouter.cart)
                     }
                 Image(.heart)
                     .onTapGesture {
-                        path.append(AppRoute.favorites)
+                        path.append(AppRouter.favorites)
                     }
             }
         }

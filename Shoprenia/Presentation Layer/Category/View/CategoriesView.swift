@@ -32,7 +32,7 @@ struct CategoriesView: View {
                     .frame(width: 200,height: 200)
                 Spacer()
             }else{
-                ProductsGridView(products: $viewModel.products.wrappedValue)
+                ProductsGridView(path:$path, products: $viewModel.products.wrappedValue)
             }
         }
         .overlay(

@@ -20,7 +20,7 @@ struct BrandsGridView: View {
                 ForEach(brands, id: \.id) { brand in
                     BrandView(brand: brand)
                         .onTapGesture {
-                            path.append(AppRoute.Products(vendor: brand.title))
+                            path.append(AppRouter.products(vendor: brand.title))
                         }
                 }
             }.padding(.top,2)

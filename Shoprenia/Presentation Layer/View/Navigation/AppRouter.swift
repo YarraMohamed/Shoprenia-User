@@ -6,10 +6,12 @@
 //
 
 import Foundation
+import MobileBuySDK
 
-enum AppRoute: Hashable {
+enum AppRouter: Hashable {
     case search
     case cart
     case favorites
-    case Products(vendor: String)
+    case products(vendor: String)
+    case productDetails(productId: GraphQL.ID)
 }

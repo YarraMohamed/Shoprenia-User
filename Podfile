@@ -8,5 +8,7 @@ target 'Shoprenia' do
   # Pods for Shoprenia
 
 	pod "Mobile-Buy-SDK"
-
+        pod 'Kingfisher', '~> 7.0'
+	pod 'FirebaseAuth'
+	pod 'GoogleSignIn'
 end

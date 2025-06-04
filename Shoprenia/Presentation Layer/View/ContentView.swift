@@ -6,16 +6,18 @@ struct ContentView: View {
     var body: some View {
         NavigationStack(path: $path){
             MainTabView(path: $path)
-                .navigationDestination(for: AppRoute.self) { route in
+                .navigationDestination(for: AppRouter.self) { route in
                     switch route {
                     case .search :
-                       ProductsView()
+                       ProductsView(path: $path)
                     case .cart:
                         PlaceholderView()
                     case .favorites:
                         PlaceholderView()
-                    case .Products(let vendor):
-                        ProductsView(vendor: vendor)
+                    case .products(let vendor):
+                        ProductsView(path: $path, vendor: vendor)
+                    case .productDetails(productId: let productId):
+                        ProductDetailsView(productId: productId.rawValue, path: $path)
                     }
                 }
         }

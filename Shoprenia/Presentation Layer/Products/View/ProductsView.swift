@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ProductsView: View {
     @StateObject private var viewModel: ProductsViewModel = ProductsViewModel(fetchProductsUseCase: GetProducts(repository: ProductsRepository(productService: ProductService())))
+    @Binding var path : NavigationPath
     var vendor : String?
     var body: some View {
         VStack{
@@ -26,7 +27,7 @@ struct ProductsView: View {
                  .background(Color(.systemGray6))
                  .cornerRadius(8)
                  .padding(10)
-                ProductsGridView(products: viewModel.products)
+                ProductsGridView(path: $path, products: viewModel.products)
             }
         }
         .navigationTitle(vendor ?? "Products")
@@ -49,6 +50,6 @@ struct ProductsView: View {
 }
 
 #Preview {
-    ProductsView()
+    ProductsView(path: .constant(NavigationPath()))
 }
 
