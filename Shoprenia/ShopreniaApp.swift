@@ -4,7 +4,8 @@ import SwiftUI
 struct ShopreniaApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+           // ContentView()
+            SettingsView()
         }
     }
 }

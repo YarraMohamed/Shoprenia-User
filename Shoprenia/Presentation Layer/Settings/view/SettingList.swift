@@ -23,7 +23,7 @@ struct SettingList: View {
 }
 
 struct SettingsRowList: View {
-    @State var rows = ["Currency", "Addresses", "Help Center", "About us"]
+    @State var rows = ["Currency", "Saved Addresses", "Help Center", "About us"]
     @AppStorage("selectedCurrency")  var selectedCurrency: String = "EGP"
     
     var body: some View {
@@ -52,7 +52,7 @@ struct SettingsDetailsView: View {
                 AboutUs()
             } else if title == "Help Center" {
                 HelpCenter().offset(y: 70)
-            } else if title == "Addresses" {
+            } else if title == "Saved Addresses" {
                 Addresses()
             }
         }
