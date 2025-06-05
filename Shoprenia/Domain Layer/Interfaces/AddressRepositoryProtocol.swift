@@ -9,16 +9,9 @@ import Foundation
 import MobileBuySDK
 
 protocol AddressRepositoryProtocol {
-    func addCustomerAddress(
-        address: CustomerAddress,
-        setAsDefault: Bool,
-        completion: @escaping (
-            Result<Storefront.MailingAddress, Error>
-        ) -> Void
-    )
+    func addCustomerAddress(address: CustomerAddress,
+        setAsDefault: Bool, completion: @escaping (Result<Storefront.MailingAddress, Error>) -> Void)
     func getCustomerAddresses(completion: @escaping (Result<([Storefront.MailingAddress], String?), Error>) -> Void)
-
-//    func updateCustomerAddress(addressID: String, address: CustomerAddress, completion: @escaping (Result<Storefront.MailingAddress, Error>) -> Void)
     func updateCustomerAddress(addressID: String,address: CustomerAddress,setAsDefault: Bool,
         completion: @escaping (Result<Storefront.MailingAddress, Error>) -> Void)
     

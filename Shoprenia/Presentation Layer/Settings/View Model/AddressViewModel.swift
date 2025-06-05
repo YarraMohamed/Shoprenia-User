@@ -24,8 +24,16 @@ class AddressViewModel: ObservableObject {
            landmark: "",
            city: "",
            country: "",
-           zip: ""
+           zip: "",
+           latitude: 0.0, 
+           longitude: 0.0
+           
        )
+    func setAddressCoordinates(latitude: Double, longitude: Double) {
+           address.latitude = latitude
+           address.longitude = longitude
+           address.zip = "\(latitude),\(longitude)" 
+       }
     @Published var addresses: [Storefront.MailingAddress] = []
 
 

@@ -16,4 +16,7 @@ struct CustomerAddress {
     var city: String
     var country: String
     var zip: String
+    var latitude: Double 
+    var longitude: Double
+    
 }

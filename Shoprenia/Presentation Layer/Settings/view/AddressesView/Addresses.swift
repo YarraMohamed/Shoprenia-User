@@ -1,13 +1,15 @@
-//
+
 //  Addresses.swift
 //  Shoprenia
+//
+//  Created by Reham on 03/06/2025.
 //
 
 
 import SwiftUI
 
 struct Addresses: View {
-    @StateObject private var viewModel = AddressViewModel()
+    @StateObject private var viewModel = AddressViewModel(addAddressUseCase: AddCustomerAddressUseCase(repository: AddressRepository(addressService: AddressService())))
     @State private var showDeleteAlert = false
     @State private var selectedAddressID: String?
 

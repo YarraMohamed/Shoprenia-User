@@ -38,16 +38,19 @@ struct MapView: UIViewRepresentable {
     func makeCoordinator() -> Coordinator {
         Coordinator(self)
     }
-
     func updateUIView(_ mapView: MKMapView, context: Context) {
+        mapView.removeAnnotations(mapView.annotations)
+
+        let updatedCoordinate = selectedCoordinate ?? centerCoordinate
+
         let region = MKCoordinateRegion(
-            center: centerCoordinate,
+            center: updatedCoordinate,
             span: MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005)
         )
         mapView.setRegion(region, animated: true)
-        mapView.removeAnnotations(mapView.annotations)
-        context.coordinator.addAnnotation(at: centerCoordinate, on: mapView, title: locationName)
+        context.coordinator.addAnnotation(at: updatedCoordinate, on: mapView, title: "You're here")
     }
+
 
     class Coordinator: NSObject, MKMapViewDelegate {
         var parent: MapView
@@ -61,12 +64,15 @@ struct MapView: UIViewRepresentable {
             let point = gestureRecognizer.location(in: mapView)
             let coordinate = mapView.convert(point, toCoordinateFrom: mapView)
 
-            mapView.removeAnnotations(mapView.annotations)
-            addAnnotation(at: coordinate, on: mapView, title: "Selected Location")
             DispatchQueue.main.async {
                 self.parent.selectedCoordinate = coordinate
             }
+
+            mapView.removeAnnotations(mapView.annotations)
+            addAnnotation(at: coordinate, on: mapView, title: "Selected Location")
+
         }
+
 
         func addAnnotation(at coordinate: CLLocationCoordinate2D, on mapView: MKMapView, title: String?) {
             let annotation = MKPointAnnotation()

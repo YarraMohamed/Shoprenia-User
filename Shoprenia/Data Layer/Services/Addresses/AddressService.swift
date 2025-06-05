@@ -34,8 +34,7 @@ class AddressService: AddressServiceProtocol {
                     firstName: address.addName,
                     lastName: address.apartNumber,
                     phone: address.phoneNumber,
-                    zip: address.zip
-                )
+                    zip: "\(address.latitude),\(address.longitude)"               )
             ) { $0
                 .customerAddress { $0
                     .id()
@@ -224,7 +223,7 @@ class AddressService: AddressServiceProtocol {
                     case .success:
                         print("Address set as default")
                     case .failure(let error):
-                        print(" Failed to set default  \(error.localizedDescription)")
+                        print(" Failed to set default : \(error.localizedDescription)")
                     }
                 }
             }
@@ -233,48 +232,7 @@ class AddressService: AddressServiceProtocol {
         }.resume()
     }
 
-
-
-    //    func updateCustomerAddress(addressID: String, address: CustomerAddress, completion: @escaping (Result<Storefront.MailingAddress, Error>) -> Void) {
-//        let accessToken = getCustomerAccessToken()
-//        
-//        let mutation = Storefront.buildMutation { $0
-//            .customerAddressUpdate(customerAccessToken: accessToken, id: GraphQL.ID(rawValue: addressID), address: Storefront.MailingAddressInput(
-//                address1: address.streetName,
-//                address2: "\(address.buildingNumber), Floor: \(address.floorNumber), Landmark: \(address.landmark)",
-//                city: address.city,
-//                country: address.country,
-//                firstName: address.addName,
-//                lastName: address.apartNumber,
-//                phone: address.phoneNumber,
-//                zip: address.zip
-//            )) { $0
-//                .customerAddress { $0
-//                    .id()
-//                }
-//                .customerUserErrors { $0
-//                    .field()
-//                    .message()
-//                }
-//            }
-//        }
-//
-//        GraphQLClientService.shared.client.mutateGraphWith(mutation) { mutation, error in
-//            if let error = error {
-//                completion(.failure(error))
-//                return
-//            }
-//            
-//            guard let updatedAddress = mutation?.customerAddressUpdate?.customerAddress else {
-//                completion(.failure(NSError(domain: "Unknown error", code: -1)))
-//                return
-//            }
-//
-//            completion(.success(updatedAddress))
-//        }.resume()
-//    }
-
-    
+ 
 
     func deleteCustomerAddress(addressID: String, completion: @escaping (Result<Bool, Error>) -> Void) {
         let accessToken = getCustomerAccessToken()
