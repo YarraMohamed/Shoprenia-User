@@ -23,7 +23,7 @@ class VendorService: VendorServiceProtocol {
             }
         }
         
-        GraphQLServices.shared.client.queryGraphWith(query) { query, error in
+        GraphQLClientService.shared.client.queryGraphWith(query) { query, error in
             if let error = error {
                 completion(.failure(error))
             }else if let data = query?.collections.nodes {

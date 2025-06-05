@@ -18,6 +18,8 @@ struct ContentView: View {
                         ProductsView(path: $path, vendor: vendor)
                     case .productDetails(productId: let productId):
                         ProductDetailsView(productId: productId.rawValue, path: $path)
+                    case .login:
+                        LoginView()
                     }
                 }
         }

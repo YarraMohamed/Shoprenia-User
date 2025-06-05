@@ -18,7 +18,7 @@ struct MainTabView: View {
             CategoriesView(path: $path)
                 .tabItem { Image(.category) }
 
-            ProfileTest()
+           ProfileView(path: $path)
                 .tabItem { Image(.user) }
         }
     }

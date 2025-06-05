@@ -32,7 +32,7 @@ class ProductService : ProductServiceProtocol{
                 
             }
         }
-        GraphQLServices.shared.client.queryGraphWith(query) { query , error in
+        GraphQLClientService.shared.client.queryGraphWith(query) { query , error in
             if let error = error {
                 completion(.failure(error))
             }
@@ -68,7 +68,7 @@ class ProductService : ProductServiceProtocol{
                 
             }
         }
-        GraphQLServices.shared.client.queryGraphWith(query) { query , error in
+        GraphQLClientService.shared.client.queryGraphWith(query) { query , error in
             if let error = error {
                 completion(.failure(error))
             }

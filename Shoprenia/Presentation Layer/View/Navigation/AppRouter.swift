@@ -14,4 +14,5 @@ enum AppRouter: Hashable {
     case favorites
     case products(vendor: String)
     case productDetails(productId: GraphQL.ID)
+    case login
 }
