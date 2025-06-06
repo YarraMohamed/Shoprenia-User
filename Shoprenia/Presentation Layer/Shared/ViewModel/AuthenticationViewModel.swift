@@ -21,10 +21,15 @@ class AuthenticationViewModel : ObservableObject{
     }
     
     func isAuthenticated() {
-        print("isAuth \(isAuth)")
         isAuth = getAccessToken() !=  nil
     }
+    
+    //for customNavBar
     func isAuthenticated() -> Bool {
         return getAccessToken() !=  nil
+    }
+    
+    func getUserName () -> String? {
+        return userDefaults.retrieveShopifyCustomerDisplayName()
     }
 }
