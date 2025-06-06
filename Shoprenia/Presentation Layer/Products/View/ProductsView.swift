@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ProductsView: View {
-    @StateObject private var viewModel: ProductsViewModel = ProductsViewModel(fetchProductsUseCase: GetProducts(repository: ProductsRepository(productService: ProductService())))
+    @ObservedObject var viewModel: ProductsViewModel
     @Binding var path : NavigationPath
     var vendor : String?
     var body: some View {
@@ -50,6 +50,6 @@ struct ProductsView: View {
 }
 
 #Preview {
-    ProductsView(path: .constant(NavigationPath()))
+    ProductsView(viewModel: ProductsViewModel(fetchProductsUseCase: GetProducts(repository: ProductsRepository(productService: ProductService()))), path: .constant(NavigationPath()))
 }
 

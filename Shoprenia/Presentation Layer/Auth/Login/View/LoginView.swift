@@ -3,13 +3,7 @@ import GoogleSignIn
 import FirebaseCore
 import FirebaseAuth
 struct LoginView: View {
-    @StateObject private var viewModel = LoginViewModel(
-        credentialValidator: CredentialsValidation(),
-        userDefaultsManager: UserDefaultsManager.shared,
-        loginRepo: LoginRepo(firebaseService: FirebaseAuthenticationManager.shared,
-                             googleService: GoogleAuthenticationServices.shared,
-                             customerService: CustomerServices()))
-    
+    @ObservedObject var viewModel : LoginViewModel
     
     var body: some View {
         
@@ -53,7 +47,6 @@ struct LoginView: View {
                         viewModel.createCustomerAccessToken(mail: viewModel.email,
                                                             pass: viewModel.password)
                         viewModel.signFirebaseUserIn()
-                        
                         print("access token is \(String(describing: UserDefaultsManager.shared.retrieveShopifyCustomerAccessToken()))")
                         
                     }
@@ -105,5 +98,5 @@ struct LoginView: View {
 }
 
 #Preview {
-    LoginView()
+   // LoginView()
 }

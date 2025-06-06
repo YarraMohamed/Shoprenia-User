@@ -11,4 +11,5 @@ target 'Shoprenia' do
         pod 'Kingfisher', '~> 7.0'
 	pod 'FirebaseAuth'
 	pod 'GoogleSignIn'
+        pod 'Swinject'
 end

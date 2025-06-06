@@ -3,12 +3,13 @@ import FirebaseCore
 import FirebaseAuth
 
 struct RegisterationView: View {
-    @StateObject private var viewModel = RegistarationViewModel(
-        credentialValidator: CredentialsValidation(),
-        registraionRepo: RegistrationRepo(firebaseService: FirebaseAuthenticationManager.shared,
-                                          googleService: GoogleAuthenticationServices.shared,
-                                          customerService: CustomerServices()),
-        userDefaultsManager: UserDefaultsManager.shared)
+    @ObservedObject var viewModel: RegistarationViewModel
+//    @StateObject private var viewModel = RegistarationViewModel(
+//        credentialValidator: CredentialsValidation(),
+//        registraionRepo: RegistrationRepo(firebaseService: FirebaseAuthenticationManager.shared,
+//                                          googleService: GoogleAuthenticationServices.shared,
+//                                          customerService: CustomerServices()),
+//        userDefaultsManager: UserDefaultsManager.shared)
     
     var body: some View {
         VStack{
@@ -110,7 +111,10 @@ struct RegisterationView: View {
             .padding()
             
             NavigationLink {
-               LoginView()
+            LoginView(viewModel: LoginViewModel(credentialValidator: CredentialsValidation(),
+                                                userDefaultsManager: UserDefaultsManager.shared,
+                                                loginRepo: LoginRepo(firebaseService: FirebaseAuthenticationManager.shared, googleService: GoogleAuthenticationServices.shared,
+                                                                     customerService: CustomerServices())))
             } label: {
                 HStack {
                     Spacer()
@@ -192,6 +196,6 @@ struct RegisterationView: View {
 
 #Preview {
     NavigationStack{
-        RegisterationView()
+      // RegisterationView()
     }
 }

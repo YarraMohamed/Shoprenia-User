@@ -8,12 +8,10 @@
 import SwiftUI
 
 struct CategoriesView: View {
-    @StateObject var viewModel: CategoriesViewModel = CategoriesViewModel(fetchProductsUseCase: GetProducts(repository: ProductsRepository(productService: ProductService())))
+    @ObservedObject var viewModel: CategoriesViewModel
     @Binding var path : NavigationPath
-    
     @State var isMenuExpanded = false
 
-    
     let options = ["Men", "Women", "Kids","Sale"]
     
     var body: some View {

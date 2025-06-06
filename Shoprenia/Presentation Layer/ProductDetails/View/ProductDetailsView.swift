@@ -6,7 +6,7 @@ struct ProductDetailsView: View {
     @State var productId : String
     @State var selectedSize = "Select size"
     @State var selectedColor = "Select color"
-    @StateObject var viewModel = ProductDetailsViewModel(productDetailsCase: GetProductDetailsUseCase(repo: ProductDetailsRepository(service: ProductDetailsService())))
+    @ObservedObject var viewModel : ProductDetailsViewModel
     
     @Binding var path : NavigationPath
     
@@ -182,5 +182,9 @@ struct ProductDetailsView: View {
 }
 
 #Preview {
-    ProductDetailsView(productId: "gid://shopify/Product/7936016351306", path: .constant(NavigationPath()))
+
+    ProductDetailsView(productId: "gid://shopify/Product/7936016351306",
+                       viewModel:ProductDetailsViewModel(productDetailsCase: GetProductDetailsUseCase(repo: ProductDetailsRepository(service: ProductDetailsService()))),
+                       path: .constant(NavigationPath()))
+
 }

@@ -65,12 +65,14 @@ PODS:
   - Mobile-Buy-SDK (2025.4.0)
   - PromisesObjC (2.4.0)
   - RecaptchaInterop (101.0.0)
+  - Swinject (2.9.1)
 
 DEPENDENCIES:
   - FirebaseAuth
   - GoogleSignIn
   - Kingfisher (~> 7.0)
   - Mobile-Buy-SDK
+  - Swinject
 
 SPEC REPOS:
   trunk:
@@ -90,6 +92,7 @@ SPEC REPOS:
     - Mobile-Buy-SDK
     - PromisesObjC
     - RecaptchaInterop
+    - Swinject
 
 SPEC CHECKSUMS:
   AppAuth: d4f13a8fe0baf391b2108511793e4b479691fb73
@@ -108,7 +111,8 @@ SPEC CHECKSUMS:
   Mobile-Buy-SDK: 484638073ed665fbe4669b5b88f59a32163b0af0
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
   RecaptchaInterop: 11e0b637842dfb48308d242afc3f448062325aba
+  Swinject: a827d508c6270da03ec74e558e728917a888fa9b
 
-PODFILE CHECKSUM: 5ca5a728374eeeee6a08f8b996016b6bc411d40a
+PODFILE CHECKSUM: 350f977f017f61769bebe21d62b13e5fb5969b67
 
 COCOAPODS: 1.16.2

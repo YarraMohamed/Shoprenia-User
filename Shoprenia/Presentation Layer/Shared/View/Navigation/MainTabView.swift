@@ -6,16 +6,18 @@
 //
 
 import SwiftUI
+import Swinject
 
 struct MainTabView: View {
     @Binding var path: NavigationPath
-    
+    let homeVM : HomeViewModel
+    let categoriesVM : CategoriesViewModel
     var body: some View {
         TabView{
-            HomeView(path: $path)
+            HomeView(viewModel: homeVM, path: $path)
                 .tabItem { Image(.home) }
 
-            CategoriesView(path: $path)
+            CategoriesView(viewModel: categoriesVM, path: $path)
                 .tabItem { Image(.category) }
 
            ProfileView(path: $path)
@@ -25,5 +27,5 @@ struct MainTabView: View {
 }
 
 #Preview {
-    MainTabView(path:.constant(NavigationPath()))
+   // MainTabView(path:.constant(NavigationPath()))
 }

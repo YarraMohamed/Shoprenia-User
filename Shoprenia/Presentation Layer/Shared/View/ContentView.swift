@@ -1,27 +1,37 @@
 import SwiftUI
+import Swinject
 import MobileBuySDK
 
 struct ContentView: View {
     @State private var path = NavigationPath()
+    private let container = DIContainer.shared
+
     var body: some View {
         NavigationStack(path: $path){
-            MainTabView(path: $path)
+            let homeVM = container.resolve(HomeViewModel.self)
+            let categoryVM = container.resolve(CategoriesViewModel.self)
+            MainTabView(path: $path, homeVM: homeVM, categoriesVM: categoryVM)
                 .navigationDestination(for: AppRouter.self) { route in
                     switch route {
                     case .search :
-                       ProductsView(path: $path)
+                        let productsVM = self.container.resolve(ProductsViewModel.self)
+                       ProductsView(viewModel: productsVM, path: $path)
                     case .cart:
                         PlaceholderView()
                     case .favorites:
                         PlaceholderView()
                     case .products(let vendor):
-                        ProductsView(path: $path, vendor: vendor)
+                        let productsVM = self.container.resolve(ProductsViewModel.self)
+                        ProductsView(viewModel: productsVM,path: $path, vendor: vendor)
                     case .productDetails(productId: let productId):
-                        ProductDetailsView(productId: productId.rawValue, path: $path)
+                        let productDetailsVM = self.container.resolve(ProductDetailsViewModel.self)
+                        ProductDetailsView(productId: productId.rawValue, viewModel: productDetailsVM, path: $path)
                     case .login:
-                        LoginView()
+                        let loginVM = self.container.resolve(LoginViewModel.self)
+                        LoginView(viewModel: loginVM)
                     case .register:
-                        RegisterationView()
+                        let registerationVM = self.container.resolve(RegistarationViewModel.self)
+                        RegisterationView(viewModel: registerationVM)
                     }
                 }
         }

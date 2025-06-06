@@ -3,7 +3,8 @@ import SwiftUI
 
 @main
 struct ShopreniaApp: App {
-    @StateObject var vm : AuthenticationViewModel = AuthenticationViewModel(userDefaults: UserDefaultsManager.shared)
+    
+    @StateObject var vm = DIContainer.shared.resolve(AuthenticationViewModel.self)
     
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     
