@@ -17,5 +17,6 @@ enum AppRouter: Hashable {
     case login
     case register
     case profile
+    case settings
     
 }

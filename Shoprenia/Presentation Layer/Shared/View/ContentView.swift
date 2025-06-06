@@ -34,6 +34,8 @@ struct ContentView: View {
                         RegisterationView(viewModel: registerationVM,path:$path)
                     case .profile:
                         ProfileView(path: $path)
+                    case .settings:
+                        SettingsView()
                     }
                 }
         }

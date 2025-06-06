@@ -15,7 +15,7 @@ struct ProfileView: View {
             CustomNavigationBar(path: $path)
             Spacer()
             if vm.isAuth{
-                AuthProfile(title: vm.getUserName() ?? "" )
+                AuthProfile(title: vm.getUserName() ?? "", path: $path)
                     .padding(.bottom,100)
             }else{
                 GuestProfile(path: $path)

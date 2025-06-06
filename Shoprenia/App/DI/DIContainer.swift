@@ -23,7 +23,8 @@ final class DIContainer {
             ProductsAssembly(),
             ProductDetailsAssembly(),
             LoginAssembly(),
-            RegisterationAssembly()
+            RegisterationAssembly(),
+            AddressesAssembly()
         ], container: container)
     }
     
@@ -154,3 +155,20 @@ final class RegisterationAssembly : Assembly{
     }
 }
 
+
+final class AddressesAssembly : Assembly{
+    func assemble(container: Container) {
+        container.register(AddressService.self) { _ in
+            AddressService()
+        }
+        container.register(AddressRepository.self) { resolver in
+            AddressRepository(addressService: resolver.resolve(AddressService.self)!)
+        }
+        container.register(AddCustomerAddressUseCase.self) { resolver in
+            AddCustomerAddressUseCase(repository: resolver.resolve(AddressRepository.self)!)
+        }
+        container.register(AddressViewModel.self) { resolver in
+            AddressViewModel(addAddressUseCase: resolver.resolve(AddCustomerAddressUseCase.self)!)
+        }
+    }
+}

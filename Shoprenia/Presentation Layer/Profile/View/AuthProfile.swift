@@ -11,6 +11,7 @@ struct AuthProfile: View {
     var title : String = "Account"
     var arr : [String] = ["Orders","Wishlist","Settings"]
     let columns : [GridItem] = [GridItem(.flexible())]
+    @Binding var path: NavigationPath
     var body: some View {
         VStack(alignment: .leading){
             UserProfile(userName: title)
@@ -19,7 +20,12 @@ struct AuthProfile: View {
                 ForEach(arr ,id:\.self) { item in
                     HStack{
                         Button(item){
-                            print(item)
+                            switch item {
+                                case "Settings":
+                                path.append(AppRouter.settings)
+                            default :
+                                print(item)
+                            }
                         }
                         Spacer()
                         Image(systemName: "chevron.right")
@@ -37,5 +43,5 @@ struct AuthProfile: View {
 }
 
 #Preview {
-    AuthProfile()
+    AuthProfile(path: .constant(NavigationPath()))
 }

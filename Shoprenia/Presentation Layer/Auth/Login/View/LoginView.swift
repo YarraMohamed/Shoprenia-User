@@ -88,7 +88,7 @@ struct LoginView: View {
         }
         .onChange(of: viewModel.isLoggedIn){ isLogged in
             if isLogged {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
                     path.removeLast()
                 }
             }
