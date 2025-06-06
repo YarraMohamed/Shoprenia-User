@@ -24,4 +24,7 @@ class AuthenticationViewModel : ObservableObject{
         print("isAuth \(isAuth)")
         isAuth = getAccessToken() !=  nil
     }
+    func isAuthenticated() -> Bool {
+        return getAccessToken() !=  nil
+    }
 }
