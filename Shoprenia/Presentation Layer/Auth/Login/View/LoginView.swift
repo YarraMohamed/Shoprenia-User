@@ -3,7 +3,12 @@ import GoogleSignIn
 import FirebaseCore
 import FirebaseAuth
 struct LoginView: View {
-//    @StateObject private var viewModel = LoginViewModel()
+    @StateObject private var viewModel = LoginViewModel(
+        credentialValidator: CredentialsValidation(),
+        userDefaultsManager: UserDefaultsManager.shared,
+        loginRepo: LoginRepo(firebaseService: FirebaseAuthenticationManager.shared,
+                             googleService: GoogleAuthenticationServices.shared,
+                             customerService: CustomerServices()))
     
     var body: some View {
         
@@ -22,8 +27,7 @@ struct LoginView: View {
                 
                 Spacer()
                 
-//                TextField("Email...",text:$viewModel.email)
-                TextField("Email...",text: .constant(""))
+                TextField("Email...",text:$viewModel.email)
                     .keyboardType(.emailAddress)
                     .textContentType(.emailAddress)
                     .textInputAutocapitalization(.never)
@@ -32,8 +36,7 @@ struct LoginView: View {
                     .background(Color.gray.opacity(0.4))
                     .clipShape(RoundedRectangle(cornerRadius: 10))
                     
-//                SecureField("Password",text: $viewModel.password)
-                TextField("Email...",text: .constant(""))
+                SecureField("Password",text: $viewModel.password)
                     .textInputAutocapitalization(.never)
                     .autocorrectionDisabled()
                     .padding()
@@ -46,9 +49,11 @@ struct LoginView: View {
                HStack{
                     Button("Login"){
                         
-//                        viewModel.createCustomerAccessToken(mail: viewModel.email,
-//                                                            pass: viewModel.password)
-//                        viewModel.signFirebaseUserIn()
+                        viewModel.createCustomerAccessToken(mail: viewModel.email,
+                                                            pass: viewModel.password)
+                        viewModel.signFirebaseUserIn()
+                        
+                        print("access token is \(String(describing: UserDefaultsManager.shared.retrieveShopifyCustomerAccessToken()))")
                         
                     }
                     .font(.system(size: 16, weight: .semibold))
@@ -68,7 +73,7 @@ struct LoginView: View {
                 HStack(spacing: 10){
                     
                     Button(action:{
-//                        viewModel.googleSignIn(rootController: getRootViewController())
+                        viewModel.googleSignIn(rootController: getRootViewController())
                     }){
                         Image("g")
                             .resizable()

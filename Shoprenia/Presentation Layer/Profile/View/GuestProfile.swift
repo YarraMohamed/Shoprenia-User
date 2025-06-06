@@ -35,7 +35,7 @@ struct GuestProfile: View {
             .padding(.bottom,20)
             
             Button("Signup"){
-        
+                path.append(AppRouter.register)
             }
             .font(.system(size: 20, weight: .semibold))
             .foregroundStyle(.white)

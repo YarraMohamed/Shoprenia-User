@@ -20,6 +20,8 @@ struct ContentView: View {
                         ProductDetailsView(productId: productId.rawValue, path: $path)
                     case .login:
                         LoginView()
+                    case .register:
+                        RegisterationView()
                     }
                 }
         }

@@ -35,6 +35,7 @@ class CategoriesViewModel: ObservableObject {
     }
     
     func loadProducts(vendor: String, category: String?) {
+        print("i am fetching")
         fetchProductsUseCase.getFetchedProducts(vendor: vendor.uppercased()) { [weak self] result in
             DispatchQueue.main.async {
                 switch result {
