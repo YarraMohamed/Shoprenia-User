@@ -4,12 +4,7 @@ import FirebaseAuth
 
 struct RegisterationView: View {
     @ObservedObject var viewModel: RegistarationViewModel
-//    @StateObject private var viewModel = RegistarationViewModel(
-//        credentialValidator: CredentialsValidation(),
-//        registraionRepo: RegistrationRepo(firebaseService: FirebaseAuthenticationManager.shared,
-//                                          googleService: GoogleAuthenticationServices.shared,
-//                                          customerService: CustomerServices()),
-//        userDefaultsManager: UserDefaultsManager.shared)
+    @Binding var path : NavigationPath
     
     var body: some View {
         VStack{
@@ -110,17 +105,14 @@ struct RegisterationView: View {
             }
             .padding()
             
-            NavigationLink {
-            LoginView(viewModel: LoginViewModel(credentialValidator: CredentialsValidation(),
-                                                userDefaultsManager: UserDefaultsManager.shared,
-                                                loginRepo: LoginRepo(firebaseService: FirebaseAuthenticationManager.shared, googleService: GoogleAuthenticationServices.shared,
-                                                                     customerService: CustomerServices())))
-            } label: {
                 HStack {
                     Spacer()
                     
                     HStack {
                         Text("Already have an account? ")
+                            .onTapGesture {
+                                path.append(AppRouter.login)
+                            }
                             .foregroundStyle(.black)
                             .font(.system(size: 14, weight: .semibold))
                         
@@ -129,7 +121,6 @@ struct RegisterationView: View {
                     }
                     .padding(.trailing, 16)
                 }
-            }
                 
                 HStack{
                     Button("Sign Up"){

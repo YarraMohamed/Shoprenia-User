@@ -28,7 +28,7 @@ struct CustomNavigationBar: View {
                     }
                 Image(.cart)
                     .onTapGesture {
-                        if viewModel.isAuthenticated(){
+                        if viewModel.isAuth{
                             path.append(AppRouter.cart)
                         }else{
                             showAlert = true
@@ -36,7 +36,7 @@ struct CustomNavigationBar: View {
                     }
                 Image(.heart)
                     .onTapGesture {
-                        if viewModel.isAuthenticated(){
+                        if viewModel.isAuth{
                             path.append(AppRouter.favorites)
                         }else{
                             showAlert = true

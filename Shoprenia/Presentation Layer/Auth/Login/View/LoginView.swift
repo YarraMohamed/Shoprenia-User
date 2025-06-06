@@ -4,6 +4,7 @@ import FirebaseCore
 import FirebaseAuth
 struct LoginView: View {
     @ObservedObject var viewModel : LoginViewModel
+    @Binding var path : NavigationPath
     
     var body: some View {
         
@@ -84,6 +85,13 @@ struct LoginView: View {
             }
             
             Spacer()
+        }
+        .onChange(of: viewModel.isLoggedIn){ isLogged in
+            if isLogged {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    path.removeLast()
+                }
+            }
         }
         .toolbar{
             ToolbarItem(placement: .topBarTrailing) {

@@ -28,10 +28,12 @@ struct ContentView: View {
                         ProductDetailsView(productId: productId.rawValue, viewModel: productDetailsVM, path: $path)
                     case .login:
                         let loginVM = self.container.resolve(LoginViewModel.self)
-                        LoginView(viewModel: loginVM)
+                        LoginView(viewModel: loginVM,path:$path)
                     case .register:
                         let registerationVM = self.container.resolve(RegistarationViewModel.self)
-                        RegisterationView(viewModel: registerationVM)
+                        RegisterationView(viewModel: registerationVM,path:$path)
+                    case .profile:
+                        ProfileView(path: $path)
                     }
                 }
         }

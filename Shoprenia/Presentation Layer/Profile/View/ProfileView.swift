@@ -14,7 +14,7 @@ struct ProfileView: View {
         VStack{
             CustomNavigationBar(path: $path)
             Spacer()
-            if vm.isAuthenticated(){
+            if vm.isAuth{
                 AuthProfile()
                     .padding(.bottom,100)
             }else{
@@ -22,7 +22,11 @@ struct ProfileView: View {
                     .padding(.bottom,100)
             }
             Spacer()
-        }.padding()
+        }
+        .onAppear{
+            vm.isAuthenticated()
+        }
+        .padding()
     }
 }
 

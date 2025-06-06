@@ -16,5 +16,6 @@ enum AppRouter: Hashable {
     case productDetails(productId: GraphQL.ID)
     case login
     case register
+    case profile
     
 }

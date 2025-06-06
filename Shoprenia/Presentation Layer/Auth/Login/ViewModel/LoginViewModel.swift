@@ -5,6 +5,7 @@ import GoogleSignIn
 class LoginViewModel: ObservableObject {
     @Published var email: String = ""
     @Published var password: String = ""
+    @Published var isLoggedIn : Bool = false
    
     private var credentialValidator : CredentialsValidationProtocol
     private var userDefaultsManager : UserDefaultsManagerProtocol
@@ -86,6 +87,7 @@ class LoginViewModel: ObservableObject {
     
     func signFirebaseUserIn(){
         loginRepo.signInFirebaseUser(email: email, password: password)
+        isLoggedIn = true
     }
     
     func insertInUserDefaultsWithoutPhone(_ accessToken : String,_ customer : Storefront.Customer){

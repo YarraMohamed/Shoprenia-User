@@ -8,6 +8,7 @@
 import Foundation
 
 class AuthenticationViewModel : ObservableObject{
+    @Published var isAuth : Bool = false
     
     private var userDefaults : UserDefaultsManagerProtocol
     
@@ -19,7 +20,8 @@ class AuthenticationViewModel : ObservableObject{
         return userDefaults.retrieveShopifyCustomerAccessToken()
     }
     
-    func isAuthenticated() -> Bool{
-        return getAccessToken() != nil
+    func isAuthenticated() {
+        print("isAuth \(isAuth)")
+        isAuth = getAccessToken() !=  nil
     }
 }
