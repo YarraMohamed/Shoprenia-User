@@ -110,7 +110,7 @@ struct RegisterationView: View {
             .padding()
             
             NavigationLink {
-               Text("Login Page")
+               LoginView()
             } label: {
                 HStack {
                     Spacer()
@@ -178,16 +178,15 @@ struct RegisterationView: View {
         } message: {
             Text("We've sent a verification email to \(viewModel.email) . Please check your inbox, click the verification link and login.")
         }
-        .navigationTitle("Shoprenia")
-//        .toolbar{
-//            ToolbarItem(placement: .topBarLeading) {
-//                    VStack {
-//                        Text("Shoprenia")
-//                            .font(.system(size: 20,weight: .semibold))
-//                            .foregroundColor(.blue)
-//                    }
-//                }
-//        }
+        .toolbar{
+            ToolbarItem(placement: .topBarTrailing) {
+                    VStack {
+                        Text("Shoprenia")
+                            .font(.system(size: 20,weight: .semibold))
+                            .foregroundColor(.blue)
+                    }
+                }
+        }
     }
 }
 

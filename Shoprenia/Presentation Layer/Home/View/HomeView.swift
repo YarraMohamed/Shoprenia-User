@@ -46,5 +46,5 @@ struct HomeView: View {
 }
 
 #Preview {
-    HomeView(path: .constant(NavigationPath()))
+    //HomeView(path: .constant(NavigationPath()))
 }

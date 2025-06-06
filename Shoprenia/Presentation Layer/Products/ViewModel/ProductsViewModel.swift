@@ -31,6 +31,17 @@ class ProductsViewModel : ObservableObject {
     }
     
     func loadVendorProducts(vendor: String) {
+//        fetchProductsUseCase.getFetchedProducts { [weak self] result in
+//            DispatchQueue.main.async {
+//                switch result {
+//                case .success(let products):
+//                    self?.products = products.filter { $0.vendor == vendor}
+//                case .failure(let error) :
+//                    print(error.localizedDescription)
+//                }
+//            }
+//        }
+        
         fetchProductsUseCase.getFetchedProducts(vendor: vendor) { [weak self] result in
             DispatchQueue.main.async {
                 switch result{

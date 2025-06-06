@@ -3,6 +3,7 @@ import SwiftUI
 
 @main
 struct ShopreniaApp: App {
+    @StateObject var vm : AuthenticationViewModel = AuthenticationViewModel(userDefaults: UserDefaultsManager.shared)
     
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     
@@ -13,6 +14,7 @@ struct ShopreniaApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(vm)
         }
     }
 }

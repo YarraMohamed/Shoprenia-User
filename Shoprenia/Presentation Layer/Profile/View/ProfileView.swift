@@ -9,13 +9,18 @@ import SwiftUI
 
 struct ProfileView: View {
     @Binding var path : NavigationPath
-    
+    @EnvironmentObject var vm : AuthenticationViewModel
     var body: some View {
         VStack{
             CustomNavigationBar(path: $path)
             Spacer()
-            GuestProfile(path: $path)
-                .padding(.bottom,100)
+            if vm.isAuthenticated(){
+                AuthProfile()
+                    .padding(.bottom,100)
+            }else{
+                GuestProfile(path: $path)
+                    .padding(.bottom,100)
+            }
             Spacer()
         }.padding()
     }

@@ -11,10 +11,12 @@ import MobileBuySDK
 class ProductService : ProductServiceProtocol{
     func fetchProducts(completion: @escaping (Result<[MobileBuySDK.Storefront.Product], any Error>) -> Void) {
         let query = Storefront.buildQuery{ $0
-            .products(first: 30) { $0
+            .products(first: 50) { $0
                 .nodes { $0
                     .id()
                     .title()
+                    .productType()
+                    .vendor()
                     .images(first: 1) { $0
                         .nodes { $0
                             .url()

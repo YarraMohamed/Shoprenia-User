@@ -44,6 +44,6 @@ struct CategoriesView: View {
 }
 
 #Preview {
-    CategoriesView(path: .constant(NavigationPath()))
+  //  CategoriesView(path: .constant(NavigationPath()))
 }
 

@@ -35,7 +35,20 @@ class CategoriesViewModel: ObservableObject {
     }
     
     func loadProducts(vendor: String, category: String?) {
-        print("i am fetching")
+        //        fetchProductsUseCase.getFetchedProducts { [weak self] result in
+        //            DispatchQueue.main.async {
+        //                switch result {
+        //                case .success(let products) :
+        //                    if let category = category{
+        //                        self?.products = products.filter{ $0.productType == category}
+        //                    }else{
+        //                        self?.products = products.filter { $0.vendor == vendor.uppercased()}
+        //                    }
+        //                case .failure(let error) :
+        //                    print("Failed to load products: \(error.localizedDescription)")
+        //                }
+        //            }
+        //        }
         fetchProductsUseCase.getFetchedProducts(vendor: vendor.uppercased()) { [weak self] result in
             DispatchQueue.main.async {
                 switch result {
@@ -49,6 +62,7 @@ class CategoriesViewModel: ObservableObject {
                     print("Failed to load products: \(error.localizedDescription)")
                 }
             }
+            //        }
         }
     }
 }

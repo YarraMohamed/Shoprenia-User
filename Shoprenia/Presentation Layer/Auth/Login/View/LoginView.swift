@@ -10,6 +10,7 @@ struct LoginView: View {
                              googleService: GoogleAuthenticationServices.shared,
                              customerService: CustomerServices()))
     
+    
     var body: some View {
         
         VStack{
@@ -91,16 +92,15 @@ struct LoginView: View {
             
             Spacer()
         }
-        .navigationTitle("Shoprenia")
-//        .toolbar{
-//            ToolbarItem(placement: .topBarLeading) {
-//                    VStack {
-//                        Text("Shoprenia")
-//                            .font(.system(size: 20,weight: .semibold))
-//                            .foregroundColor(.blue)
-//                    }
-//                }
-//        }
+        .toolbar{
+            ToolbarItem(placement: .topBarTrailing) {
+                    VStack {
+                        Text("Shoprenia")
+                            .font(.system(size: 20,weight: .semibold))
+                            .foregroundColor(.blue)
+                    }
+                }
+        }
     }
 }
 
