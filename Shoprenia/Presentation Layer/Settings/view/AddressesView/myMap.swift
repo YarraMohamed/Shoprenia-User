@@ -1,4 +1,10 @@
 
+//
+//  MyMap.swift
+//  SwiftUiDay1
+//
+//  Created by Reham on 29/05/2025.
+//
 
 import SwiftUI
 import MapKit
@@ -15,7 +21,7 @@ struct MyMap: View {
             MapView(
                        selectedCoordinate: $selectedCoordinate,
                        centerCoordinate: centerCoordinate,
-                       locationName: "Selected Location"
+                       locationName: "You're here"
                    )
             .edgesIgnoringSafeArea(.all)
             .offset(y: -10)

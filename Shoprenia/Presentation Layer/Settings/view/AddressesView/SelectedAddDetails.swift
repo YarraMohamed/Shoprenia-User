@@ -10,12 +10,8 @@ import MobileBuySDK
 
 struct SelectedAddDetails: View {
     let latitude: Double
-    let longitude: Double
-    @StateObject private var viewModel = AddressViewModel(
-        addAddressUseCase: AddCustomerAddressUseCase(
-            repository: AddressRepository(addressService: AddressService())
-        )
-    )
+      let longitude: Double
+    @ObservedObject var viewModel : AddressViewModel
     
     @Environment(\.dismiss) private var dismiss
     @State private var setAsDefault = false
@@ -35,6 +31,15 @@ struct SelectedAddDetails: View {
             CustomTextField(placeholder: "Street Name", text: $viewModel.address.streetName)
                 .offset(y: 60)
                 .onChange(of: viewModel.address.streetName) { viewModel.validateForm() }
+             
+            
+            CityPickerView(selectedCity: $viewModel.address.city)
+                           .frame(maxWidth: .infinity)
+                           .padding(.horizontal)
+                           .offset(y: 70)
+                           .onChange(of: viewModel.address.city) {
+                               viewModel.validateForm()
+                           }
 
             HStack {
                 CustomTextField(placeholder: "Phone Number", text: $viewModel.address.phoneNumber)
@@ -59,7 +64,7 @@ struct SelectedAddDetails: View {
                     get: { viewModel.address.apartNumber ?? "" },
                     set: { viewModel.address.apartNumber = $0 }
                 ))
-                .onChange(of: viewModel.address.apartNumber) { viewModel.validateForm() } 
+                .onChange(of: viewModel.address.apartNumber) { viewModel.validateForm() }
             }
             .offset(y: 80)
 
@@ -75,6 +80,7 @@ struct SelectedAddDetails: View {
             Toggle("Set as Default Address", isOn: $setAsDefault)
                 .padding(.horizontal)
                 .offset(y: 100)
+                .tint(.blue)
 
                        BigButton(buttonText: "Save Changes")
                            .disabled(!viewModel.isFormValid)
@@ -84,7 +90,6 @@ struct SelectedAddDetails: View {
                                    viewModel.address.latitude = latitude
                                    viewModel.address.longitude = longitude
 
-                                   print(" Address Saved! Lat: \(viewModel.address.latitude), Lon: \(viewModel.address.longitude)")
                                    viewModel.saveAddress(setAsDefault: setAsDefault)
                                    dismiss()
                                }
@@ -99,3 +104,41 @@ struct SelectedAddDetails: View {
     }
 }
 
+
+struct CityPickerView: View {
+    @Binding var selectedCity: String
+    let cities = ["Cairo", "Giza", "Zagazig", "Mansoura", "Alexandria"]
+    
+    var body: some View {
+        Menu {
+            ForEach(cities, id: \.self) { city in
+                Button(action: { selectedCity = city }) {
+                    HStack {
+                        Text(city)
+                        Spacer()
+                        if selectedCity == city {
+                            Image(systemName: "checkmark")
+                        }
+                    }
+                }
+            }
+        } label: {
+            HStack {
+                
+                Text(selectedCity.isEmpty ? "Select City" : selectedCity)
+                    .foregroundColor(selectedCity.isEmpty ? .gray : .primary)
+                
+                Spacer()
+                Image(systemName: "chevron.down")
+                                   .font(.caption)
+        
+            }
+            .padding(10)
+            .background(
+                RoundedRectangle(cornerRadius: 8)
+                    .stroke(Color.gray, lineWidth: 1)
+            )
+            
+        }
+    }
+}

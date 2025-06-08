@@ -35,7 +35,8 @@ struct ContentView: View {
                     case .profile:
                         ProfileView(path: $path)
                     case .settings:
-                        SettingsView()
+                        let addressVM = container.resolve(AddressViewModel.self)
+                        SettingsView(viewModel : addressVM)
                     }
                 }
         }
