@@ -1,4 +1,3 @@
-//
 //  AddressService.swift
 //  Shoprenia
 //
@@ -9,65 +8,70 @@ import Foundation
 import MobileBuySDK
 
 class AddressService: AddressServiceProtocol {
+
     func addCustomerAddress(
-        address: CustomerAddress,
-        setAsDefault: Bool,
-        completion: @escaping (Result<Storefront.MailingAddress, Error>) -> Void
-    ) {
-        let accessToken = getCustomerAccessToken()
+          address: CustomerAddress,
+          setAsDefault: Bool,
+          completion: @escaping (Result<Storefront.MailingAddress, Error>) -> Void
+      ) {
+          let accessToken = getCustomerAccessToken()
+          let coordinateString = encodeCoordinates(lat: address.latitude, lon: address.longitude)
 
-        let mutation = Storefront.buildMutation { $0
-            .customerAddressCreate(
-                customerAccessToken: accessToken,
-                address: Storefront.MailingAddressInput(
-                    address1: address.streetName,
-                    address2: [
-                        "Build: \( address.buildingNumber ?? "")",
-                        "Floor: \(address.floorNumber ?? "")",
-                        "Landmark: \(address.landmark ?? "")"
-                    ].compactMap { $0 }.joined(separator: ", "), 
-                    city: address.city,
-                    country: address.country,
-                    firstName: address.addName,
-                    lastName: address.apartNumber,
-                    phone: address.phoneNumber,
-                    zip: "\(address.latitude),\(address.longitude)"               )
-            ) { $0
-                .customerAddress { $0
-                    .id()
-                }
-                .customerUserErrors { $0
-                    .field()
-                    .message()
-                }
-            }
-        }
-
-        GraphQLClientService.shared.client.mutateGraphWith(mutation) { mutation, error in
-            if let error = error {
-                completion(.failure(error))
-                return
-            }
-
-            guard let createdAddress = mutation?.customerAddressCreate?.customerAddress else {
-                completion(.failure(NSError(domain: "Unknown error", code: -1)))
-                return
-            }
-
-            if setAsDefault {
-                self.setDefaultAddress(addressID: createdAddress.id.rawValue) { result in
-                    switch result {
-                    case .success:
-                        print(" Address set as default successfully")
-                    case .failure(let error):
-                        print(" Failed to set default address: \(error.localizedDescription)")
-                    }
-                }
-            }
-
-            completion(.success(createdAddress))
-        }.resume()
-    }
+  
+          let mutation = Storefront.buildMutation { $0
+              .customerAddressCreate(
+                  customerAccessToken: accessToken,
+                  address: Storefront.MailingAddressInput(
+                      address1: address.streetName,
+                      address2: [
+                          "Build: \( address.buildingNumber ?? "")",
+                          "Floor: \(address.floorNumber ?? "")",
+                          "Landmark: \(address.landmark ?? "")"
+                      ].compactMap { $0 }.joined(separator: ", "),
+                      city: address.city,
+                      country: address.country,
+                      firstName: address.addName,
+                      lastName: address.apartNumber,
+                      phone: address.phoneNumber,
+                      zip: coordinateString
+                  )
+              ) { $0
+                  .customerAddress { $0
+                      .id()
+                  }
+                  .customerUserErrors { $0
+                      .field()
+                      .message()
+                  }
+              }
+          }
+  
+          GraphQLClientService.shared.client.mutateGraphWith(mutation) { mutation, error in
+              if let error = error {
+                  completion(.failure(error))
+                  return
+              }
+  
+              guard let createdAddress = mutation?.customerAddressCreate?.customerAddress else {
+                  completion(.failure(NSError(domain: "Unknown error", code: -1)))
+                  return
+              }
+  
+              if setAsDefault {
+                  self.setDefaultAddress(addressID: createdAddress.id.rawValue) { result in
+                      switch result {
+                      case .success:
+                          print(" Address set as default successfully")
+                      case .failure(let error):
+                          print(" failed to set default address \(error.localizedDescription)")
+                      }
+                  }
+              }
+  
+              completion(.success(createdAddress))
+          }.resume()
+      }
+    
 
     func setDefaultAddress(addressID: String, completion: @escaping (Result<Bool, Error>) -> Void) {
         let accessToken = getCustomerAccessToken()
@@ -96,7 +100,7 @@ class AddressService: AddressServiceProtocol {
             }
 
             guard mutation?.customerDefaultAddressUpdate?.customer?.defaultAddress != nil else {
-                completion(.failure(NSError(domain: "Unknown error", code: -1)))
+                completion(.failure(NSError(domain: "error", code: -1)))
                 return
             }
 
@@ -120,10 +124,11 @@ class AddressService: AddressServiceProtocol {
                         .address1()
                         .address2()
                         .city()
-                        .province()
                         .country()
                         .zip()
                         .phone()
+                        .latitude()
+                        .longitude()
                     }
                 }
             }
@@ -136,7 +141,7 @@ class AddressService: AddressServiceProtocol {
             }
 
             guard let customer = query?.customer else {
-                completion(.failure(NSError(domain: "Unknown error", code: -1)))
+                completion(.failure(NSError(domain: "error", code: -1)))
                 return
             }
 
@@ -149,8 +154,7 @@ class AddressService: AddressServiceProtocol {
     }
 
     
-    
-// update
+    // update
     func updateCustomerAddress(
         addressID: String,
         address: CustomerAddress,
@@ -158,25 +162,30 @@ class AddressService: AddressServiceProtocol {
         completion: @escaping (Result<Storefront.MailingAddress, Error>) -> Void
     ) {
         let accessToken = getCustomerAccessToken()
-
+        let coordinateString = encodeCoordinates(lat: address.latitude, lon: address.longitude)
+        
+        
+        let mailingAddressInput = Storefront.MailingAddressInput(
+            address1: address.streetName,
+            address2: [
+                "Build: \(address.buildingNumber ?? "")",
+                "Floor: \(address.floorNumber ?? "")",
+                "Landmark: \(address.landmark ?? "")"
+            ].compactMap { $0 }.joined(separator: ", "),
+            city: address.city,
+            country: address.country.isEmpty ? " " : address.country,
+            firstName: address.addName,
+            lastName: address.apartNumber,
+            phone: address.phoneNumber,
+            zip: coordinateString
+        )
+        
+        
         let mutation = Storefront.buildMutation { $0
             .customerAddressUpdate(
                 customerAccessToken: accessToken,
                 id: GraphQL.ID(rawValue: addressID),
-                address: Storefront.MailingAddressInput(
-                    address1: address.streetName,
-                    address2: [
-                        "Build: \(address.buildingNumber ?? "")",
-                        "Floor: \(address.floorNumber ?? "")",
-                        "Landmark: \(address.landmark ?? "")"
-                    ].compactMap { $0 }.joined(separator: ", "),
-                    city: address.city,
-                    country: address.country,
-                    firstName: address.addName,
-                    lastName: address.apartNumber,
-                    phone: address.phoneNumber,
-                    zip: address.zip
-                )
+                address: mailingAddressInput
             ) { $0
                 .customerAddress { $0
                     .id()
@@ -193,44 +202,49 @@ class AddressService: AddressServiceProtocol {
                 }
             }
         }
-
-        GraphQLClientService.shared.client.mutateGraphWith(mutation) { mutation, error in
+        
+        GraphQLClientService.shared.client.mutateGraphWith(mutation) { mutationResponse, error in
             if let error = error {
+                print(" Mutation error: \(error.localizedDescription)")
                 completion(.failure(error))
                 return
             }
-
-            if let userErrors = mutation?.customerAddressUpdate?.customerUserErrors, !userErrors.isEmpty {
-                let errorMessage = userErrors.map {
-                    let fields = $0.field?.joined(separator: ", ") ?? "Unknown field"
-                    return "\(fields): \($0.message)"
-                }.joined(separator: ", ")
+            
+            if let userErrors = mutationResponse?.customerAddressUpdate?.customerUserErrors, !userErrors.isEmpty {
+                let errorMessage = userErrors.map { $0.message }.joined(separator: ", ")
+                print(" User errors: \(errorMessage)")
                 completion(.failure(NSError(domain: errorMessage, code: -1)))
                 return
             }
-
-            guard let updatedAddress = mutation?.customerAddressUpdate?.customerAddress else {
-                completion(.failure(NSError(domain: "Unknown error", code: -1)))
+            
+            guard let updatedAddress = mutationResponse?.customerAddressUpdate?.customerAddress else {
+                completion(.failure(NSError(domain: "No address in response", code: -1)))
                 return
             }
-
+            
+            if let zip = updatedAddress.zip {
+            //    let coords = self.decodeCoordinates(zip)
+              //  print(" Decoded Coordinates: \(coords)")
+            }
+            
             if setAsDefault {
                 self.setDefaultAddress(addressID: updatedAddress.id.rawValue) { result in
-                    switch result {
-                    case .success:
-                        print("Address set as default")
-                    case .failure(let error):
-                        print(" Failed to set default : \(error.localizedDescription)")
-                    }
+                    completion(result.map { _ in updatedAddress })
                 }
+            } else {
+                completion(.success(updatedAddress))
             }
-
-            completion(.success(updatedAddress))
         }.resume()
     }
 
- 
 
+    private func encodeCoordinates(lat: Double, lon: Double) -> String {
+        let coordinateString = String(format: "%.14f,%.14f", lat, lon)
+        return Data(coordinateString.utf8).base64EncodedString()
+    }
+
+
+//delete
     func deleteCustomerAddress(addressID: String, completion: @escaping (Result<Bool, Error>) -> Void) {
         let accessToken = getCustomerAccessToken()
 

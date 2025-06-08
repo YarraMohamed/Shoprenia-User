@@ -1,41 +1,60 @@
-////
-////  UpdatedAddressMap.swift
-////  Shoprenia
-////
-////  Created by Reham on 05/06/2025.
-////
-//
-//import SwiftUI
-//import CoreLocation
-//
-//struct UpdateAddressMap: View {
-//    let initialLatitude: Double
-//    let initialLongitude: Double
-//    @StateObject private var locationManager = LocationManager()
-//    @State private var selectedCoordinate: CLLocationCoordinate2D?
-//
-//    var body: some View {
-//        VStack {
-//            MyMap(
-//                selectedCoordinate: $selectedCoordinate,
-//                centerCoordinate: CLLocationCoordinate2D(latitude: initialLatitude, longitude: initialLongitude)
-//            )
-//            .padding(.top, 10)
-//            .cornerRadius(25)
-//            .frame(height: 570)
-//
-//            NavigationLink(
-//                destination: UpdateAddressDetails(
-//                    latitude: selectedCoordinate?.latitude ?? initialLatitude,
-//                    longitude: selectedCoordinate?.longitude ?? initialLongitude
-//                )
-//            ) {
-//                BigButton(buttonText: "Update Address").offset(y: 20)
-//            }
-//
-//            Spacer()
-//        }
-//        .navigationTitle("Update Address")
-//        .navigationBarTitleDisplayMode(.inline)
-//    }
-//}
+import SwiftUI
+import CoreLocation
+
+
+struct UpdateAddressMap: View {
+    var selectedAddress: CustomerAddress
+    let initialLatitude: Double
+    let initialLongitude: Double
+    
+    @StateObject private var locationManager = LocationManager()
+    @State private var selectedCoordinate: CLLocationCoordinate2D?
+    @State private var isActive = false
+    
+    var body: some View {
+        VStack {
+            MyMap(
+                selectedCoordinate: $selectedCoordinate,
+                centerCoordinate: CLLocationCoordinate2D(
+                    latitude: initialLatitude,
+                    longitude: initialLongitude
+                )
+            )
+            .padding(.top, 10)
+            .cornerRadius(25)
+            .frame(height: 570)
+            
+            NavigationLink(
+                destination: UpdateAddressDetails(
+                    selectedAddress: selectedAddress,
+                    latitude: selectedCoordinate?.latitude ?? initialLatitude,
+                    longitude: selectedCoordinate?.longitude ?? initialLongitude
+                ),
+                isActive: $isActive,
+                label: { EmptyView() }
+            )
+            .hidden()
+            
+            BigButton(buttonText: "Update Address")
+                .offset(y: 20)
+                .onTapGesture {
+                    if selectedCoordinate == nil {
+                         selectedCoordinate = CLLocationCoordinate2D(latitude: initialLatitude, longitude: initialLongitude)
+                     }
+                     print("Selected coordinate: \(selectedCoordinate?.latitude ?? 0), \(selectedCoordinate?.longitude ?? 0)")
+                    isActive = true
+                }
+            
+            Spacer()
+        }
+        .navigationTitle("Update Address")
+        .navigationBarTitleDisplayMode(.inline)
+        .onAppear {
+            selectedCoordinate = CLLocationCoordinate2D(
+                latitude: initialLatitude,
+                longitude: initialLongitude
+            )
+        }
+    }
+}
+

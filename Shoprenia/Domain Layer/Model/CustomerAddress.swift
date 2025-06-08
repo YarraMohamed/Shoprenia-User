@@ -6,6 +6,7 @@
 //
 
 struct CustomerAddress {
+    var id: String?
     var addName: String
     var streetName: String
     var phoneNumber: String
