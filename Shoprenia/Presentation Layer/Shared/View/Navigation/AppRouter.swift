@@ -18,5 +18,9 @@ enum AppRouter: Hashable {
     case register
     case profile
     case settings
+    case pastOrders
+    case shippingAddresses
+    case paymentMethods
+    case invoice
     
 }
