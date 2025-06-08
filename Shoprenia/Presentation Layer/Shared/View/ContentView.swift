@@ -17,7 +17,7 @@ struct ContentView: View {
                         let productsVM = self.container.resolve(ProductsViewModel.self)
                        ProductsView(viewModel: productsVM, path: $path)
                     case .cart:
-                        PlaceholderView()
+                        CartView(path: $path)
                     case .favorites:
                         PlaceholderView()
                     case .products(let vendor):
@@ -37,6 +37,14 @@ struct ContentView: View {
                     case .settings:
                         let addressVM = container.resolve(AddressViewModel.self)
                         SettingsView(viewModel : addressVM)
+                    case .pastOrders:
+                        OrderHistory()
+                    case .shippingAddresses:
+                        AddressSelectionView()
+                    case .paymentMethods:
+                        PaymentView()
+                    case .invoice:
+                        InvoiceView()
                     }
                 }
         }
