@@ -20,6 +20,7 @@ struct CartView: View {
                 }
 
             }
+            .listStyle(.plain)
             .scrollContentBackground(.hidden)
             .padding(.bottom,20)
             
