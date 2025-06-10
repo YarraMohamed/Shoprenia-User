@@ -38,7 +38,7 @@ struct CustomNavigationBar: View {
                 
                 Button(action: {
                     if viewModel.isAuthenticated(){
-                        path.append(AppRouter.favorites)
+                        path.append(AppRouter.wishlist)
                     }else{
                         showAlert = true
                     }

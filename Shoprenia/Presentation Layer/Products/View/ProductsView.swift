@@ -21,13 +21,15 @@ struct ProductsView: View {
                  HStack{
                      Image(systemName: "magnifyingglass")
                          .foregroundColor(.gray)
-                     TextField("Search", text: .constant(""))
+                     TextField("Search...", text: $viewModel.searchText)
+                         .textInputAutocapitalization(.never)
                  }
                  .padding(10)
                  .background(Color(.systemGray6))
                  .cornerRadius(8)
                  .padding(10)
-                ProductsGridView(path: $path, products: viewModel.products)
+                
+                ProductsGridView(path: $path, products: viewModel.searchedProducts)
             }
         }
         .navigationTitle(vendor ?? "Products")

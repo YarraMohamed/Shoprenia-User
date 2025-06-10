@@ -19,14 +19,12 @@ struct ContentView: View {
                        ProductsView(viewModel: productsVM, path: $path)
                     case .cart:
                         CartView(path: $path)
-                    case .favorites:
-                        PlaceholderView()
                     case .products(let vendor):
                         let productsVM = self.container.resolve(ProductsViewModel.self)
                         ProductsView(viewModel: productsVM,path: $path, vendor: vendor)
                     case .productDetails(productId: let productId):
                         let productDetailsVM = self.container.resolve(ProductDetailsViewModel.self)
-                        ProductDetailsView(productId: productId.rawValue, viewModel: productDetailsVM, path: $path)
+                        ProductDetailsView(productId: productId, viewModel: productDetailsVM, path: $path)
                     case .login:
                         let loginVM = self.container.resolve(LoginViewModel.self)
                         LoginView(viewModel: loginVM,path:$path)
@@ -59,6 +57,9 @@ struct ContentView: View {
                     case .addressDetails(lat: let lat, lon: let lon):
                         //let addressVM = container.resolve(AddressViewModel.self)
                         SelectedAddDetails(latitude: lat, longitude: lon, viewModel: addressVM, path: $path)
+                    case .wishlist:
+                        let wishlistVM = self.container.resolve(WishlistViewModel.self)
+                        WishlistView(viewModel: wishlistVM, path: $path)
                     }
                 }
         }
