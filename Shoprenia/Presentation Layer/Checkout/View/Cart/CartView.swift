@@ -29,7 +29,7 @@ struct CartView: View {
                 .fontWeight(.semibold)
                 .padding(.bottom,10)
             Button("Get Them"){
-                
+                path.append(AppRouter.shippingAddresses)
             }
             .font(.system(size: 16, weight: .semibold))
             .foregroundStyle(.white)

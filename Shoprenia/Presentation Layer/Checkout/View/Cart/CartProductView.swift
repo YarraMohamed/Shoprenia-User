@@ -34,7 +34,6 @@ struct CartProductView: View {
                         }
                     }) {
                         Image(.minus)
-                            .foregroundColor(.gray)
                     }
                     
                     Text("\(quantity)")
@@ -45,7 +44,6 @@ struct CartProductView: View {
                         quantity += 1
                     }) {
                         Image(.plus)
-                            .foregroundColor(.gray)
                     }
                     
                 }
