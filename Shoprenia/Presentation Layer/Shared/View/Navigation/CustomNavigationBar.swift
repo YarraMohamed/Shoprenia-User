@@ -20,28 +20,31 @@ struct CustomNavigationBar: View {
                 .foregroundColor(.app)
             Spacer()
             HStack(spacing: 20) {
-                Image(.search)
-                    .resizable()
-                    .frame(width: 28,height: 28)
-                    .onTapGesture {
-                        path.append(AppRouter.search)
+                Button(action: {
+                    path.append(AppRouter.search)
+                }) {
+                    Image(.search)
+                }
+                
+                Button(action: {
+                    if viewModel.isAuthenticated(){
+                        path.append(AppRouter.cart)
+                    }else{
+                        showAlert = true
                     }
-                Image(.cart)
-                    .onTapGesture {
-                        if viewModel.isAuthenticated(){
-                            path.append(AppRouter.cart)
-                        }else{
-                            showAlert = true
-                        }
+                }) {
+                    Image(.cart)
+                }
+                
+                Button(action: {
+                    if viewModel.isAuthenticated(){
+                        path.append(AppRouter.favorites)
+                    }else{
+                        showAlert = true
                     }
-                Image(.heart)
-                    .onTapGesture {
-                        if viewModel.isAuthenticated(){
-                            path.append(AppRouter.favorites)
-                        }else{
-                            showAlert = true
-                        }
-                    }
+                }) {
+                    Image(.heart)
+                }
             }
         }
         .padding(.horizontal)
@@ -62,6 +65,6 @@ struct CustomNavigationBar: View {
 
 
 #Preview {
-   // CustomNavigationBar(path:.constant(NavigationPath()))
+    CustomNavigationBar(path:.constant(NavigationPath()))
 }
 

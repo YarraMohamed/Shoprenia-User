@@ -40,7 +40,7 @@ struct ContentView: View {
                     case .pastOrders:
                         OrderHistory()
                     case .shippingAddresses:
-                        AddressSelectionView()
+                        AddressSelectionView(path:$path)
                     case .paymentMethods:
                         PaymentView()
                     case .invoice:
