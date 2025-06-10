@@ -23,18 +23,21 @@ struct AboutUs: View {
             Text(" Shoprenia offers").font(.title).foregroundStyle(Color.blue)
                 .offset(y : 20)
             Text("""
-        • A wide range of products from trusted vendors
-        • Smart search and advanced filtering
-        • Easy cart and favorites management
-        • Exclusive discounts and Apple Pay integration
-        • A complete history of your orders, always accessible
+        • A wide range of products from trusted vendors.
+        • Smart search and advanced filtering.
+        • Easy cart and favorites management.
+        • Exclusive discounts and Apple Pay integration.
+        • A complete history of your orders, always accessible.
         
         Our mission is to bring convenience and joy to your shopping journey.
         We’re constantly improving and adding new features to serve you better. Thank you for being a part of the Shoprenia family!
         """)
-            .offset(x : -20,y: -10)
-            .padding()
+            
+//            .offset(x : -20,y: -10)
+            .padding(.top,10)
         }
+        .navigationTitle("About Us")
+        .padding(20)
     }
 }
 

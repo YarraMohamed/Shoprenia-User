@@ -20,4 +20,12 @@ struct CustomerAddress {
     var latitude: Double 
     var longitude: Double
     
+    static var empty: CustomerAddress {
+        return CustomerAddress(
+            addName: "", streetName: "", phoneNumber: "",
+            buildingNumber: "", floorNumber: "", apartNumber: "",
+            landmark: "", city: "", country: "", zip: "",
+            latitude: 0.0, longitude: 0.0
+        )
+    }
 }

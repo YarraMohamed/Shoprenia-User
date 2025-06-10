@@ -18,8 +18,9 @@ struct CurrencyPicker: View {
         }) {
             HStack {
                 Text(title)
-                    .font(.system(size: 14, weight: .medium, design: .serif))
+                    .font(.system(size: 16, weight: .medium))
                     .foregroundStyle(.blue)
+                    
                 
                 Spacer()
                 

@@ -36,6 +36,7 @@ struct AddressSelectionView: View {
         .toolbar{
             ToolbarItem{
                 Button(action: {
+                    path.append(AppRouter.addresses)
                 }) {
                     Image(.plus)
                 }
