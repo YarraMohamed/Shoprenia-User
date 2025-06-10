@@ -67,6 +67,7 @@ struct HelpCenter: View {
             .padding(.horizontal, 50)
             
         }
+        .navigationTitle("Help Center")
         
     }
 }

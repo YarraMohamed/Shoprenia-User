@@ -2,7 +2,8 @@ import SwiftUI
 import MobileBuySDK
 
 struct Addresses: View {
-        @ObservedObject var viewModel : AddressViewModel
+    @ObservedObject var viewModel : AddressViewModel
+    @Binding var path: NavigationPath
 
     @State private var editableAddress: CustomerAddress?
     @State private var navigationCoordinates: (latitude: Double, longitude: Double)?
@@ -19,8 +20,6 @@ struct Addresses: View {
     }
 
     var body: some View {
-        
-        NavigationView {
             VStack {
                 Text("\(viewModel.addresses.count) Addresses")
                     .padding(.vertical, 8)
@@ -34,19 +33,25 @@ struct Addresses: View {
                 } else {
                     addressList
                 }
-
-                NavigationLink(destination: AddFromMap(viewModel: viewModel)) {
-                    BigButton(buttonText: "Add New Address")
-                }
-                .padding(.top, 20)
-                .padding(.horizontal)
-
+                
+                BigButton(buttonText: "Add New Address")
+                    .onTapGesture {
+                        path.append(AppRouter.addAddressFromMap)
+                    }
+                    .padding(.top, 20)
+                    .padding(.horizontal)
                 Spacer()
             }
+            .navigationTitle("Saved Addresses")
+        
             .background(navigationLink)
             .onAppear {
                 viewModel.loadCustomerAddresses()
             }
+            .onReceive(viewModel.$reloadAddress.removeDuplicates()) { _ in
+                viewModel.loadCustomerAddresses()
+            }
+
             .alert("Delete Address", isPresented: $showDeleteAlert) {
                 Button("Cancel", role: .cancel) {}
                 Button("Delete", role: .destructive) {
@@ -57,7 +62,7 @@ struct Addresses: View {
             } message: {
                 Text("Are you sure you want to delete this address?")
             }
-        }
+        
         .navigationViewStyle(.stack)
     }
     

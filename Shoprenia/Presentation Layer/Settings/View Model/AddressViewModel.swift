@@ -11,6 +11,7 @@ import Swift
 
 class AddressViewModel: ObservableObject {
     private let addAddressUseCase: AddCustomerAddressUseCase
+    @Published var reloadAddress = false
     @Published var defaultAddressID: String? = nil
     @Published var address = CustomerAddress(
            addName: "",
@@ -60,6 +61,7 @@ class AddressViewModel: ObservableObject {
              switch result {
              case .success(let savedAddress):
                  print(" Address saved successfully: \(savedAddress.id.rawValue)")
+                 self.reloadAddress.toggle()
              case .failure(let error):
                  print("failed acces \(error.localizedDescription)")
              }
@@ -122,6 +124,5 @@ class AddressViewModel: ObservableObject {
             }
         }
     }
-    
 }
 

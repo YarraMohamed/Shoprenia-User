@@ -10,10 +10,10 @@ import MobileBuySDK
 
 struct SelectedAddDetails: View {
     let latitude: Double
-      let longitude: Double
+    let longitude: Double
     @ObservedObject var viewModel : AddressViewModel
-    
-    @Environment(\.dismiss) private var dismiss
+    @Binding var path:NavigationPath
+//    @Environment(\.dismiss) private var dismiss
     @State private var setAsDefault = false
     
     var body: some View {
@@ -91,7 +91,8 @@ struct SelectedAddDetails: View {
                                    viewModel.address.longitude = longitude
 
                                    viewModel.saveAddress(setAsDefault: setAsDefault)
-                                   dismiss()
+                                   viewModel.address = CustomerAddress.empty
+                                   path.removeLast(2)
                                }
                            }
                            .offset(y: 150)
@@ -142,3 +143,5 @@ struct CityPickerView: View {
         }
     }
 }
+
+
