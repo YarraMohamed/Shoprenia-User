@@ -17,7 +17,7 @@ struct UpdateAddressDetails: View {
         self.latitude = latitude
         self.longitude = longitude
         
-              var vm = AddressViewModel()
+        let vm = AddressViewModel()
 
         vm.address = selectedAddress
         vm.address.latitude = latitude

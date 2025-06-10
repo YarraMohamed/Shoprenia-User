@@ -4,6 +4,7 @@ import CoreLocation
 struct AddFromMap: View {
     @StateObject private var locationManager = LocationManager()
     @State private var selectedCoordinate: CLLocationCoordinate2D?
+    @Binding var path:NavigationPath
     var viewModel : AddressViewModel
 
     var body: some View {
@@ -16,15 +17,12 @@ struct AddFromMap: View {
             .cornerRadius(25)
             .frame(height: 570)
 
-            NavigationLink(
-                destination: SelectedAddDetails(
-                    latitude: selectedCoordinate?.latitude ?? locationManager.userLocation?.latitude ?? 30.0444,
-                    longitude: selectedCoordinate?.longitude ?? locationManager.userLocation?.longitude ?? 31.2357, viewModel: viewModel
-                )
-            ) {
-                BigButton(buttonText: "Confirm Address").offset(y: 20)
-            }
-
+            BigButton(buttonText: "Confirm Address").offset(y:20)
+                .onTapGesture {
+                    path.append(AppRouter.addressDetails(
+                        lat: selectedCoordinate?.latitude ?? locationManager.userLocation?.latitude ?? 30.0444,
+                        lon: selectedCoordinate?.longitude ?? locationManager.userLocation?.longitude ?? 31.2357))
+                }
             Spacer()
         }
 
