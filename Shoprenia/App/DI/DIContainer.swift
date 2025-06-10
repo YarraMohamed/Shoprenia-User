@@ -24,7 +24,8 @@ final class DIContainer {
             ProductDetailsAssembly(),
             LoginAssembly(),
             RegisterationAssembly(),
-            AddressesAssembly()
+            AddressesAssembly(),
+            CartAssembly()
         ], container: container)
     }
     
@@ -108,7 +109,7 @@ final class ProductDetailsAssembly : Assembly{
             GetProductDetailsUseCase(repo: resolver.resolve(ProductDetailsRepository.self)!)
         }
         container.register(ProductDetailsViewModel.self) { resolver in
-            ProductDetailsViewModel(productDetailsCase: resolver.resolve(GetProductDetailsUseCase.self)!)
+            ProductDetailsViewModel(productDetailsCase: resolver.resolve(GetProductDetailsUseCase.self)! , cartUseCase: resolver.resolve(CartUsecase.self)! )
         }
     }
 }
@@ -169,6 +170,22 @@ final class AddressesAssembly : Assembly{
         }
         container.register(AddressViewModel.self) { resolver in
             AddressViewModel(addAddressUseCase: resolver.resolve(AddCustomerAddressUseCase.self)!)
+        }
+    }
+}
+final class CartAssembly : Assembly{
+    func assemble(container: Container) {
+        container.register(CartService.self) { _ in
+            CartService()
+        }
+        container.register(CartRepository.self) { resolver in
+            CartRepository(service: resolver.resolve(CartService.self)!)
+        }
+        container.register(CartUsecase.self) { resolver in
+            CartUsecase(repository: resolver.resolve(CartRepository.self)!)
+        }
+        container.register(CartViewModel.self) { resolver in
+            CartViewModel(cartUsecase: resolver.resolve(CartUsecase.self)!)
         }
     }
 }

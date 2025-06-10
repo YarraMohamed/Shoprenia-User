@@ -5,6 +5,8 @@
 //
 
 import SwiftUI
+import MobileBuySDK
+import Foundation
 
 struct SettingsView: View {
     @ObservedObject var viewModel : AddressViewModel
@@ -14,6 +16,13 @@ struct SettingsView: View {
             SectionText(Stext: "Account")
                 .padding(.leading)
                 .offset(x : -130  )
+            
+                .onAppear{
+                    let accessToken = getCustomerAccessToken()
+                    print ("access token : ")
+                    print (accessToken)
+                }
+            
             
             UserProfile(userName: vm.getUserName() ?? "")
                 .offset(x : -70 , y : 20)
@@ -31,4 +40,10 @@ struct SettingsView: View {
         }
         .padding(.top)
     }
+    
+    
+    private func getCustomerAccessToken() -> String {
+        return UserDefaultsManager.shared.retrieveShopifyCustomerAccessToken() ?? ""
+    }
+        
 }

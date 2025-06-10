@@ -7,6 +7,11 @@ struct ProductDetailsView: View {
     @State var selectedSize = "Select size"
     @State var selectedColor = "Select color"
     @ObservedObject var viewModel : ProductDetailsViewModel
+    @State private var isInCart = false
+    @State private var showToast = false
+    @State private var toastMessage = ""
+
+
     
     @Binding var path : NavigationPath
     
@@ -148,10 +153,17 @@ struct ProductDetailsView: View {
                 .frame(maxWidth: .infinity)
                 
                 HStack{
-                    Button("Add to cart"){
-                        //Logic hna w bta3
-                        print("Added to cart")
+                    Button("Add to cart") {
+                        if let matchedVariant = viewModel.getMatchingVariant(selectedSize: selectedSize, selectedColor: selectedColor) {
+                            viewModel.addToCart(variantId: matchedVariant.id.rawValue, quantity: 1)
+                            toastMessage = "🎉 Added successfully.\nYou can select the quantity in the shopping cart."
+
+                            showToast = true
+                        }
                     }
+
+
+
                     .font(.system(size: 16, weight: .semibold))
                     .foregroundStyle(.white)
                     .frame(width: 245, height: 48)
@@ -170,7 +182,6 @@ struct ProductDetailsView: View {
                     }
                 }
             }
-            
         }
         
         
@@ -178,13 +189,45 @@ struct ProductDetailsView: View {
         .onAppear{
             viewModel.getProductDetails(id: GraphQL.ID(rawValue: productId))
         }
+        .overlay(
+            VStack {
+                if showToast {
+                    Text(toastMessage)
+                        .font(.subheadline)
+                        .padding()
+                        .background(Color.blue.opacity(0.9))
+                        .foregroundColor(.white)
+                        .cornerRadius(12)
+                        .transition(.opacity)
+                        .onAppear {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                withAnimation {
+                                    showToast = false
+                                }
+                            }
+                        }
+                }
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .animation(.easeInOut, value: showToast)
+        )
+
+
     }
-}
-
-#Preview {
-
-    ProductDetailsView(productId: "gid://shopify/Product/7936016351306",
-                       viewModel:ProductDetailsViewModel(productDetailsCase: GetProductDetailsUseCase(repo: ProductDetailsRepository(service: ProductDetailsService()))),
-                       path: .constant(NavigationPath()))
 
 }
+
+//#Preview {
+//
+//    ProductDetailsView(
+//productId: "gid://shopify/Product/7936016351306",
+//viewModel:ProductDetailsViewModel(
+//    productDetailsCase: GetProductDetailsUseCase(
+//        repo: ProductDetailsRepository(service: ProductDetailsService())
+//    ),
+//    cartUseCase: <#CartUsecase#>
+//),
+//                       path: .constant(NavigationPath())
+//)
+//
+//}

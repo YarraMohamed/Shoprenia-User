@@ -21,12 +21,17 @@ class ProductDetailsService: ProductDetailsServiceProtocol {
                     .vendor()
                     .productType()
                     .tags()
-                    .variants(first: 1){ $0
+                    .variants(first: 100){ $0
                         .nodes{ $0
+                            .id()
                             .currentlyNotInStock()
                             .price { $0
                                 .amount()
                                 .currencyCode()
+                            }
+                            .selectedOptions { $0
+                                .name()
+                                .value()
                             }
                         }
                     }
@@ -53,6 +58,10 @@ class ProductDetailsService: ProductDetailsServiceProtocol {
                     return
                 }
                 let productDetails: Storefront.Product = details
+                for variant in productDetails.variants.nodes {
+                    print("Variant ID: \(variant.id.rawValue)")
+                }
+              
                 completion(.success(productDetails))
             }.resume()
             
