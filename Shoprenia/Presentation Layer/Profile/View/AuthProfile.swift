@@ -23,8 +23,10 @@ struct AuthProfile: View {
                             switch item {
                                 case "Settings":
                                 path.append(AppRouter.settings)
-                            default :
-                                print(item)
+                                case "Wishlist":
+                                path.append(AppRouter.favorites)
+                            default:
+                                path.append(AppRouter.pastOrders)
                             }
                         }
                         Spacer()

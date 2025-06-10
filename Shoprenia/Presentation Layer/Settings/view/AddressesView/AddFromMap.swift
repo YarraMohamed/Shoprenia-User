@@ -4,6 +4,7 @@ import CoreLocation
 struct AddFromMap: View {
     @StateObject private var locationManager = LocationManager()
     @State private var selectedCoordinate: CLLocationCoordinate2D?
+    var viewModel : AddressViewModel
 
     var body: some View {
         VStack {
@@ -18,23 +19,23 @@ struct AddFromMap: View {
             NavigationLink(
                 destination: SelectedAddDetails(
                     latitude: selectedCoordinate?.latitude ?? locationManager.userLocation?.latitude ?? 30.0444,
-                    longitude: selectedCoordinate?.longitude ?? locationManager.userLocation?.longitude ?? 31.2357
+                    longitude: selectedCoordinate?.longitude ?? locationManager.userLocation?.longitude ?? 31.2357, viewModel: viewModel
                 )
             ) {
-                BigButton(buttonText: "Confirm Address")
-                    .offset(y: 20)
+                BigButton(buttonText: "Confirm Address").offset(y: 20)
             }
 
             Spacer()
         }
+
         .onAppear {
-                    locationManager.startUpdatingLocation()
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                        if let currentLocation = locationManager.userLocation {
-                            selectedCoordinate = currentLocation
-                        }
-                    }
+            locationManager.startUpdatingLocation()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                if selectedCoordinate == nil, let currentLocation = locationManager.userLocation {
+                    selectedCoordinate = currentLocation
                 }
+            }
+        }
         .navigationTitle("Step 1/2")
         .navigationBarTitleDisplayMode(.inline)
     }

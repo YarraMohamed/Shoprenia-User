@@ -1,5 +1,3 @@
-
-
 //  SettingList.swift
 //  Demo SWPro
 //
@@ -9,20 +7,19 @@
 import SwiftUI
 
 struct SettingList: View {
+    let viewModel: AddressViewModel
+
     var body: some View {
         List {
-            SettingsRowList()
+            SettingsRowList(viewModel:viewModel)
         }.frame(width: 420 )
             
     }
 }
 
-
-#Preview {
-    SettingList()
-}
-
 struct SettingsRowList: View {
+    let viewModel: AddressViewModel
+
     @State var rows = ["Currency", "Saved Addresses", "Help Center", "About us"]
     @AppStorage("selectedCurrency")  var selectedCurrency: String = "EGP"
     
@@ -31,7 +28,7 @@ struct SettingsRowList: View {
             if row == "Currency" {
                 CurrencyPicker(selectedCurrency: $selectedCurrency, title: row)
             } else {
-                NavigationLink(destination: SettingsDetailsView(title: row)) {
+                NavigationLink(destination: SettingsDetailsView(title: row, viewModel: viewModel)) {
                     Text(row)
                         .font(.system(size: 14, weight: .medium, design: .serif))
                         .foregroundStyle(.blue)
@@ -45,6 +42,8 @@ struct SettingsRowList: View {
 
 struct SettingsDetailsView: View {
     let title: String
+    let viewModel: AddressViewModel
+
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -53,7 +52,7 @@ struct SettingsDetailsView: View {
             } else if title == "Help Center" {
                 HelpCenter().offset(y: 70)
             } else if title == "Saved Addresses" {
-                Addresses()
+                Addresses(viewModel: viewModel)
             }
         }
         .navigationTitle(title)
