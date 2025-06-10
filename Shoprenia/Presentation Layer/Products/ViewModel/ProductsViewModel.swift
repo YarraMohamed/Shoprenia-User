@@ -11,8 +11,12 @@ import MobileBuySDK
 class ProductsViewModel : ObservableObject {
     private let fetchProductsUseCase: GetProducts
     private var cancellables = Set<AnyCancellable>()
+    @Published var showFilter = false
+    @Published var isFilterDismissed = false
+    @Published var sliderValue : Double = 19.0
     @Published var searchText : String = ""
     @Published var searchedProducts : [Storefront.Product] = []
+    @Published var filteredProducts : [Storefront.Product] = []
     @Published var products: [Storefront.Product] = []
     
     init(fetchProductsUseCase: GetProducts) {
@@ -32,12 +36,22 @@ class ProductsViewModel : ObservableObject {
                 if searchTerm.isEmpty {
                     self.searchedProducts = self.products
                 } else {
+                    isFilterDismissed = false
                     self.searchedProducts = self.products.filter {
                         $0.title.lowercased().contains(self.searchText)
                     }
                 }
             }
             .store(in: &cancellables)
+    }
+    
+    func filterProducts() {
+            filteredProducts = products.filter { product in
+                product.variants.nodes.contains { variant in
+                    let sliderDecimal = Decimal(sliderValue)
+                   return variant.price.amount >= sliderDecimal
+                }
+            }
     }
     
     func loadAllProducts() {
