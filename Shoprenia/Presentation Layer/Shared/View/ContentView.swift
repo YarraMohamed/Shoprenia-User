@@ -44,7 +44,7 @@ struct ContentView: View {
                     case .paymentMethods:
                         PaymentView()
                     case .invoice:
-                        InvoiceView()
+                        InvoiceView(path:$path)
                     }
                 }
         }

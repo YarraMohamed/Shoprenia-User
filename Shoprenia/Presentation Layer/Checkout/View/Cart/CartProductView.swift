@@ -53,7 +53,7 @@ struct CartProductView: View {
         .frame(width: 350,height: 180)
         .overlay {
             RoundedRectangle(cornerRadius: 15)
-                .stroke(Color.gray, lineWidth: 1)
+                .stroke(Color.gray, lineWidth: 0.5)
         }
     }
 }
