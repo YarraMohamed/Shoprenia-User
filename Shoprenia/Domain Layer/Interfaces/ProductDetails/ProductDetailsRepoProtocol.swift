@@ -5,4 +5,7 @@ protocol ProductDetailsRepoProtocol{
     func fetchProductDetails(
         id: GraphQL.ID,
         completion: @escaping (Result<Storefront.Product,Error>) -> Void)
+    
+    func saveToFirestore(product: FirestoreShopifyProduct)
 }
+

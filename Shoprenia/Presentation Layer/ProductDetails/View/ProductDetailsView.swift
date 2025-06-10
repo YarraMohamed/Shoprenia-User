@@ -6,7 +6,10 @@ struct ProductDetailsView: View {
     @State var productId : String
     @State var selectedSize = "Select size"
     @State var selectedColor = "Select color"
+    @State var showAlert = false
+    
     @ObservedObject var viewModel : ProductDetailsViewModel
+    @EnvironmentObject var authViewModel: AuthenticationViewModel
     
     @Binding var path : NavigationPath
     
@@ -17,7 +20,7 @@ struct ProductDetailsView: View {
         
         ScrollView{
             VStack{
-                Divider()
+                
                 ZStack{
                     KFImage(viewModel.productDetails?.featuredImage?.url)
                         .resizable()
@@ -45,7 +48,6 @@ struct ProductDetailsView: View {
                                 .padding(.trailing,16)
                                 
                     }
-                
                 
                 HStack{
                     Image("star")
@@ -149,7 +151,7 @@ struct ProductDetailsView: View {
                 
                 HStack{
                     Button("Add to cart"){
-                        //Logic hna w bta3
+                        //Logic hna
                         print("Added to cart")
                     }
                     .font(.system(size: 16, weight: .semibold))
@@ -166,15 +168,28 @@ struct ProductDetailsView: View {
             .toolbar{
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("", image: .heartUnfilled) {
-                        print("ok")
+                        if authViewModel.isAuthenticated(){
+                            guard let product = viewModel.productDetails else{
+                                return
+                            }
+                            viewModel.saveShopifyProduct(product)
+                        }else{
+                            self.showAlert = true
+                        }
                     }
                 }
             }
-            
+            .alert(isPresented: $showAlert) {
+                Alert(
+                    title: Text("You need to login"),
+                    message: Text("Please login to continue."),
+                    primaryButton: .default(Text("Ok"), action: {
+                        path.append(AppRouter.register)
+                    }),
+                    secondaryButton: .cancel()
+                )
+            }
         }
-        
-        
-        
         .onAppear{
             viewModel.getProductDetails(id: GraphQL.ID(rawValue: productId))
         }
@@ -182,9 +197,7 @@ struct ProductDetailsView: View {
 }
 
 #Preview {
-
     ProductDetailsView(productId: "gid://shopify/Product/7936016351306",
-                       viewModel:ProductDetailsViewModel(productDetailsCase: GetProductDetailsUseCase(repo: ProductDetailsRepository(service: ProductDetailsService()))),
+                       viewModel:ProductDetailsViewModel(productDetailsCase: GetProductDetailsUseCase(repo: ProductDetailsRepository(service: ProductDetailsService())), saveToFirestoreCase: SaveToFirestore(repo: ProductDetailsRepository(service: ProductDetailsService()))),
                        path: .constant(NavigationPath()))
-
 }
