@@ -151,7 +151,7 @@ struct ProductDetailsView: View {
                 
                 HStack{
                     Button("Add to cart"){
-                        //Logic hna
+                        print("\(viewModel.productDetails?.id)")
                         print("Added to cart")
                     }
                     .font(.system(size: 16, weight: .semibold))
@@ -197,7 +197,7 @@ struct ProductDetailsView: View {
 }
 
 #Preview {
-    ProductDetailsView(productId: "gid://shopify/Product/7936016351306",
+    ProductDetailsView(productId: "gid://shopify/Product/7944168734794",
                        viewModel:ProductDetailsViewModel(productDetailsCase: GetProductDetailsUseCase(repo: ProductDetailsRepository(service: ProductDetailsService())), saveToFirestoreCase: SaveToFirestore(repo: ProductDetailsRepository(service: ProductDetailsService()))),
                        path: .constant(NavigationPath()))
 }

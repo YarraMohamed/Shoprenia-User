@@ -6,7 +6,7 @@ class LoginViewModel: ObservableObject {
     @Published var email: String = ""
     @Published var password: String = ""
     @Published var isLoggedIn : Bool = false
-   
+    @Published var showAlert: Bool = false
     private var credentialValidator : CredentialsValidationProtocol
     private var userDefaultsManager : UserDefaultsManagerProtocol
     private var loginRepo : LoginRepoProtocol
@@ -32,7 +32,6 @@ class LoginViewModel: ObservableObject {
             switch result {
             case .success(let googleUser):
                 self.createCustomerWithoutPhone(user: googleUser)
-                self.isLoggedIn = true
             case .failure(let error):
                 print("ERR in g sign in \(error.localizedDescription)")
             }
@@ -79,6 +78,7 @@ class LoginViewModel: ObservableObject {
                 print("id: \(customer.id)")
                 print("email: \(customer.email ?? "no mail")")
                 print("phone: \(customer.phone ?? "no phone")")
+                self?.isLoggedIn = true
                 self?.insertInUserDefaultsWithoutPhone(accessToken, customer)
             case .failure(let error):
                 print("In Login Viewmodel Error: \(error)")
@@ -87,7 +87,6 @@ class LoginViewModel: ObservableObject {
     }
     
     func signFirebaseUserIn(){
-        self.isLoggedIn = true
         loginRepo.signInFirebaseUser(email: email, password: password)
     }
     

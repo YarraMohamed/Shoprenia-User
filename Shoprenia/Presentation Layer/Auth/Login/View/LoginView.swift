@@ -45,15 +45,25 @@ struct LoginView: View {
                HStack{
                     Button("Login"){
                         
-                        viewModel.createCustomerAccessToken(mail: viewModel.email,
-                                                            pass: viewModel.password)
-                        viewModel.signFirebaseUserIn()
-                        print("access token is \(String(describing: UserDefaultsManager.shared.retrieveShopifyCustomerAccessToken()))")
-                        
-                        if viewModel.isLoggedIn{
-                            path.append(AppRouter.home)
+                        if viewModel.isValidEmail() && viewModel.isValidPassword(){
+                            
+                            viewModel.createCustomerAccessToken(mail: viewModel.email,
+                                pass: viewModel.password)
+                            
+                            viewModel.signFirebaseUserIn()
+                            
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                                if viewModel.isLoggedIn{
+                                    print("\(viewModel.isLoggedIn)")
+                                    path.append(AppRouter.home)
+                                    viewModel.isLoggedIn = false
+                                }else{
+                                    viewModel.showAlert = true
+                                }
+                            }
+                        }else{
+                            viewModel.showAlert = true
                         }
-                        
                     }
                     .font(.system(size: 16, weight: .semibold))
                     .foregroundStyle(.white)
@@ -75,6 +85,7 @@ struct LoginView: View {
                         viewModel.googleSignIn(rootController: getRootViewController())
                         if viewModel.isLoggedIn{
                             path.append(AppRouter.home)
+                            viewModel.isLoggedIn = false
                         }
                     }){
                         Image("g")
@@ -108,6 +119,11 @@ struct LoginView: View {
                             .foregroundColor(.blue)
                     }
                 }
+        }
+        .alert("Please insert valid credentials", isPresented: $viewModel.showAlert) {
+            Button("Ok",role: .cancel){
+                viewModel.showAlert = false
+            }
         }
     }
 }

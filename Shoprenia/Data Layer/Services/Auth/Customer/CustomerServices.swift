@@ -110,7 +110,6 @@ class CustomerServices : CustomerServicesProtocol {
         }.resume()
     }
     
-    
     func getCustomerByAccessToken(accessToken:String,completionHandler : @escaping (Result<Storefront.Customer,Error>)->Void){
         
         let query = Storefront.buildQuery { $0

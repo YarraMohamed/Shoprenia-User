@@ -26,6 +26,7 @@ final class FirebaseAuthenticationManager : FirebaseManagerProtocol{
                 if let error = error {
                     print("Error updating profile: \(error.localizedDescription)")
                 } else {
+                    completion(true)
                     print("User created with name: \(firstname) \(lastname)")
                 }
             }

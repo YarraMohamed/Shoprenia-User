@@ -54,7 +54,7 @@ final class FireStoreServices : FireStoreServicesProtocol {
             .collection("wishlist")
             .whereField("id", isEqualTo: productId)
             .getDocuments { snapshot, error in
-                if let error = error {
+                if error != nil {
                     print("Error in delete firestore")
                     return
                 }
@@ -65,7 +65,7 @@ final class FireStoreServices : FireStoreServicesProtocol {
                 }
                 
                 document.reference.delete { error in
-                    if let error = error {
+                    if error != nil {
                        print("Can't deleteb product")
                     } else {
                         print("Deleted successfully")
