@@ -10,6 +10,7 @@ struct UpdateAddressMap: View {
     @StateObject private var locationManager = LocationManager()
     @State private var selectedCoordinate: CLLocationCoordinate2D?
     @State private var isActive = false
+    @Binding var path: NavigationPath
     
     var body: some View {
         VStack {
@@ -23,28 +24,28 @@ struct UpdateAddressMap: View {
             .padding(.top, 10)
             .cornerRadius(25)
             .frame(height: 570)
-            
-            NavigationLink(
-                destination: UpdateAddressDetails(
-                    selectedAddress: selectedAddress,
-                    latitude: selectedCoordinate?.latitude ?? initialLatitude,
-                    longitude: selectedCoordinate?.longitude ?? initialLongitude
-                ),
-                isActive: $isActive,
-                label: { EmptyView() }
-            )
-            .hidden()
+//            
+//            NavigationLink(
+//                destination: UpdateAddressDetails(
+//                    selectedAddress: selectedAddress,
+//                    latitude: selectedCoordinate?.latitude ?? initialLatitude,
+//                    longitude: selectedCoordinate?.longitude ?? initialLongitude
+//                ),
+//                isActive: $isActive,
+//                label: { EmptyView() }
+//            )
+//            .hidden()
             
             BigButton(buttonText: "Update Address")
                 .offset(y: 20)
                 .onTapGesture {
                     if selectedCoordinate == nil {
-                         selectedCoordinate = CLLocationCoordinate2D(latitude: initialLatitude, longitude: initialLongitude)
-                     }
-                     print("Selected coordinate: \(selectedCoordinate?.latitude ?? 0), \(selectedCoordinate?.longitude ?? 0)")
-                    isActive = true
+                        selectedCoordinate = CLLocationCoordinate2D(latitude: initialLatitude, longitude: initialLongitude)
+                    }
+
+                    path.append("UpdateAddressDetails")
                 }
-            
+
             Spacer()
         }
         .navigationTitle("Update Address")

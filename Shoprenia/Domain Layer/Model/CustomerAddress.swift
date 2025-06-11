@@ -5,7 +5,7 @@
 //  Created by MAC on 03/06/2025.
 //
 
-struct CustomerAddress {
+struct CustomerAddress : Hashable {
     var id: String?
     var addName: String
     var streetName: String
