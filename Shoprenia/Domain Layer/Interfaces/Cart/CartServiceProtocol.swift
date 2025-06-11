@@ -17,5 +17,10 @@ protocol CartServiceProtocol {
     
     func updateCartQuantity(lineId: String, newQuantity: Int, completion: @escaping (Result<Storefront.Cart, Error>) -> Void)
     
-    func fetchCart(completion: @escaping (Result<Storefront.Cart, Error>) -> Void) 
+    func fetchCart(completion: @escaping (Result<Storefront.Cart, Error>) -> Void)
+    
+    func setAddressInCart(
+        address: Storefront.MailingAddress,
+        completion: @escaping (Result<Storefront.CartSelectableAddress, Error>) -> Void
+    ) 
 }

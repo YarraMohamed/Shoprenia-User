@@ -39,7 +39,8 @@ struct ContentView: View {
                     case .pastOrders:
                         OrderHistory()
                     case .shippingAddresses:
-                        AddressSelectionView(path:$path)
+                        let selectedViewModel = container.resolve(SelectedAddressViewModel.self)
+                        AddressSelectionView(path: $path, viewModel: addressVM, selectedViewModel: selectedViewModel)
                     case .paymentMethods:
                         PaymentView()
                     case .invoice:

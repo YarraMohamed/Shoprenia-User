@@ -26,7 +26,8 @@ final class DIContainer {
             LoginAssembly(),
             RegisterationAssembly(),
             WishlistAssembly(),
-            CartAssembly()
+            CartAssembly(),
+            SelectedAddressAssembly()
         ], container: container)
     }
     
@@ -221,5 +222,14 @@ final class DIContainer {
             }
         }
     }
+    
+    final class SelectedAddressAssembly : Assembly{
+        func assemble(container: Container) {
+            container.register(SelectedAddressViewModel.self) { resolver in
+                SelectedAddressViewModel(cartUsecase: resolver.resolve(CartUsecase.self)!)
+            }
+        }
+    }
+
     
 }
