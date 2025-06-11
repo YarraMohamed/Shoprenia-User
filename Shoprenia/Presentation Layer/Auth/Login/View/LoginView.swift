@@ -4,6 +4,7 @@ import FirebaseCore
 import FirebaseAuth
 struct LoginView: View {
     @ObservedObject var viewModel : LoginViewModel
+    @EnvironmentObject var authVm : AuthenticationViewModel
     @Binding var path : NavigationPath
     
     var body: some View {
@@ -84,7 +85,6 @@ struct LoginView: View {
                     
                     Button(action:{
                         viewModel.googleSignIn(rootController: getRootViewController())
-                            
                             
                         DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
                             

@@ -4,6 +4,7 @@ import FirebaseAuth
 
 struct RegisterationView: View {
     @ObservedObject var viewModel: RegistarationViewModel
+    @EnvironmentObject var authVM : AuthenticationViewModel
     @Binding var path : NavigationPath
     
     var body: some View {
@@ -149,7 +150,6 @@ struct RegisterationView: View {
                     
                     Button(action:{
                         viewModel.googleSignIn(rootController: getRootViewController())
-                            
                             
                         DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
                             
