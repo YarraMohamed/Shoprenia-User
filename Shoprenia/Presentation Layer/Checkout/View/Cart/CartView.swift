@@ -63,15 +63,19 @@ struct CartView: View {
                     .fontWeight(.semibold)
                     .padding(.bottom, 10)
 
-                Button("Get Them") {
-                    path.append(AppRouter.shippingAddresses)
+                if viewModel.cartLines.count > 0 {
+                    Button("Get Them") {
+                        path.append(AppRouter.shippingAddresses)
+                    }
+                    
+                    .font(.system(size: 16, weight: .semibold))
+                    .foregroundStyle(.white)
+                    .frame(width: 250, height: 48)
+                    .background {
+                        RoundedRectangle(cornerRadius: 30).fill(.blue)
+                    }
                 }
-                .font(.system(size: 16, weight: .semibold))
-                .foregroundStyle(.white)
-                .frame(width: 250, height: 48)
-                .background {
-                    RoundedRectangle(cornerRadius: 30).fill(.blue)
-                }
+                
             } else {
                 ProgressView("Loading Cart...")
             }
