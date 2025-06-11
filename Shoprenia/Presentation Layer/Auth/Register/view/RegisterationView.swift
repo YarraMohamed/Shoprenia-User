@@ -149,12 +149,8 @@ struct RegisterationView: View {
                     
                     Button(action:{
                         viewModel.googleSignIn(rootController: getRootViewController())
-                            
-                            
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
-                            
+                        if viewModel.isLoggedIn {
                             path.append(AppRouter.home)
-                            
                         }
                     }){
                         Image("g")
@@ -182,13 +178,13 @@ struct RegisterationView: View {
         } message: {
             Text("We've sent a verification email to \(viewModel.email) . Please check your inbox, click the verification link and login.")
         }
-//        .onChange(of: viewModel.isLoggedIn){ isLogged in
-//            if isLogged {
-//                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-//                    path.removeLast()
-//                }
-//            }
-//        }
+        .onChange(of: viewModel.isLoggedIn){ isLogged in
+            if isLogged {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                    path.removeLast()
+                }
+            }
+        }
         .toolbar{
             ToolbarItem(placement: .topBarTrailing) {
                     VStack {

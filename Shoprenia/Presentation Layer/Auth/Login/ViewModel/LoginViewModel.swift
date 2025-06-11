@@ -1,7 +1,6 @@
 import Foundation
 import MobileBuySDK
 import GoogleSignIn
-import FirebaseAuth
 
 class LoginViewModel: ObservableObject {
     @Published var email: String = ""
@@ -39,11 +38,11 @@ class LoginViewModel: ObservableObject {
         }
     }
     
-    func createCustomerWithoutPhone(user:User){
-        loginRepo.createCustomerWithoutPhone(email: user.email ?? "No mail",
+    func createCustomerWithoutPhone(user:GIDGoogleUser){
+        loginRepo.createCustomerWithoutPhone(email: user.profile?.email ?? "No mail",
                                              password: "Password123",
-                                             firstName: user.displayName ?? "no first name",
-                                             lastName: ""){result in
+                                             firstName: user.profile?.givenName ?? "no first name",
+                                             lastName: user.profile?.familyName ?? "no last name"){result in
             
             switch result {
             case .success(let customer):

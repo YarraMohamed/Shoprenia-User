@@ -1,7 +1,7 @@
 import Foundation
 import MobileBuySDK
 import GoogleSignIn
-import FirebaseAuth
+
 protocol RegistrationRepoProtocol{
     
     func createCustomer(email : String ,
@@ -30,6 +30,6 @@ protocol RegistrationRepoProtocol{
     func getCustomerByAccessToken(accessToken:String,
                                   completionHandler : @escaping (Result<Storefront.Customer,Error>)->Void)
     
-    func googleSignIn(rootController : UIViewController,completion: @escaping(Result<User, Error>)->Void)
+    func googleSignIn(rootController : UIViewController,completion: @escaping(Result<GIDGoogleUser, Error>)->Void)
     
 }

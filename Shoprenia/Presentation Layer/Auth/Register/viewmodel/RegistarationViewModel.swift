@@ -1,7 +1,6 @@
 import Foundation
 import GoogleSignIn
 import MobileBuySDK
-import FirebaseAuth
 
 final class RegistarationViewModel : ObservableObject {
     
@@ -83,7 +82,7 @@ final class RegistarationViewModel : ObservableObject {
             
             switch result {
             case .success(let googleUser):
-                self.isLoggedIn = true
+                print("Created google user with : \(googleUser.profile?.name ?? "No name")")
                 self.createShopifyCustomerWithoutPhone(user: googleUser)
             case .failure(let error):
                 print("ERR in g sign in \(error.localizedDescription)")
@@ -91,11 +90,11 @@ final class RegistarationViewModel : ObservableObject {
         }
     }
     
-    func createShopifyCustomerWithoutPhone(user:User){
-        registrationRepo.createCustomerWithoutPhone(email: user.email ?? "No mail",
+    func createShopifyCustomerWithoutPhone(user:GIDGoogleUser){
+        registrationRepo.createCustomerWithoutPhone(email: user.profile?.email ?? "No mail",
                                              password: "Password123",
-                                                    firstName: user.displayName ?? "no first name",
-                                                    lastName: ""){result in
+                                             firstName: user.profile?.givenName ?? "no first name",
+                                             lastName: user.profile?.familyName ?? "no last name"){result in
             
             switch result {
             case .success(let customer):
@@ -105,7 +104,7 @@ final class RegistarationViewModel : ObservableObject {
                 
                 self.createCustomerAccessToken(mail: customer.email ?? "no mail", pass: "Password123")
             case .failure(let error):
-                print("In regist Viewmodel Error: \(error)")
+                print("In Login Viewmodel Error: \(error)")
             }
         }
     }
@@ -115,10 +114,10 @@ final class RegistarationViewModel : ObservableObject {
             
             switch result {
             case .success(let accessToken):
-                print("In Regis ViewModel Access Token created: \(accessToken)")
+                print("In Login ViewModel Access Token created: \(accessToken)")
                 self?.getCustomerByAccessToken(accessToken: accessToken)
             case .failure(let error):
-                print("In Regis Viewmodel Error: \(error)")
+                print("In Login Viewmodel Error: \(error)")
             }
         }
     }
@@ -133,10 +132,11 @@ final class RegistarationViewModel : ObservableObject {
                 print("id: \(customer.id)")
                 print("email: \(customer.email ?? "no mail")")
                 print("phone: \(customer.phone ?? "no phone")")
+                self?.isLoggedIn = true
                 self?.insertInUserDefaultsWithoutPhone(accessToken, customer)
                 
             case .failure(let error):
-                print("In Regis Viewmodel Error: \(error)")
+                print("In Login Viewmodel Error: \(error)")
             }
         }
     }

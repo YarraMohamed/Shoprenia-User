@@ -1,7 +1,6 @@
 import Foundation
 import MobileBuySDK
 import GoogleSignIn
-import FirebaseAuth
 
 final class LoginRepo : LoginRepoProtocol{
     
@@ -31,7 +30,7 @@ final class LoginRepo : LoginRepoProtocol{
         firebaseService.signInFirebaseUser(email: email, password: password)
     }
     
-    func googleSignIn(rootController: UIViewController, completion: @escaping (Result<User, any Error>) -> Void){
+    func googleSignIn(rootController: UIViewController, completion: @escaping (Result<GIDGoogleUser, any Error>) -> Void){
         googleService.googleSignIn(rootController: rootController, completion: completion)
     }
     
