@@ -41,10 +41,18 @@ struct ContentView: View {
                     case .shippingAddresses:
                         let selectedViewModel = container.resolve(SelectedAddressViewModel.self)
                         AddressSelectionView(path: $path, viewModel: addressVM, selectedViewModel: selectedViewModel)
-                    case .paymentMethods:
-                        PaymentView()
-                    case .invoice:
-                        InvoiceView(path:$path)
+                    case .paymentMethods(let orderFees):
+                        PaymentView(orderFees: orderFees)
+
+                    case .invoice(let fee, let total ,let location, let phone):
+                        InvoiceView(
+                            path: $path,
+                            total : total,
+                            fee: fee ,
+                            location: location,
+                            phone: phone
+                        )
+
                     case .AboutUs:
                         AboutUs()
                     case .HelpCenter:
