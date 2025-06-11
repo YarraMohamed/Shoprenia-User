@@ -33,4 +33,9 @@ class CartRepository: CartRepositoryProtocol {
         service.fetchCart(completion: completion)
     }
     
+    func setAddressInCart(address: Storefront.MailingAddress,completion: @escaping (Result<Storefront.CartSelectableAddress, Error>) ->Void){
+        service.setAddressInCart(address: address, completion: completion)
+        
+    }
+    
 }

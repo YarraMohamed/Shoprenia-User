@@ -30,4 +30,9 @@ class CartUsecase: CartUsecaseProtocol {
     func fetchCart(completion: @escaping (Result<Storefront.Cart, Error>) -> Void) {
         repository.fetchCart(completion: completion)
     }
+    
+    func setAddressInCart(address: MobileBuySDK.Storefront.MailingAddress, completion: @escaping (Result<MobileBuySDK.Storefront.CartSelectableAddress, any Error>) -> Void) {
+        repository.setAddressInCart(address: address, completion: completion)
+    }
+    
 }

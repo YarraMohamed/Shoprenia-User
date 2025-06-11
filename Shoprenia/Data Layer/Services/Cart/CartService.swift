@@ -56,7 +56,6 @@ class CartService: CartServiceProtocol {
                     completion(.failure(error))
                     return
                 }
-
                 if let userErrors = result?.cartLinesAdd?.userErrors, !userErrors.isEmpty {
                     let message = userErrors.map { $0.message }.joined(separator: ", ")
                     completion(.failure(NSError(domain: "ShopifyError", code: -1, userInfo: [NSLocalizedDescriptionKey: message])))
@@ -227,5 +226,87 @@ class CartService: CartServiceProtocol {
                }.resume()
            }
        }
+    
+    func setAddressInCart(
+        address: Storefront.MailingAddress,
+        completion: @escaping (Result<Storefront.CartSelectableAddress, Error>) -> Void
+    ) {
+        CartServiceManager.shared.getCartId { cartId in
+            guard let cartId = cartId else {
+                completion(.failure(NSError(domain: "CartError", code: -1, userInfo: [NSLocalizedDescriptionKey: "Cart ID not found"])))
+                return
+            }
+
+            let id = GraphQL.ID(rawValue: cartId)
+
+            
+            guard let address1 = address.address1,
+                  let city = address.city,
+                  let phone = address.phone else {
+                completion(.failure(NSError(domain: "AddressError", code: -1, userInfo: [NSLocalizedDescriptionKey: "Address is missing required fields"])))
+                return
+            }
+
+            let deliveryAddressInput = Storefront.CartDeliveryAddressInput(
+                address1: address1,
+                city: city,
+                countryCode: .eg,
+                phone: phone
+            )
+
+            let addressInput = Storefront.CartAddressInput(deliveryAddress: deliveryAddressInput)
+
+            let cartSelectableAddressInput = Storefront.CartSelectableAddressInput(address: addressInput)
+
+            let mutation = Storefront.buildMutation { $0
+                .cartDeliveryAddressesAdd(
+                    cartId: id,
+                    addresses: [cartSelectableAddressInput]
+                ) { $0
+                    .cart { $0
+                        .id()
+                        .delivery { $0
+                            .addresses { $0
+                                .id()
+                                .address { $0
+                                    .onCartDeliveryAddress { $0
+                                        .address1()
+                                        .city()
+                                        .phone()
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    .userErrors { $0
+                        .field()
+                        .message()
+                    }
+                }
+            }
+
+            GraphQLClientService.shared.client.mutateGraphWith(mutation) { result, error in
+                if let error = error {
+                    completion(.failure(error))
+                    return
+                }
+
+                if let userErrors = result?.cartDeliveryAddressesAdd?.userErrors, !userErrors.isEmpty {
+                    let message = userErrors.map { $0.message }.joined(separator: ", ")
+                    completion(.failure(NSError(domain: "ShopifyError", code: -1, userInfo: [NSLocalizedDescriptionKey: message])))
+                    return
+                }
+
+                if let address = result?.cartDeliveryAddressesAdd?.cart?.delivery.addresses.first {
+                    print(address)
+                    completion(.success(address))
+                } else {
+                    completion(.failure(NSError(domain: "ShopifyError", code: -1, userInfo: [NSLocalizedDescriptionKey: "No address returned from Shopify"])))
+                }
+            }.resume()
+        }
+    }
+
+
     
 }

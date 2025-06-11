@@ -6,21 +6,21 @@
 //
 
 import SwiftUI
+import MobileBuySDK
 
 struct AddressSelectionRow: View {
-    @Binding var isSelected: Bool
+    var isSelected: Bool
+    var address: Storefront.MailingAddress?
+
     var body: some View {
-        VStack(alignment: .leading, spacing:8){
-            Text("StreetName, Country")
-            Text("PhoneNumber : 0123456789")
-        }
-        .onTapGesture {
-            isSelected = true
+        VStack(alignment: .leading, spacing: 8) {
+            Text("\(address?.address1 ?? "No Address"), \(address?.city ?? "No City")")
+            Text("Phone Number: \(address?.phone ?? "No Phone Number")")
         }
         .padding()
         .font(.title3)
         .fontWeight(.medium)
-        .frame(width: 300,height: 150)
+        .frame(width: 300, height: 150)
         .overlay(
             RoundedRectangle(cornerRadius: 8)
                 .stroke(isSelected ? Color.app : Color.gray, lineWidth: isSelected ? 1 : 0.5)
@@ -28,6 +28,7 @@ struct AddressSelectionRow: View {
     }
 }
 
+
 #Preview {
-    AddressSelectionRow(isSelected: .constant(false))
+   // AddressSelectionRow(isSelected: .constant(false))
 }
