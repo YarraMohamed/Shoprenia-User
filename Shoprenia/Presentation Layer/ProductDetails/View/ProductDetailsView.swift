@@ -151,7 +151,6 @@ struct ProductDetailsView: View {
                 
                 HStack{
                     Button("Add to cart"){
-                        print("\(viewModel.productDetails?.id)")
                         print("Added to cart")
                     }
                     .font(.system(size: 16, weight: .semibold))

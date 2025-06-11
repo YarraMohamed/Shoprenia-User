@@ -45,6 +45,7 @@ struct LoginView: View {
                HStack{
                     Button("Login"){
                         
+                        
                         if viewModel.isValidEmail() && viewModel.isValidPassword(){
                             
                             viewModel.createCustomerAccessToken(mail: viewModel.email,
