@@ -11,8 +11,9 @@ struct UpdateAddressDetails: View {
     @State private var showUpdateSuccess = false
     @State private var showErrorAlert = false
     @State private var errorMessage = ""
+    @Binding var path : NavigationPath
     
-    init(selectedAddress: CustomerAddress, latitude: Double, longitude: Double) {
+    init(selectedAddress: CustomerAddress, latitude: Double, longitude: Double, path: Binding<NavigationPath>) {
         self.selectedAddress = selectedAddress
         self.latitude = latitude
         self.longitude = longitude
@@ -23,6 +24,7 @@ struct UpdateAddressDetails: View {
         vm.address.latitude = latitude
         vm.address.longitude = longitude
         _viewModel = StateObject(wrappedValue: vm)
+        self._path = path
     }
 
     var body: some View {
@@ -118,7 +120,7 @@ struct UpdateAddressDetails: View {
         .navigationBarTitleDisplayMode(.inline)
       
         .alert("Address Updated", isPresented: $showUpdateSuccess) {
-            Button("OK", role: .cancel) { dismiss() }
+            Button("OK", role: .cancel) { path.removeLast(2)}
         } message: {
             Text("Your address has been updated successfully")
         }

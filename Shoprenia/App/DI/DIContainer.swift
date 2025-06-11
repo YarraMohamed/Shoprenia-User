@@ -26,6 +26,8 @@ final class DIContainer {
             LoginAssembly(),
             RegisterationAssembly(),
             WishlistAssembly(),
+            CartAssembly(),
+            SelectedAddressAssembly()
         ], container: container)
     }
     
@@ -186,7 +188,7 @@ final class DIContainer {
                 SaveToFirestore(repo: resolver.resolve(ProductDetailsRepository.self)!)
             }
             container.register(ProductDetailsViewModel.self) { resolver in
-                ProductDetailsViewModel(productDetailsCase: resolver.resolve(GetProductDetailsUseCase.self)!, saveToFirestoreCase: resolver.resolve(SaveToFirestore.self)!)
+                ProductDetailsViewModel(productDetailsCase: resolver.resolve(GetProductDetailsUseCase.self)!, saveToFirestoreCase: resolver.resolve(SaveToFirestore.self)!,cartUseCase: resolver.resolve(CartUsecase.self)!)
             }
         }
     }
@@ -217,5 +219,30 @@ final class DIContainer {
         }
     }
     
+    final class CartAssembly : Assembly{
+        func assemble(container: Container) {
+            container.register(CartService.self) { _ in
+                CartService()
+            }
+            container.register(CartRepository.self) { resolver in
+                CartRepository(service: resolver.resolve(CartService.self)!)
+            }
+            container.register(CartUsecase.self) { resolver in
+                CartUsecase(repository: resolver.resolve(CartRepository.self)!)
+            }
+            container.register(CartViewModel.self) { resolver in
+                CartViewModel(cartUsecase: resolver.resolve(CartUsecase.self)!)
+            }
+        }
+    }
+    
+    final class SelectedAddressAssembly : Assembly{
+        func assemble(container: Container) {
+            container.register(SelectedAddressViewModel.self) { resolver in
+                SelectedAddressViewModel(cartUsecase: resolver.resolve(CartUsecase.self)!)
+            }
+        }
+    }
+
     
 }

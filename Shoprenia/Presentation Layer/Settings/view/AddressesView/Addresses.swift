@@ -44,7 +44,7 @@ struct Addresses: View {
             }
             .navigationTitle("Saved Addresses")
         
-            .background(navigationLink)
+//            .background(navigationLink)
             .onAppear {
                 viewModel.loadCustomerAddresses()
             }
@@ -105,7 +105,10 @@ struct Addresses: View {
                         phone: add.phone ?? "No phone",
                         address: "\(add.address2 ?? ""), \(add.country ?? "")",
                         onEdit: {
-                            prepareForNavigation(with: add)
+                            if let coordinates = parseCoordinates(from: add.zip),
+                               let customerAddress = convertToCustomerAddress(add, coordinates: coordinates) {
+                                path.append(AppRouter.updateAddress(address: customerAddress, lat: coordinates.latitude, lon: coordinates.longitude))
+                            }
                         },
                         onDelete: {
                             selectedAddressID = add.id.rawValue
@@ -122,31 +125,31 @@ struct Addresses: View {
         }
     }
     
-    private var navigationLink: some View {
-        NavigationLink(
-            destination: Group {
-                if let target = navigationTarget {
-                    UpdateAddressMap(
-                        selectedAddress: target.address,
-                        initialLatitude: target.latitude,
-                        initialLongitude: target.longitude
-                    )
-                    .onDisappear {
-                        navigationTarget = nil
-                    }
-                }
-            },
-            isActive: Binding(
-                get: { navigationTarget != nil },
-                set: { newValue in
-                    if !newValue { navigationTarget = nil }
-                }
-            ),
-            label: { EmptyView() }
-        )
-        .hidden()
-    }
-    
+//    private var navigationLink: some View {
+//        NavigationLink(
+//            destination: Group {
+//                if let target = navigationTarget {
+//                    UpdateAddressMap(
+//                        selectedAddress: target.address,
+//                        initialLatitude: target.latitude,
+//                        initialLongitude: target.longitude
+//                    )
+//                    .onDisappear {
+//                        navigationTarget = nil
+//                    }
+//                }
+//            },
+//            isActive: Binding(
+//                get: { navigationTarget != nil },
+//                set: { newValue in
+//                    if !newValue { navigationTarget = nil }
+//                }
+//            ),
+//            label: { EmptyView() }
+//        )
+//        .hidden()
+//    }
+//    
     
     private func parseCoordinates(from zip: String?) -> (latitude: Double, longitude: Double)? {
         guard let zip = zip,  let decodedData = Data(base64Encoded: zip) , let decodedString = String(data: decodedData, encoding: .utf8)
@@ -163,20 +166,20 @@ struct Addresses: View {
     }
 
     
-    private func prepareForNavigation(with mailingAddress: Storefront.MailingAddress) {
-        navigationTarget = nil
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-           guard let coordinates = parseCoordinates(from: mailingAddress.zip) , let customerAddress = convertToCustomerAddress(mailingAddress, coordinates: coordinates) else {
-                return
-            }
-            navigationTarget = NavigationTarget(
-                address: customerAddress,
-                latitude: coordinates.latitude,
-                longitude: coordinates.longitude
-            )
-        }
-    }
+//    private func prepareForNavigation(with mailingAddress: Storefront.MailingAddress) {
+//        navigationTarget = nil
+//        
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+//           guard let coordinates = parseCoordinates(from: mailingAddress.zip) , let customerAddress = convertToCustomerAddress(mailingAddress, coordinates: coordinates) else {
+//                return
+//            }
+//            navigationTarget = NavigationTarget(
+//                address: customerAddress,
+//                latitude: coordinates.latitude,
+//                longitude: coordinates.longitude
+//            )
+//        }
+//    }
 
     private func convertToCustomerAddress(_ mailingAddress: Storefront.MailingAddress,
                                           coordinates: (latitude: Double, longitude: Double)) -> CustomerAddress? {

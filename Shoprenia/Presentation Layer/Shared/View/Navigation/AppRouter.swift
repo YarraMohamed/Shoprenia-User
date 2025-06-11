@@ -28,4 +28,5 @@ enum AppRouter: Hashable {
     case addressDetails(lat : Double, lon : Double)
     case wishlist
     case home
+    case updateAddress(address: CustomerAddress, lat: Double, lon: Double)
 }

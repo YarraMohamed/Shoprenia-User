@@ -31,7 +31,8 @@ struct SettingsView: View {
                     viewModel.googleSignOut()
                     viewModel.removeAllUserDataFromDefaults()
                     vm.isAuth = false
-                    path.append(AppRouter.register)
+                    path.removeLast(1)
+                   // path.append(AppRouter.register)
                 }
             
             Spacer()

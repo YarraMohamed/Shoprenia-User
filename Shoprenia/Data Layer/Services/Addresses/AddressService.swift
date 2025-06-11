@@ -19,8 +19,6 @@ class AddressService: AddressServiceProtocol {
       ) {
           let accessToken = getCustomerAccessToken()
           let coordinateString = encodeCoordinates(lat: address.latitude, lon: address.longitude)
-
-  
           let mutation = Storefront.buildMutation { $0
               .customerAddressCreate(
                   customerAccessToken: accessToken,
@@ -166,8 +164,6 @@ class AddressService: AddressServiceProtocol {
     ) {
         let accessToken = getCustomerAccessToken()
         let coordinateString = encodeCoordinates(lat: address.latitude, lon: address.longitude)
-        
-        
         let mailingAddressInput = Storefront.MailingAddressInput(
             address1: address.streetName,
             address2: [
@@ -182,8 +178,6 @@ class AddressService: AddressServiceProtocol {
             phone: address.phoneNumber,
             zip: coordinateString
         )
-        
-        
         let mutation = Storefront.buildMutation { $0
             .customerAddressUpdate(
                 customerAccessToken: accessToken,
@@ -281,7 +275,7 @@ class AddressService: AddressServiceProtocol {
     private func getCustomerAccessToken() -> String {
         return UserDefaultsManager.shared.retrieveShopifyCustomerAccessToken() ?? ""
     }
-    
+  
     func signOutFirebaseUser(){
         let firebaseAuth = Auth.auth()
         do {
@@ -308,7 +302,6 @@ class AddressService: AddressServiceProtocol {
         UserDefaults.standard.removeObject(forKey: UserDefaultsKeys.shopifyCustomerPhoneNumber.rawValue)
         UserDefaults.standard.removeObject(forKey: UserDefaultsKeys.shopifyCustomerDisplayName.rawValue)
     }
-    
+
 }
 
- 

@@ -56,7 +56,8 @@ struct LoginView: View {
                             DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
                                 if viewModel.isLoggedIn{
                                     print("\(viewModel.isLoggedIn)")
-                                    path.append(AppRouter.home)
+                                    //path.append(AppRouter.home)
+                                    path.removeLast(1)
                                     viewModel.isLoggedIn = false
                                 }else{
                                     viewModel.showAlert = true
@@ -87,9 +88,10 @@ struct LoginView: View {
                             
                             
                         DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
-                            
-                            path.append(AppRouter.home)
-                            
+                         
+                        if viewModel.isLoggedIn{
+                            path.removeLast(1)
+                            viewModel.isLoggedIn = false
                         }
                     }){
                         Image("g")
