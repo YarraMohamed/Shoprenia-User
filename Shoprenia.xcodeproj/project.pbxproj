@@ -41,8 +41,6 @@
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		50ED497C2DF9E9B600478147 /* ShopreniaTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = ShopreniaTests;
 			sourceTree = "<group>";
 		};
@@ -245,9 +243,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Shoprenia/Pods-Shoprenia-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Shoprenia/Pods-Shoprenia-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
