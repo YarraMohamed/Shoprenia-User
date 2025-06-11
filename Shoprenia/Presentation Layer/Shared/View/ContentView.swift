@@ -60,7 +60,10 @@ struct ContentView: View {
                     case .wishlist:
                         let wishlistVM = self.container.resolve(WishlistViewModel.self)
                         WishlistView(viewModel: wishlistVM, path: $path)
+                    case .home:
+                        MainTabView(path: $path, homeVM: homeVM, categoriesVM: categoryVM)
                     }
+                    
                 }
         }
     }

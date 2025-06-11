@@ -50,6 +50,10 @@ struct LoginView: View {
                         viewModel.signFirebaseUserIn()
                         print("access token is \(String(describing: UserDefaultsManager.shared.retrieveShopifyCustomerAccessToken()))")
                         
+                        if viewModel.isLoggedIn{
+                            path.append(AppRouter.home)
+                        }
+                        
                     }
                     .font(.system(size: 16, weight: .semibold))
                     .foregroundStyle(.white)
@@ -69,6 +73,9 @@ struct LoginView: View {
                     
                     Button(action:{
                         viewModel.googleSignIn(rootController: getRootViewController())
+                        if viewModel.isLoggedIn{
+                            path.append(AppRouter.home)
+                        }
                     }){
                         Image("g")
                             .resizable()
@@ -86,13 +93,13 @@ struct LoginView: View {
             
             Spacer()
         }
-        .onChange(of: viewModel.isLoggedIn){ isLogged in
-            if isLogged {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                    path.removeLast()
-                }
-            }
-        }
+//        .onChange(of: viewModel.isLoggedIn){ isLogged in
+//            if isLogged {
+//                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+//                    pat
+//                }
+//            }
+//        }
         .toolbar{
             ToolbarItem(placement: .topBarTrailing) {
                     VStack {

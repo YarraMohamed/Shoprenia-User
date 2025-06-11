@@ -6,6 +6,9 @@
 
 import Foundation
 import MobileBuySDK
+import GoogleSignIn
+import FirebaseAuth
+import FirebaseCore
 
 class AddressService: AddressServiceProtocol {
 
@@ -277,6 +280,33 @@ class AddressService: AddressServiceProtocol {
 
     private func getCustomerAccessToken() -> String {
         return UserDefaultsManager.shared.retrieveShopifyCustomerAccessToken() ?? ""
+    }
+    
+    func signOutFirebaseUser(){
+        let firebaseAuth = Auth.auth()
+        do {
+          try firebaseAuth.signOut()
+        } catch let signOutError as NSError {
+          print("Error signing out: %@", signOutError)
+        }
+    }
+    
+    func googleSignOut() {
+        do {
+            try Auth.auth().signOut()
+            GIDSignIn.sharedInstance.signOut()
+            print("User signed out")
+        } catch let signOutError as NSError {
+            print("Error signing out: %@", signOutError)
+        }
+    }
+    
+    func removeAllUserDefaultsValues(){
+        UserDefaults.standard.removeObject(forKey: UserDefaultsKeys.shopifyCustomerId.rawValue)
+        UserDefaults.standard.removeObject(forKey: UserDefaultsKeys.shopifyCustomerAccessToken.rawValue)
+        UserDefaults.standard.removeObject(forKey: UserDefaultsKeys.shopifyCustomerEmail.rawValue)
+        UserDefaults.standard.removeObject(forKey: UserDefaultsKeys.shopifyCustomerPhoneNumber.rawValue)
+        UserDefaults.standard.removeObject(forKey: UserDefaultsKeys.shopifyCustomerDisplayName.rawValue)
     }
     
 }

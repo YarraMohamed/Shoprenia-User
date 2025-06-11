@@ -32,6 +32,7 @@ class LoginViewModel: ObservableObject {
             switch result {
             case .success(let googleUser):
                 self.createCustomerWithoutPhone(user: googleUser)
+                self.isLoggedIn = true
             case .failure(let error):
                 print("ERR in g sign in \(error.localizedDescription)")
             }
@@ -86,8 +87,8 @@ class LoginViewModel: ObservableObject {
     }
     
     func signFirebaseUserIn(){
+        self.isLoggedIn = true
         loginRepo.signInFirebaseUser(email: email, password: password)
-        isLoggedIn = true
     }
     
     func insertInUserDefaultsWithoutPhone(_ accessToken : String,_ customer : Storefront.Customer){

@@ -15,7 +15,7 @@ final class RegistarationViewModel : ObservableObject {
     @Published var passwordEdited = false
     @Published var phoneEdited = false
     @Published var showVerificationAlert = false
-    
+    @Published var isLoggedIn : Bool = false
     private let registrationRepo : RegistrationRepoProtocol
     private let credentialValidator : CredentialsValidationProtocol
     private let userDefaultsManager : UserDefaultsManagerProtocol
@@ -132,7 +132,7 @@ final class RegistarationViewModel : ObservableObject {
                 print("id: \(customer.id)")
                 print("email: \(customer.email ?? "no mail")")
                 print("phone: \(customer.phone ?? "no phone")")
-                
+                self?.isLoggedIn = true
                 self?.insertInUserDefaultsWithoutPhone(accessToken, customer)
                 
             case .failure(let error):

@@ -14,7 +14,7 @@ struct SliderView: View {
             
            
             VStack(spacing: 16) {
-                Text("Price Range")
+                Text("Starting Price")
                     .font(.system(size: 16, weight: .semibold))
                 
                 Text("EGP \(sliderValue, specifier: "%.0f")")
@@ -22,14 +22,14 @@ struct SliderView: View {
                 
                 Slider(
                     value: $sliderValue,
-                    in: 19...400,
+                    in: 19...300,
                     step: 1,
                     onEditingChanged: { _ in
                         print("Slider value is now: \(sliderValue)")
                     },
                     minimumValueLabel: Text("EGP 19")
                         .font(.system(size: 14, weight: .semibold)),
-                    maximumValueLabel: Text("EGP 400")
+                    maximumValueLabel: Text("EGP 300")
                         .font(.system(size: 14, weight: .semibold)),
                     label: { Text("Price Range Slider") }
                 )
