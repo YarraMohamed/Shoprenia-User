@@ -16,7 +16,7 @@ struct ContentView: View {
                     switch route {
                     case .search :
                         let productsVM = self.container.resolve(ProductsViewModel.self)
-                       ProductsView(viewModel: productsVM, path: $path)
+                        ProductsView(viewModel: productsVM, path: $path)
                     case .cart:
                         CartView(path: $path)
                     case .products(let vendor):
@@ -75,8 +75,9 @@ struct ContentView: View {
                                     path: $path
                                 )
                             }
+                        }
+                        
                     }
-                    
                 }
         }
     }

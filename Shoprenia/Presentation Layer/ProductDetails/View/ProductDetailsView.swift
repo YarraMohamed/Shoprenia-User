@@ -232,6 +232,8 @@ struct ProductDetailsView: View {
 
     }
 
+}
+
 //#Preview {
 //
 //    ProductDetailsView(

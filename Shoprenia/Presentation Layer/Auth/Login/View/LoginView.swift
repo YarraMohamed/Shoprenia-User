@@ -55,7 +55,8 @@ struct LoginView: View {
                             DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
                                 if viewModel.isLoggedIn{
                                     print("\(viewModel.isLoggedIn)")
-                                    path.append(AppRouter.home)
+                                    //path.append(AppRouter.home)
+                                    path.removeLast(1)
                                     viewModel.isLoggedIn = false
                                 }else{
                                     viewModel.showAlert = true
@@ -84,7 +85,7 @@ struct LoginView: View {
                     Button(action:{
                         viewModel.googleSignIn(rootController: getRootViewController())
                         if viewModel.isLoggedIn{
-                            path.append(AppRouter.home)
+                            path.removeLast(1)
                             viewModel.isLoggedIn = false
                         }
                     }){
