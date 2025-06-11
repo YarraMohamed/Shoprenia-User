@@ -83,9 +83,12 @@ struct LoginView: View {
                     
                     Button(action:{
                         viewModel.googleSignIn(rootController: getRootViewController())
-                        if viewModel.isLoggedIn{
+                            
+                            
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
+                            
                             path.append(AppRouter.home)
-                            viewModel.isLoggedIn = false
+                            
                         }
                     }){
                         Image("g")
