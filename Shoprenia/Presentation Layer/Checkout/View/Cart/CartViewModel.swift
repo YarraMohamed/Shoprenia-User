@@ -11,6 +11,8 @@ final class CartViewModel: ObservableObject {
     
     @Published var cart: Storefront.Cart?
     @Published var errorMessage: String?
+    @Published var cartLines: [CartLineItem] = []
+
     
     private let cartUsecase: CartUsecaseProtocol
     
@@ -33,47 +35,63 @@ final class CartViewModel: ObservableObject {
         }
     }
     
-    func removeFromCart(lineId: String) {
-        cartUsecase.removeFromCart(lineId: lineId) { [weak self] result in
-            DispatchQueue.main.async {
-                switch result {
-                case .success(let cart):
-                    self?.cart = cart
-                    print("Removed from cart successfully.")
-                case .failure(let error):
-                    self?.errorMessage = error.localizedDescription
-                    print("Failed to remove from cart: \(error.localizedDescription)")
+    func fetchCart() {
+        cartUsecase.fetchCart { [weak self] result in
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success(let cart):
+                        self?.cart = cart
+                        self?.cartLines = cart.lines.nodes.compactMap { line in
+                            guard let cartLine = line as? Storefront.CartLine,
+                                  let variant = cartLine.merchandise as? Storefront.ProductVariant else {
+                                return nil
+                            }
+
+                            return CartLineItem(
+                                id: cartLine.id.rawValue,
+                                title: variant.product.title,
+                                variantTitle: variant.title,
+                                imageURL: variant.image?.url,
+                                quantity: Int(cartLine.quantity),
+                                price: cartLine.cost.totalAmount.amount,
+                                currency: cartLine.cost.totalAmount.currencyCode.rawValue
+                            )
+                        }
+
+                    case .failure(let error):
+                        print("Error fetching cart: \(error.localizedDescription)")
+                    }
                 }
             }
         }
-    }
     
     func updateCartQuantity(lineId: String, newQuantity: Int) {
         cartUsecase.updateCartQuantity(lineId: lineId, newQuantity: newQuantity) { [weak self] result in
             DispatchQueue.main.async {
                 switch result {
-                case .success(let cart):
-                    self?.cart = cart
-                    print("Updated cart quantity successfully.")
+                case .success(_):
+                    self?.fetchCart()
+
                 case .failure(let error):
-                    self?.errorMessage = error.localizedDescription
-                    print("Failed to update quantity: \(error.localizedDescription)")
+                    print("Failed to update cart quantity:", error.localizedDescription)
                 }
             }
         }
     }
-    
-    func fetchCart() {
-           cartUsecase.fetchCart { [weak self] result in
-               DispatchQueue.main.async {
-                   switch result {
-                   case .success(let cart):
-                       self?.cart = cart
-                   case .failure(let error):
-                       self?.errorMessage = error.localizedDescription
-                   }
-               }
-           }
-       }
+
+
+    func removeFromCart(lineId: String) {
+        cartUsecase.removeFromCart(lineId: lineId) { [weak self] result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(_):
+                    self?.fetchCart()
+                case .failure(let error):
+                    print("Failed to remove item:", error.localizedDescription)
+                }
+            }
+        }
+    }
+
     
 }

@@ -112,8 +112,6 @@ class CartService: CartServiceProtocol {
                     completion(.failure(error))
                 } else if let cart = response?.cartLinesRemove?.cart {
                     completion(.success(cart))
-                } else {
-                    completion(.failure(NSError(domain: "CartService", code: -1, userInfo: [NSLocalizedDescriptionKey: "Unknown error removing cart line"])))
                 }
             }.resume()
         }
