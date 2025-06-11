@@ -45,6 +45,7 @@ struct LoginView: View {
                HStack{
                     Button("Login"){
                         
+                        
                         if viewModel.isValidEmail() && viewModel.isValidPassword(){
                             
                             viewModel.createCustomerAccessToken(mail: viewModel.email,
@@ -84,6 +85,10 @@ struct LoginView: View {
                     
                     Button(action:{
                         viewModel.googleSignIn(rootController: getRootViewController())
+                            
+                            
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
+                         
                         if viewModel.isLoggedIn{
                             path.removeLast(1)
                             viewModel.isLoggedIn = false
