@@ -24,7 +24,7 @@ struct ContentView: View {
                         ProductsView(viewModel: productsVM,path: $path, vendor: vendor)
                     case .productDetails(productId: let productId):
                         let productDetailsVM = self.container.resolve(ProductDetailsViewModel.self)
-                        ProductDetailsView(productId: productId, viewModel: productDetailsVM, path: $path)
+                        ProductDetailsView(productId: productId, path: $path, viewModel: productDetailsVM)
                     case .login:
                         let loginVM = self.container.resolve(LoginViewModel.self)
                         LoginView(viewModel: loginVM,path:$path)

@@ -19,7 +19,7 @@ final class WishlistViewModel : ObservableObject{
         fetchwishlistCase.execute{[weak self] result in
             switch result {
             case .success(let wishlist):
-                print("retrieved first item : \(wishlist[0].title)")
+                //print("retrieved first item : \(wishlist[0].title)")
                 self?.wishlist = wishlist
             case .failure(let error):
                 print("error fetching wishlist \(error)")
