@@ -26,9 +26,15 @@ struct SettingsView: View {
                 
             BigButton(buttonText: "Logout")
                 .offset(y: -70)
+                .onTapGesture {
+                    viewModel.firebaseSignOut()
+                    viewModel.googleSignOut()
+                    viewModel.removeAllUserDataFromDefaults()
+                    vm.isAuth = false
+                    path.append(AppRouter.register)
+                }
             
             Spacer()
-            
         }
         .padding(.top)
     }

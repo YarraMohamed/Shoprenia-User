@@ -58,6 +58,8 @@ struct ContentView: View {
                     case .wishlist:
                         let wishlistVM = self.container.resolve(WishlistViewModel.self)
                         WishlistView(viewModel: wishlistVM, path: $path)
+                    case .home:
+                        MainTabView(path: $path, homeVM: homeVM, categoriesVM: categoryVM)
                     case .updateAddress(let address, let lat, let lon):
                         UpdateAddressMap(
                             selectedAddress: address,
@@ -73,8 +75,8 @@ struct ContentView: View {
                                     path: $path
                                 )
                             }
-                        }
                     }
+                    
                 }
         }
     }

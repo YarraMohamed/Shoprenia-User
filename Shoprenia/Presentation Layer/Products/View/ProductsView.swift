@@ -29,16 +29,26 @@ struct ProductsView: View {
                  .cornerRadius(8)
                  .padding(10)
                 
-                ProductsGridView(path: $path, products: viewModel.searchedProducts)
+                if viewModel.isFilterDismissed {
+                    ProductsGridView(path: $path, products: viewModel.filteredProducts)
+                }else{
+                    ProductsGridView(path: $path, products: viewModel.searchedProducts)
+                }
             }
         }
         .navigationTitle(vendor ?? "Products")
         .toolbar{
             ToolbarItem(placement: .topBarTrailing) {
                 Button("", image: .filter) {
-                    print("ok")
+                    viewModel.showFilter = true
                 }
             }
+        }
+        .sheet(isPresented: $viewModel.showFilter,onDismiss: {
+            viewModel.filterProducts()
+            viewModel.isFilterDismissed = true
+        }){
+            SliderView(sliderValue: $viewModel.sliderValue,isPresented: $viewModel.showFilter)
         }
             .onAppear{
                 guard let vendor = vendor else {

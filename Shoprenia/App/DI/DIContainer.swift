@@ -102,8 +102,21 @@ final class DIContainer {
             container.register(AddCustomerAddressUseCase.self) { resolver in
                 AddCustomerAddressUseCase(repository: resolver.resolve(AddressRepository.self)!)
             }
+            
+            container.register(LogoutFromGoogle.self) { resolver in
+                LogoutFromGoogle(repository: resolver.resolve(AddressRepository.self)!)
+            }
+            
+            container.register(LogoutFromFirebase.self) { resolver in
+                LogoutFromFirebase(repository: resolver.resolve(AddressRepository.self)!)
+            }
+            
+            container.register(RemoveAllUserDefaultsValues.self) { resolver in
+                RemoveAllUserDefaultsValues(repository: resolver.resolve(AddressRepository.self)!)
+            }
+            
             container.register(AddressViewModel.self) { resolver in
-                AddressViewModel(addAddressUseCase: resolver.resolve(AddCustomerAddressUseCase.self)!)
+                AddressViewModel(addAddressUseCase: resolver.resolve(AddCustomerAddressUseCase.self)!, googleSignoutUseCase: resolver.resolve(LogoutFromGoogle.self)!, firebaseSignoutUseCase: resolver.resolve(LogoutFromFirebase.self)!,removeDefaults: resolver.resolve(RemoveAllUserDefaultsValues.self)!)
             }
         }
     }

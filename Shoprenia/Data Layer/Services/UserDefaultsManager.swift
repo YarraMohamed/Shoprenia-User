@@ -50,5 +50,4 @@ class UserDefaultsManager : UserDefaultsManagerProtocol {
     func removeValueForKey(_ key:String){
         UserDefaults.standard.removeObject(forKey: key)
     }
-    
 }

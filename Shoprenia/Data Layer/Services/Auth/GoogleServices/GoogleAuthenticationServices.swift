@@ -10,16 +10,6 @@ final class GoogleAuthenticationServices : GoogleAuthenticationServicesProtocol 
     private init() {}
     
     
-    func googleSignOut() {
-        do {
-            try Auth.auth().signOut()
-            GIDSignIn.sharedInstance.signOut()
-            print("User signed out")
-        } catch let signOutError as NSError {
-            print("Error signing out: %@", signOutError)
-        }
-    }
-    
     func googleSignIn(rootController : UIViewController,completion: @escaping(Result<GIDGoogleUser, Error>)->Void) {
         
         guard let clientID = FirebaseApp.app()?.options.clientID else { return }

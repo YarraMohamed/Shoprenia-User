@@ -14,7 +14,8 @@ protocol AddressRepositoryProtocol {
     func getCustomerAddresses(completion: @escaping (Result<([Storefront.MailingAddress], String?), Error>) -> Void)
     func updateCustomerAddress(addressID: String,address: CustomerAddress,setAsDefault: Bool,
         completion: @escaping (Result<Storefront.MailingAddress, Error>) -> Void)
-    
     func deleteCustomerAddress(addressID: String, completion: @escaping (Result<Bool, Error>) -> Void)
-
+    func signOutFirebaseUser()
+    func googleSignOut()
+    func removeAllUserDefaultsValues()
 }
