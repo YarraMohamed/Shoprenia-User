@@ -15,4 +15,8 @@ class ProductDetailsRepository: ProductDetailsRepoProtocol {
         completion: @escaping (Result<MobileBuySDK.Storefront.Product, any Error>) -> Void) {
             service.fetchProductDetails(id: id, completion: completion)
     }
+    
+    func saveToFirestore(product: FirestoreShopifyProduct) {
+        service.saveToFirestoreIfProductNotExist(product: product)
+    }
 }

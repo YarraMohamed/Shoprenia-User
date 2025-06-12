@@ -12,4 +12,5 @@ target 'Shoprenia' do
 	pod 'FirebaseAuth'
 	pod 'GoogleSignIn'
         pod 'Swinject'
+	pod 'FirebaseFirestore'
 end

@@ -11,9 +11,8 @@ import MobileBuySDK
 enum AppRouter: Hashable {
     case search
     case cart
-    case favorites
     case products(vendor: String)
-    case productDetails(productId: GraphQL.ID)
+    case productDetails(productId: String)
     case login
     case register
     case profile
@@ -27,4 +26,7 @@ enum AppRouter: Hashable {
     case addresses
     case addAddressFromMap
     case addressDetails(lat : Double, lon : Double)
+    case wishlist
+    case home
+    case updateAddress(address: CustomerAddress, lat: Double, lon: Double)
 }

@@ -16,17 +16,15 @@ struct ContentView: View {
                     switch route {
                     case .search :
                         let productsVM = self.container.resolve(ProductsViewModel.self)
-                       ProductsView(viewModel: productsVM, path: $path)
+                        ProductsView(viewModel: productsVM, path: $path)
                     case .cart:
                         CartView(path: $path)
-                    case .favorites:
-                        PlaceholderView()
                     case .products(let vendor):
                         let productsVM = self.container.resolve(ProductsViewModel.self)
                         ProductsView(viewModel: productsVM,path: $path, vendor: vendor)
                     case .productDetails(productId: let productId):
                         let productDetailsVM = self.container.resolve(ProductDetailsViewModel.self)
-                        ProductDetailsView(productId: productId.rawValue, viewModel: productDetailsVM, path: $path)
+                        ProductDetailsView(productId: productId, path: $path, viewModel: productDetailsVM)
                     case .login:
                         let loginVM = self.container.resolve(LoginViewModel.self)
                         LoginView(viewModel: loginVM,path:$path)
@@ -41,7 +39,8 @@ struct ContentView: View {
                     case .pastOrders:
                         OrderHistory()
                     case .shippingAddresses:
-                        AddressSelectionView(path:$path)
+                        let selectedViewModel = container.resolve(SelectedAddressViewModel.self)
+                        AddressSelectionView(path: $path, viewModel: addressVM, selectedViewModel: selectedViewModel)
                     case .paymentMethods:
                         PaymentView()
                     case .invoice:
@@ -51,14 +50,33 @@ struct ContentView: View {
                     case .HelpCenter:
                         HelpCenter().offset(y: 70)
                     case .addresses:
-                       // let addressVM = container.resolve(AddressViewModel.self)
                         Addresses(viewModel: addressVM, path: $path)
                     case .addAddressFromMap:
-                       // let addressVM = container.resolve(AddressViewModel.self)
                         AddFromMap(path: $path, viewModel: addressVM)
                     case .addressDetails(lat: let lat, lon: let lon):
-                        //let addressVM = container.resolve(AddressViewModel.self)
                         SelectedAddDetails(latitude: lat, longitude: lon, viewModel: addressVM, path: $path)
+                    case .wishlist:
+                        let wishlistVM = self.container.resolve(WishlistViewModel.self)
+                        WishlistView(viewModel: wishlistVM, path: $path)
+                    case .home:
+                        MainTabView(path: $path, homeVM: homeVM, categoriesVM: categoryVM)
+                    case .updateAddress(let address, let lat, let lon):
+                        UpdateAddressMap(
+                            selectedAddress: address,
+                            initialLatitude: lat,
+                            initialLongitude: lon,
+                            path: $path
+                        ).navigationDestination(for: String.self) { destination in
+                            if destination == "UpdateAddressDetails" {
+                                UpdateAddressDetails(
+                                    selectedAddress: address,
+                                    latitude: 30.0,
+                                    longitude: 31.0,
+                                    path: $path
+                                )
+                            }
+                        }
+                        
                     }
                 }
         }

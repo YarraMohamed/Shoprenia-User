@@ -45,11 +45,27 @@ struct LoginView: View {
                HStack{
                     Button("Login"){
                         
-                        viewModel.createCustomerAccessToken(mail: viewModel.email,
-                                                            pass: viewModel.password)
-                        viewModel.signFirebaseUserIn()
-                        print("access token is \(String(describing: UserDefaultsManager.shared.retrieveShopifyCustomerAccessToken()))")
                         
+                        if viewModel.isValidEmail() && viewModel.isValidPassword(){
+                            
+                            viewModel.createCustomerAccessToken(mail: viewModel.email,
+                                pass: viewModel.password)
+                            
+                            viewModel.signFirebaseUserIn()
+                            
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                                if viewModel.isLoggedIn{
+                                    print("\(viewModel.isLoggedIn)")
+                                    //path.append(AppRouter.home)
+                                    path.removeLast(1)
+                                    viewModel.isLoggedIn = false
+                                }else{
+                                    viewModel.showAlert = true
+                                }
+                            }
+                        }else{
+                            viewModel.showAlert = true
+                        }
                     }
                     .font(.system(size: 16, weight: .semibold))
                     .foregroundStyle(.white)
@@ -65,33 +81,32 @@ struct LoginView: View {
             VStack{
                 Spacer()
                 Text("Or Login with Google")
-                HStack(spacing: 10){
-                    
-                    Button(action:{
+                HStack(spacing: 10) {
+                    Button(action: {
                         viewModel.googleSignIn(rootController: getRootViewController())
-                    }){
+
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
+                            if viewModel.isLoggedIn {
+                                if !path.isEmpty {
+                                    path.removeLast(1)
+                                }
+                                viewModel.isLoggedIn = false
+                            }
+                        }
+                    }) {
                         Image("g")
                             .resizable()
                             .scaledToFit()
-                            .frame(width: 50,height: 50)
+                            .frame(width: 50, height: 50)
                             .overlay(
-                                        RoundedRectangle(cornerRadius: 10)
-                                            .stroke(Color.black,
-                                            lineWidth: 1
-                                        )
-                                    )
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(Color.black, lineWidth: 1)
+                            )
                     }
                 }
             }
-            
+
             Spacer()
-        }
-        .onChange(of: viewModel.isLoggedIn){ isLogged in
-            if isLogged {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                    path.removeLast()
-                }
-            }
         }
         .toolbar{
             ToolbarItem(placement: .topBarTrailing) {
@@ -101,6 +116,11 @@ struct LoginView: View {
                             .foregroundColor(.blue)
                     }
                 }
+        }
+        .alert("Please insert valid credentials", isPresented: $viewModel.showAlert) {
+            Button("Ok",role: .cancel){
+                viewModel.showAlert = false
+            }
         }
     }
 }

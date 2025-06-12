@@ -24,7 +24,7 @@ struct AuthProfile: View {
                                 case "Settings":
                                 path.append(AppRouter.settings)
                                 case "Wishlist":
-                                path.append(AppRouter.favorites)
+                                path.append(AppRouter.wishlist)
                             default:
                                 path.append(AppRouter.pastOrders)
                             }

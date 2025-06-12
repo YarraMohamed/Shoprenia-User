@@ -6,9 +6,15 @@ struct ProductDetailsView: View {
     @State var productId : String
     @State var selectedSize = "Select size"
     @State var selectedColor = "Select color"
+    @State private var isInCart = false
+    @State private var showToast = false
+    @State var showAlert = false
+    @State private var toastMessage = ""
+    @Binding var path : NavigationPath
+
+    @EnvironmentObject var authViewModel: AuthenticationViewModel
     @ObservedObject var viewModel : ProductDetailsViewModel
     
-    @Binding var path : NavigationPath
     
     private let reviews = ["1", "1.5", "2", "2.5", "3", "3.5", "4", "4.5", "5"]
     private let numberOfReviews = ["5", "10", "15", "20", "25", "30", "35", "40", "45", "50"]
@@ -148,10 +154,17 @@ struct ProductDetailsView: View {
                 .frame(maxWidth: .infinity)
                 
                 HStack{
-                    Button("Add to cart"){
-                        //Logic hna w bta3
-                        print("Added to cart")
+                    Button("Add to cart") {
+                        if let matchedVariant = viewModel.getMatchingVariant(selectedSize: selectedSize, selectedColor: selectedColor) {
+                            viewModel.addToCart(variantId: matchedVariant.id.rawValue, quantity: 1)
+                            toastMessage = "🎉 Added successfully.\nYou can select the quantity in the shopping cart."
+
+                            showToast = true
+                        }
                     }
+
+
+
                     .font(.system(size: 16, weight: .semibold))
                     .foregroundStyle(.white)
                     .frame(width: 245, height: 48)
@@ -164,27 +177,74 @@ struct ProductDetailsView: View {
                 Spacer()
             }
             .toolbar{
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button("", image: .heartUnfilled) {
-                        print("ok")
+                            ToolbarItem(placement: .topBarTrailing) {
+                                Button("", image: .heartUnfilled) {
+                                    if authViewModel.isAuthenticated(){
+                                        guard let product = viewModel.productDetails else{
+                                            return
+                                        }
+                                        viewModel.saveShopifyProduct(product)
+                                    }else{
+                                        self.showAlert = true
+                                    }
+                                }
+                            }
+                        }
+                        .alert(isPresented: $showAlert) {
+                            Alert(
+                                title: Text("You need to login"),
+                                message: Text("Please login to continue."),
+                                primaryButton: .default(Text("Ok"), action: {
+                                    path.append(AppRouter.register)
+                                }),
+                                secondaryButton: .cancel()
+                            )
+                        }
                     }
-                }
-            }
-            
-        }
-        
         
         
         .onAppear{
             viewModel.getProductDetails(id: GraphQL.ID(rawValue: productId))
         }
+        .overlay(
+            VStack {
+                if showToast {
+                    Text(toastMessage)
+                        .font(.subheadline)
+                        .padding()
+                        .background(Color.blue.opacity(0.9))
+                        .foregroundColor(.white)
+                        .cornerRadius(12)
+                        .transition(.opacity)
+                        .onAppear {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                withAnimation {
+                                    showToast = false
+                                }
+                            }
+                        }
+                }
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .animation(.easeInOut, value: showToast)
+        )
+
+
     }
-}
-
-#Preview {
-
-    ProductDetailsView(productId: "gid://shopify/Product/7936016351306",
-                       viewModel:ProductDetailsViewModel(productDetailsCase: GetProductDetailsUseCase(repo: ProductDetailsRepository(service: ProductDetailsService()))),
-                       path: .constant(NavigationPath()))
 
 }
+
+//#Preview {
+//
+//    ProductDetailsView(
+//productId: "gid://shopify/Product/7936016351306",
+//viewModel:ProductDetailsViewModel(
+//    productDetailsCase: GetProductDetailsUseCase(
+//        repo: ProductDetailsRepository(service: ProductDetailsService())
+//    ),
+//    cartUseCase: <#CartUsecase#>
+//),
+//                       path: .constant(NavigationPath())
+//)
+//
+//}

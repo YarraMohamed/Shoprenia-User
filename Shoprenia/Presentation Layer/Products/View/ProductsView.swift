@@ -21,22 +21,34 @@ struct ProductsView: View {
                  HStack{
                      Image(systemName: "magnifyingglass")
                          .foregroundColor(.gray)
-                     TextField("Search", text: .constant(""))
+                     TextField("Search...", text: $viewModel.searchText)
+                         .textInputAutocapitalization(.never)
                  }
                  .padding(10)
                  .background(Color(.systemGray6))
                  .cornerRadius(8)
                  .padding(10)
-                ProductsGridView(path: $path, products: viewModel.products)
+                
+                if viewModel.isFilterDismissed {
+                    ProductsGridView(path: $path, products: viewModel.filteredProducts)
+                }else{
+                    ProductsGridView(path: $path, products: viewModel.searchedProducts)
+                }
             }
         }
         .navigationTitle(vendor ?? "Products")
         .toolbar{
             ToolbarItem(placement: .topBarTrailing) {
                 Button("", image: .filter) {
-                    print("ok")
+                    viewModel.showFilter = true
                 }
             }
+        }
+        .sheet(isPresented: $viewModel.showFilter,onDismiss: {
+            viewModel.filterProducts()
+            viewModel.isFilterDismissed = true
+        }){
+            SliderView(sliderValue: $viewModel.sliderValue,isPresented: $viewModel.showFilter)
         }
             .onAppear{
                 guard let vendor = vendor else {

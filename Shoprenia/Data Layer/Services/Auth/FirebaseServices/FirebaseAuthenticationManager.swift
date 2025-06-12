@@ -26,6 +26,7 @@ final class FirebaseAuthenticationManager : FirebaseManagerProtocol{
                 if let error = error {
                     print("Error updating profile: \(error.localizedDescription)")
                 } else {
+                    completion(true)
                     print("User created with name: \(firstname) \(lastname)")
                 }
             }
@@ -48,17 +49,8 @@ final class FirebaseAuthenticationManager : FirebaseManagerProtocol{
           guard let strongSelf = self else { return }
           
             print("\(authResult?.user.displayName ?? "John doe") signed in with Firebase id : \(authResult?.user.uid ?? "No id")")
-            
         }
     }
     
-    func signOutFirebaseUser(){
-        let firebaseAuth = Auth.auth()
-        do {
-          try firebaseAuth.signOut()
-        } catch let signOutError as NSError {
-          print("Error signing out: %@", signOutError)
-        }
-    }
 }
 

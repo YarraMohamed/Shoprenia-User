@@ -32,4 +32,16 @@ class AddressRepository: AddressRepositoryProtocol {
         addressService.deleteCustomerAddress(addressID: addressID, completion: completion)
     }
 
+    func signOutFirebaseUser(){
+        addressService.signOutFirebaseUser()
+    }
+    
+    func googleSignOut() {
+        addressService.googleSignOut()
+    }
+    
+    func removeAllUserDefaultsValues() {
+        addressService.removeAllUserDefaultsValues()
+    }
+    
 }
