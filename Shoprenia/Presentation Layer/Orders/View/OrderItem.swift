@@ -6,13 +6,15 @@
 //
 
 import SwiftUI
+import MobileBuySDK
 
 struct OrderItem: View {
+    var order : Storefront.Order?
     var body: some View {
         VStack(alignment: .leading,spacing: 5){
-            OrderText(title: "Order Id:", value: "#58301")
-            OrderText(title: "Total:", value: "120.00 EGP")
-            OrderText(title: "Order Date:", value: "2025-06-09")
+            OrderText(title: "Order Id:", value: order?.id.rawValue ?? " ")
+            OrderText(title: "Total:", value: String(describing: order?.totalPrice.amount))
+            OrderText(title: "Order Date:", value: String(describing: order?.processedAt))
         }
         .padding()
         .frame(width: 350,height: 150,alignment: .leading)

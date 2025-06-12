@@ -27,7 +27,8 @@ final class DIContainer {
             RegisterationAssembly(),
             WishlistAssembly(),
             CartAssembly(),
-            SelectedAddressAssembly()
+            SelectedAddressAssembly(),
+            OrderHistoryAssembly()
         ], container: container)
     }
     
@@ -243,6 +244,22 @@ final class DIContainer {
             }
         }
     }
-
+    
+    final class OrderHistoryAssembly : Assembly{
+        func assemble(container: Container) {
+            container.register(OrderHistoryService.self) { _ in
+                OrderHistoryService()
+            }
+            container.register(OrderHistoryRepo.self) { resolver in
+                OrderHistoryRepo(service: resolver.resolve(OrderHistoryService.self)!)
+            }
+            container.register(OrderHistoryUsecase.self){ resolver in
+                OrderHistoryUsecase(repo: resolver.resolve(OrderHistoryRepo.self)!)
+            }
+            container.register(OrderHistoryViewModel.self) { resolver in
+                OrderHistoryViewModel(usecase: resolver.resolve(OrderHistoryUsecase.self)!)
+            }
+        }
+    }
     
 }
