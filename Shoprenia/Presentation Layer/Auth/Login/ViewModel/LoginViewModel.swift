@@ -28,32 +28,15 @@ class LoginViewModel: ObservableObject {
     
     func googleSignIn(rootController : UIViewController) {
        
-        loginRepo.googleSignIn(rootController: rootController){ result in
+        loginRepo.googleSignIn(rootController: rootController){[weak self] result in
             
             switch result {
             case .success(let googleUser):
-                self.createCustomerWithoutPhone(user: googleUser)
+                guard let email = googleUser.email else { return }
+                self?.createCustomerAccessToken(mail: email, pass: "Password123")
             case .failure(let error):
                 print("ERR in g sign in \(error.localizedDescription)")
             }
-        }
-    }
-    
-    func createCustomerWithoutPhone(user:User){
-        loginRepo.createCustomerWithoutPhone(email: user.email ?? "No mail",
-                                             password: "Password123",
-                                             firstName: user.displayName ?? "no first name",
-                                             lastName: ""){result in
-            
-            switch result {
-            case .success(let customer):
-                print("In Login ViewModel shopify customer created using google with name : \(customer.displayName)")
-                print("In Login ViewModel shopify customer created using google with email : \(customer.email ?? "no mail")")
-                self.createCustomerAccessToken(mail: customer.email ?? "no mail", pass: "Password123")
-            case .failure(let error):
-                print("In Login Viewmodel Error: \(error)")
-            }
-            
         }
     }
     

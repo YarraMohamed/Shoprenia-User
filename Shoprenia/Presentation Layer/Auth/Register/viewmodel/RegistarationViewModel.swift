@@ -133,6 +133,7 @@ final class RegistarationViewModel : ObservableObject {
                 print("id: \(customer.id)")
                 print("email: \(customer.email ?? "no mail")")
                 print("phone: \(customer.phone ?? "no phone")")
+                self?.isLoggedIn = true
                 self?.insertInUserDefaultsWithoutPhone(accessToken, customer)
                 
             case .failure(let error):

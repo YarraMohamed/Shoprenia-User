@@ -29,7 +29,7 @@ final class DIContainer {
         ], container: container)
     }
     
-    func resolve<T>(_ type: T.Type) -> T {
+    func resolve<T>(_ type: T.Type) -> T {  
         return assembler.resolver.resolve(type)!
     }
 
