@@ -360,7 +360,6 @@ class CartService: CartServiceProtocol {
                         }
                         
                         if let address = result?.cartDeliveryAddressesAdd?.cart?.delivery.addresses.first {
-                            print("added address \(address)")
                             completion(.success(address))
                         } else {
                             completion(.failure(NSError(domain: "ShopifyError", code: -1, userInfo: [NSLocalizedDescriptionKey: "No address returned from Shopify"])))
