@@ -28,7 +28,8 @@ final class DIContainer {
             WishlistAssembly(),
             CartAssembly(),
             SelectedAddressAssembly(),
-            OrderHistoryAssembly()
+            OrderHistoryAssembly(),
+            PaymentAssembly()
         ], container: container)
     }
     
@@ -258,6 +259,23 @@ final class DIContainer {
             }
             container.register(OrderHistoryViewModel.self) { resolver in
                 OrderHistoryViewModel(usecase: resolver.resolve(OrderHistoryUsecase.self)!)
+            }
+        }
+    }
+    
+    final class PaymentAssembly : Assembly{
+        func assemble(container: Container) {
+            container.register(PaymentService.self) { _ in
+                PaymentService()
+            }
+            container.register(PaymentRepository.self) { resolver in
+                PaymentRepository(service: resolver.resolve(PaymentService.self)!)
+            }
+            container.register(PaymentUsecase.self) { resolver in
+                PaymentUsecase(repo: resolver.resolve(PaymentRepository.self)!)
+            }
+            container.register(PaymentViewModel.self) { resolver in
+                PaymentViewModel(usecase: resolver.resolve(PaymentUsecase.self)!)
             }
         }
     }

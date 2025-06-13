@@ -6,3 +6,16 @@
 //
 
 import Foundation
+
+class PaymentRepository : PaymentRepoProtocol{
+    
+    let service : PaymentServicesProtocol
+    init(service: PaymentServicesProtocol) {
+        self.service = service
+    }
+    
+    func placeOrder(completion: @escaping (Result<Bool, any Error>) -> Void) {
+        service.placeOrder(completion: completion)
+    }
+    
+}

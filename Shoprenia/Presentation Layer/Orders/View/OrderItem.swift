@@ -11,10 +11,18 @@ import MobileBuySDK
 struct OrderItem: View {
     var order : Storefront.Order?
     var body: some View {
-        VStack(alignment: .leading,spacing: 5){
-            OrderText(title: "Order Id:", value: order?.id.rawValue ?? " ")
-            OrderText(title: "Total:", value: String(describing: order?.totalPrice.amount))
-            OrderText(title: "Order Date:", value: String(describing: order?.processedAt))
+        HStack{
+            VStack(alignment: .leading,spacing: 5){
+                OrderText(title: "Order Id:", value: order?.name ?? " ")
+                OrderText(title: "Total:", value: "\(String(describing: order?.totalPrice.amount ?? 0)) EGP")
+                OrderText(title: "Order Date:", value: String(String(describing: order?.processedAt ?? Date()).split(separator: " ").first ?? " "))
+            }
+            Spacer()
+            VStack(alignment: .trailing){
+                Image(.order)
+                    .resizable()
+                    .frame(width: 50,height: 50)
+            }
         }
         .padding()
         .frame(width: 350,height: 150,alignment: .leading)

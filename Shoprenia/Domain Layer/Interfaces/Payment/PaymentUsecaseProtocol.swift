@@ -6,3 +6,7 @@
 //
 
 import Foundation
+
+protocol PaymentUsecaseProtocol{
+    func placeOrder(completion: @escaping (Result<Bool, Error>) -> Void)
+}

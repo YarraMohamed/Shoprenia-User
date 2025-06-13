@@ -15,6 +15,7 @@ class OrderHistoryService: OrderHistoryServicesProtocol {
                 .orders(first: 30) { $0
                     .nodes { $0
                         .id()
+                        .name()
                         .processedAt()
                         .totalPrice { $0
                             .amount()

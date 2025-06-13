@@ -6,3 +6,14 @@
 //
 
 import Foundation
+
+class PaymentUsecase : PaymentUsecaseProtocol{
+    let repo : PaymentRepoProtocol
+    init(repo: PaymentRepoProtocol) {
+        self.repo = repo
+    }
+    
+    func placeOrder(completion: @escaping (Result<Bool, any Error>) -> Void) {
+        repo.placeOrder(completion: completion)
+    }
+}
