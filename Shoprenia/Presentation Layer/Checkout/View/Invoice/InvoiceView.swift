@@ -10,6 +10,8 @@ struct InvoiceView: View {
     let phone: String
     @State private var orderFees: Double = 0.0
     @State private var discountMessage = ""
+    @State private var isCodeApplied = false
+
 
 
     @StateObject var viewModel = CartViewModel(cartUsecase: CartUsecase())
@@ -65,44 +67,56 @@ struct InvoiceView: View {
                         .foregroundColor(.blue)
                //    Spacer()
                     Button(action: {
-                                 print("Verify discount code: \(viewModel.discountCode)")
-                                 let subtotal = calculateCartSubtotalValue()
-                                 let code = viewModel.discountCode.uppercased()
-                                 var saved: Double = 0
+                        if isCodeApplied {
+                            let subtotal = calculateCartSubtotalValue()
+                            orderFees = subtotal + Double(fee)
+                            discountMessage = ""
+                            viewModel.discountCode = ""
+                            isCodeApplied = false
+                        } else {
 
-                                 if code == "SUMMER15" {
-                                     let discount = subtotal * 0.15
-                                     orderFees = (subtotal - discount) + Double(fee)
-                                     saved = discount
-                                     discountMessage = String(format: "You saved %.2f \(viewModel.cartLines.first?.currency ?? "")", saved)
-                                 }
-                                 else if code == "SUMMER10" {
-                                     let discount = subtotal * 0.10
-                                     orderFees = (subtotal - discount) + Double(fee)
-                                     saved = discount
-                                     discountMessage = String(format: "You saved %.2f \(viewModel.cartLines.first?.currency ?? "")", saved)
-                                 }
-                                 else if code == "WELCOME5" {
-                                     let discount = subtotal * 0.05
-                                     orderFees = (subtotal - discount) + Double(fee)
-                                     saved = discount
-                                     discountMessage = String(format: "You saved %.2f \(viewModel.cartLines.first?.currency ?? "")", saved)
-                                 }
-                                 else {
-                                     orderFees = subtotal + Double(fee)
-                                     discountMessage = "Coupon not valid"
-                                 }
+                            print("Verify discount code: \(viewModel.discountCode)")
+                            let subtotal = calculateCartSubtotalValue()
+                            let code = viewModel.discountCode.uppercased()
+                            var saved: Double = 0
 
+                            if code == "SUMMER15" {
+                                let discount = subtotal * 0.15
+                                orderFees = (subtotal - discount) + Double(fee)
+                                saved = discount
+                                discountMessage = String(format: "You saved %.2f \(viewModel.cartLines.first?.currency ?? "")", saved)
+                                isCodeApplied = true
+                            }
+                            else if code == "SUMMER10" {
+                                let discount = subtotal * 0.10
+                                orderFees = (subtotal - discount) + Double(fee)
+                                saved = discount
+                                discountMessage = String(format: "You saved %.2f \(viewModel.cartLines.first?.currency ?? "")", saved)
+                                isCodeApplied = true
+                            }
+                            else if code == "WELCOME50" {
+                                let discount = 50.0
+                                orderFees = (subtotal - discount) + Double(fee)
+                                saved = discount
+                                discountMessage = String(format: "You saved %.2f \(viewModel.cartLines.first?.currency ?? "")", saved)
+                                isCodeApplied = true
+                            }
+                            else {
+                                orderFees = subtotal + Double(fee)
+                                discountMessage = "Coupon not valid"
+                                isCodeApplied = false
+                            }
+                        }
                     }) {
-                        Text("Apply")
+                        Text(isCodeApplied ? "Remove" : "Apply")
                             .font(.system(size: 16, weight: .semibold))
                             .padding(.horizontal)
                             .padding(.vertical, 6)
-                            .background(Color.blue)
+                            .background(isCodeApplied ? Color.red : Color.blue)
                             .foregroundColor(.white)
                             .cornerRadius(8)
                     }
-                }.padding(.horizontal, 15)
+       }.padding(.horizontal, 15)
 
                 if !discountMessage.isEmpty {
                     Text(discountMessage)

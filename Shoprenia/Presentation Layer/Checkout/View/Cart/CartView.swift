@@ -24,37 +24,17 @@ struct CartView: View {
 
                         CartProductView(
                             line: line,
-
-                            onIncrease: {
-                                    if line.quantity < 5 {
-                                        viewModel.checkVariantAvailability(variantId: line.variantId)
-                                                let isAvailable = viewModel.isVariantAvailable
-                                                 if isAvailable ?? false {
-                                                        viewModel.updateCartQuantity(lineId: line.id,newQuantity: line.quantity + 1)
-                                                } else {showNotAvailableAlert = true }
-                                       
-                                    } else { showNotAvailableAlert = true}
-                                         },
-                            onDecrease: {
-                                if line.quantity > 1 {
-                                    viewModel.updateCartQuantity(
-                                        lineId: line.id,
-                                        newQuantity: line.quantity - 1
-                                    )
-                                } else {
-                                    lineIdToDelete = line.id
-                                    showAlert = true
-                                }
-                            },
-                            onDelete: {
-                                   lineIdToDelete = line.id
-                                
-                                   showAlert = true
-                               }
-                            
+                            onIncrease: { handleIncrease(line: line) },
+                            onDecrease: { handleDecrease(line: line) },
+                            onDelete: { handleDelete(line: line) },
+                            onTap: {
+                                path.append(AppRouter.productDetails(productId: line.productId))
+                            }
                         )
+                    
                     }
                 }
+        
                 .listStyle(.plain)
                 .scrollContentBackground(.hidden)
                 .padding(.bottom, 20)
@@ -76,6 +56,7 @@ struct CartView: View {
                         RoundedRectangle(cornerRadius: 30).fill(.blue)
                     }
                 }
+                  
                    
                 
             } else {
@@ -109,6 +90,34 @@ struct CartView: View {
 
         let doubleTotal = NSDecimalNumber(decimal: total).doubleValue
         return String(format: "%.2f", doubleTotal)
+    }
+
+    func handleIncrease( line: CartLineItem) {
+        if line.quantity < 5 {
+            viewModel.checkVariantAvailability(variantId: line.variantId)
+            let isAvailable = viewModel.isVariantAvailable
+            if isAvailable ?? false {
+                viewModel.updateCartQuantity(lineId: line.id, newQuantity: line.quantity + 1)
+            } else {
+                showNotAvailableAlert = true
+            }
+        } else {
+            showNotAvailableAlert = true
+        }
+    }
+
+    func handleDecrease( line: CartLineItem) {
+        if line.quantity > 1 {
+            viewModel.updateCartQuantity(lineId: line.id, newQuantity: line.quantity - 1)
+        } else {
+            lineIdToDelete = line.id
+            showAlert = true
+        }
+    }
+
+    func handleDelete( line: CartLineItem) {
+        lineIdToDelete = line.id
+        showAlert = true
     }
 
 }

@@ -199,6 +199,7 @@ class CartService: CartServiceProtocol {
                                         .altText()
                                     }
                                     .product { $0
+                                        .id()
                                         .title()
                                         .featuredImage { $0
                                             .url()

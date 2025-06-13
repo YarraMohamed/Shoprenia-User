@@ -50,6 +50,7 @@ final class CartViewModel: ObservableObject {
                                 return nil
                             }
                             
+                            let productId = variant.product.id.rawValue
 
                             return CartLineItem(
                                 id: cartLine.id.rawValue,
@@ -59,7 +60,8 @@ final class CartViewModel: ObservableObject {
                                 quantity: Int(cartLine.quantity),
                                 price: cartLine.cost.totalAmount.amount,
                                 currency: cartLine.cost.totalAmount.currencyCode.rawValue,
-                                variantId: variant.id.rawValue
+                                variantId: variant.id.rawValue,
+                                productId: productId
                             )
                         }
                         self?.cartLines.forEach { line in

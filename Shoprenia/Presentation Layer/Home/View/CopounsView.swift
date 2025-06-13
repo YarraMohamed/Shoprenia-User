@@ -23,7 +23,7 @@ struct CouponsView: View {
                         Button(action: {
                             let codeToCopy = codes[index]
                             UIPasteboard.general.string = codeToCopy
-                            copiedMessage = "Code '\(codeToCopy)' copied!"
+                            copiedMessage = "Code copied!"
 
                             DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                                 copiedMessage = ""
@@ -61,6 +61,6 @@ struct CouponsView: View {
         UIPageControl.appearance().pageIndicatorTintColor = UIColor.lightGray
     }
     let items = ["Coupon1", "Coupon2", "Coupon3"]
-    let codes = ["SUMMER15", "SUMMER10", "WELCOME5"]
+    let codes = ["SUMMER15", "SUMMER10", "WELCOME50"]
 }
 
