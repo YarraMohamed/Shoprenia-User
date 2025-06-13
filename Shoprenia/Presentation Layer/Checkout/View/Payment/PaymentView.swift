@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct PaymentView: View {
+    let orderFees : Double
+
     @State private var selectedOption = "COD"
         let options = ["COD", "Apple Pay"]
     var body: some View {
@@ -37,7 +39,7 @@ struct PaymentView: View {
                 Text("Total Price")
                     .font(.title2)
                     .fontWeight(.bold)
-                Text("100.00 EGP")
+                Text("\(orderFees)")
                     .font(.title2)
                     .foregroundColor(Color.app)
             }
@@ -59,7 +61,7 @@ struct PaymentView: View {
         .navigationBarTitle("Payment")
     }
 }
-
-#Preview {
-    PaymentView()
-}
+//
+//#Preview {
+//    PaymentView()
+//}

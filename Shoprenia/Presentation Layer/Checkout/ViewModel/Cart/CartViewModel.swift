@@ -12,6 +12,8 @@ final class CartViewModel: ObservableObject {
     @Published var cart: Storefront.Cart?
     @Published var errorMessage: String?
     @Published var cartLines: [CartLineItem] = []
+    @Published var discountCode: String = ""
+
 
     
     private let cartUsecase: CartUsecaseProtocol

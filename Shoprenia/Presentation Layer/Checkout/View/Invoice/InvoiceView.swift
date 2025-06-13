@@ -1,81 +1,124 @@
-//
-//  InvoiceView.swift
-//  Shoprenia
-//
-//  Created by Yara Mohamed on 09/06/2025.
-//
+
+
 
 import SwiftUI
-
 struct InvoiceView: View {
-    @Binding var path:NavigationPath
+    @Binding var path: NavigationPath
+    let total : Double
+    let fee: Int
+    let location: String
+    let phone: String
+    @State private var orderFees: Double = 0.0
+
+    @StateObject var viewModel = CartViewModel(cartUsecase: CartUsecase())
+
     let rows: [GridItem] = [GridItem(.flexible())]
-    
+
     var body: some View {
-        VStack{
+        VStack(alignment: .leading) {
+
             ScrollView(.horizontal) {
                 LazyHGrid(rows: rows, spacing: 10) {
-                    ForEach(0..<4) { index in
-                        InvoiceItem()
+                    ForEach(viewModel.cartLines) { line in
+                        InvoiceItem(line: line)
                     }
                 }
-               
+                .padding(.horizontal)
             }
-            .padding(.vertical,20)
-            .frame(maxWidth: .infinity,maxHeight: 250)
-            
-            HStack{
-                Text("Original Total: ")
-                    .font(.system(size: 22, weight: .medium))
+            .padding(.vertical, 20)
+            .frame(maxWidth: .infinity, maxHeight: 250)
+
+            HStack {
+                Text("Cart subtotal:")
+                    .font(.system(size: 18, weight: .medium))
                 Spacer()
-                Text("100.00 EGP")
-                    .font(.system(size: 22, weight: .medium))
+                Text("\(calculateCartSubtotal()) \(viewModel.cartLines.first?.currency ?? "")")
+                    .font(.system(size: 18, weight: .medium))
                     .foregroundColor(.blue)
             }
-            .padding()
-            
-            HStack{
-                Text("Discount Code: ")
-                    .font(.system(size: 22, weight: .medium))
+            .padding(.horizontal)
+            .padding(.vertical, 15)
+
+            HStack {
+                Text("Delivery Fee:")
+                    .font(.system(size: 18, weight: .medium))
                 Spacer()
-                TextField("Enter Code", text: .constant(""))
-                    .frame(width: 100)
+                Text("\(fee) \(viewModel.cartLines.first?.currency ?? "")")
+                    .font(.system(size: 18, weight: .medium))
                     .foregroundColor(.blue)
             }
-            .padding()
-            
-            HStack{
-                Text("Discounted Total: ")
-                    .font(.system(size: 22, weight: .medium))
+            .padding(.horizontal)
+            .padding(.vertical, 15)
+
+            HStack {
+                Text("Discount Code:")
+                    .font(.system(size: 18, weight: .medium))
+
                 Spacer()
-                Text("70.00 EGP")
-                    .font(.system(size: 22, weight: .medium))
+
+                TextField("Enter Code", text: $viewModel.discountCode)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .frame(width: 120)
+                    .foregroundColor(.blue)
+
+                Button(action: {
+                    print("Verify discount code: \(viewModel.discountCode)")
+                    let subtotal = calculateCartSubtotalValue()
+
+                    if viewModel.discountCode == "summer25" {
+                        let discount = subtotal * 0.25
+                        orderFees = (subtotal - discount) + Double(fee)
+                    } else {
+                        orderFees = subtotal + Double(fee)
+                    }
+                }) {
+                    Text("Apply")
+                        .font(.system(size: 16, weight: .semibold))
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 6)
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(8)
+                }
+            }
+            .padding(.horizontal)
+            .padding(.vertical, 15)
+
+            HStack {
+                Text("Total:")
+                    .font(.system(size: 18, weight: .medium))
+                Spacer()
+                Text(String(format: "%.2f", orderFees) + " \(viewModel.cartLines.first?.currency ?? "")")
+                    .font(.system(size: 18, weight: .medium))
                     .foregroundColor(.blue)
             }
-            .padding()
-            
-            HStack{
-                Text("Location: ")
-                    .font(.system(size: 22, weight: .medium))
+            .padding(.horizontal)
+            .padding(.vertical, 15)
+
+            HStack {
+                Text("Location:")
+                    .font(.system(size: 18, weight: .medium))
                 Spacer()
-                Text("Giza, Egypt")
-                    .font(.system(size: 22, weight: .medium))
+                Text(location)
+                    .font(.system(size: 18, weight: .medium))
                     .foregroundColor(.blue)
             }
-            .padding()
-            
-            HStack{
-                Text("Phone: ")
-                    .font(.system(size: 22, weight: .medium))
+            .padding(.horizontal)
+            .padding(.vertical, 15)
+
+            HStack {
+                Text("Phone:")
+                    .font(.system(size: 18, weight: .medium))
                 Spacer()
-                Text("0102847389")
-                    .font(.system(size: 22, weight: .medium))
+                Text(phone)
+                    .font(.system(size: 18, weight: .medium))
                     .foregroundColor(.blue)
             }
-            .padding()
-        
-            Button("Place Order"){
-                path.append(AppRouter.paymentMethods)
+            .padding(.horizontal)
+            .padding(.vertical, 15)
+
+            Button("Place Order") {
+                path.append(AppRouter.paymentMethods(orderFees: orderFees))
             }
             .font(.system(size: 16, weight: .semibold))
             .foregroundStyle(.white)
@@ -84,14 +127,31 @@ struct InvoiceView: View {
                 RoundedRectangle(cornerRadius: 30)
                     .fill(.blue)
             }
-            .padding(.top,50)
+            .frame(maxWidth: .infinity)
+            .padding(.top, 40)
+
             Spacer()
         }
         .navigationTitle("Invoice")
-        .padding()
+        .onAppear {
+            viewModel.fetchCart()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                let subtotal = calculateCartSubtotalValue()
+                orderFees = subtotal + Double(fee)
+            }
+        }
+    }
+
+    func calculateCartSubtotal() -> String {
+        let total = calculateCartSubtotalValue()
+        return String(format: "%.2f", total)
+    }
+
+    func calculateCartSubtotalValue() -> Double {
+        let total = viewModel.cartLines.reduce(Decimal(0)) { result, line in
+            result + line.price
+        }
+        return NSDecimalNumber(decimal: total).doubleValue
     }
 }
 
-#Preview {
-    InvoiceView(path: .constant(NavigationPath()))
-}
