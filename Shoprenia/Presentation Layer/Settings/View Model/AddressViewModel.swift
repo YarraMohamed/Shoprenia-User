@@ -11,6 +11,10 @@ import Swift
 
 class AddressViewModel: ObservableObject {
     private let addAddressUseCase: AddCustomerAddressUseCase
+    private let googleSignoutUseCase: LogoutFromGoogleUseCaseProtocol
+    private let firebaseSignoutUseCase: LogoutFromFirebaseUseCaseProtocol
+    private let removeDefaults: RemoveAllUserDefaultsValuesUseCaseProtocol
+    @Published var isSignedOut: Bool = false
     @Published var reloadAddress = false
     @Published var defaultAddressID: String? = nil
     @Published var address = CustomerAddress(
@@ -28,6 +32,30 @@ class AddressViewModel: ObservableObject {
            longitude: 0.0
            
        )
+    
+    init(addAddressUseCase: AddCustomerAddressUseCase,
+         googleSignoutUseCase: LogoutFromGoogleUseCaseProtocol,
+         firebaseSignoutUseCase: LogoutFromFirebaseUseCaseProtocol,
+         removeDefaults: RemoveAllUserDefaultsValuesUseCaseProtocol) {
+        self.addAddressUseCase = addAddressUseCase
+        self.googleSignoutUseCase = googleSignoutUseCase
+        self.firebaseSignoutUseCase = firebaseSignoutUseCase
+        self.removeDefaults = removeDefaults
+    }
+    
+    init() {
+           let addressService = AddressService()
+           let repository = AddressRepository(addressService: addressService)
+           let useCase = AddCustomerAddressUseCase(repository: repository)
+           let googleUseCase = LogoutFromGoogle(repository: repository)
+           let firebaseUseCase = LogoutFromFirebase(repository: repository)
+           let removeDefaultsUseCase = RemoveAllUserDefaultsValues(repository: repository)
+           self.removeDefaults = removeDefaultsUseCase
+           self.googleSignoutUseCase = googleUseCase
+           self.firebaseSignoutUseCase = firebaseUseCase
+           self.addAddressUseCase = useCase
+       }
+    
     func setAddressCoordinates(latitude: Double, longitude: Double) {
            address.latitude = latitude
            address.longitude = longitude
@@ -35,16 +63,6 @@ class AddressViewModel: ObservableObject {
        }
     @Published var addresses: [Storefront.MailingAddress] = []
     @Published var isFormValid = false
-
-    init(addAddressUseCase: AddCustomerAddressUseCase) {
-        self.addAddressUseCase = addAddressUseCase
-    }
-    init() {
-           let addressService = AddressService()
-           let repository = AddressRepository(addressService: addressService)
-           let useCase = AddCustomerAddressUseCase(repository: repository)
-           self.addAddressUseCase = useCase
-       }
 
     func validateForm() {
            isFormValid = !address.addName.isEmpty &&
@@ -123,6 +141,19 @@ class AddressViewModel: ObservableObject {
                 }
             }
         }
+    }
+    
+    func googleSignOut() {
+        googleSignoutUseCase.execute()
+        self.isSignedOut = true
+    }
+    
+    func firebaseSignOut() {
+        firebaseSignoutUseCase.execute()
+    }
+    
+    func removeAllUserDataFromDefaults() {
+        removeDefaults.execute()
     }
 }
 

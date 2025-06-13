@@ -15,7 +15,7 @@ struct WishlistView: View {
         List{
             ForEach(viewModel.wishlist) { item in
     
-                    WishlistRow(product: item, path: .constant(NavigationPath()))
+                    WishlistRow(product: item, path:$path)
                     .onTapGesture {
                         path.append(AppRouter.productDetails(productId: item.id))
                     }

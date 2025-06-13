@@ -1,12 +1,13 @@
 import Foundation
 import MobileBuySDK
 import GoogleSignIn
+import FirebaseAuth
 
 class LoginViewModel: ObservableObject {
     @Published var email: String = ""
     @Published var password: String = ""
     @Published var isLoggedIn : Bool = false
-   
+    @Published var showAlert: Bool = false
     private var credentialValidator : CredentialsValidationProtocol
     private var userDefaultsManager : UserDefaultsManagerProtocol
     private var loginRepo : LoginRepoProtocol
@@ -38,11 +39,11 @@ class LoginViewModel: ObservableObject {
         }
     }
     
-    func createCustomerWithoutPhone(user:GIDGoogleUser){
-        loginRepo.createCustomerWithoutPhone(email: user.profile?.email ?? "No mail",
+    func createCustomerWithoutPhone(user:User){
+        loginRepo.createCustomerWithoutPhone(email: user.email ?? "No mail",
                                              password: "Password123",
-                                             firstName: user.profile?.givenName ?? "no first name",
-                                             lastName: user.profile?.familyName ?? "no last name"){result in
+                                             firstName: user.displayName ?? "no first name",
+                                             lastName: ""){result in
             
             switch result {
             case .success(let customer):
@@ -78,6 +79,7 @@ class LoginViewModel: ObservableObject {
                 print("id: \(customer.id)")
                 print("email: \(customer.email ?? "no mail")")
                 print("phone: \(customer.phone ?? "no phone")")
+                self?.isLoggedIn = true
                 self?.insertInUserDefaultsWithoutPhone(accessToken, customer)
             case .failure(let error):
                 print("In Login Viewmodel Error: \(error)")
@@ -87,7 +89,6 @@ class LoginViewModel: ObservableObject {
     
     func signFirebaseUserIn(){
         loginRepo.signInFirebaseUser(email: email, password: password)
-        isLoggedIn = true
     }
     
     func insertInUserDefaultsWithoutPhone(_ accessToken : String,_ customer : Storefront.Customer){

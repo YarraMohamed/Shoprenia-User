@@ -16,7 +16,7 @@ struct ContentView: View {
                     switch route {
                     case .search :
                         let productsVM = self.container.resolve(ProductsViewModel.self)
-                       ProductsView(viewModel: productsVM, path: $path)
+                        ProductsView(viewModel: productsVM, path: $path)
                     case .cart:
                         CartView(path: $path)
                     case .products(let vendor):
@@ -37,12 +37,14 @@ struct ContentView: View {
                         let addressVM = container.resolve(AddressViewModel.self)
                         SettingsView(viewModel : addressVM, path:$path)
                     case .pastOrders:
-                        OrderHistory()
+                        let ordersVM = container.resolve(OrderHistoryViewModel.self)
+                        OrderHistory(viewModel: ordersVM)
                     case .shippingAddresses:
                         let selectedViewModel = container.resolve(SelectedAddressViewModel.self)
                         AddressSelectionView(path: $path, viewModel: addressVM, selectedViewModel: selectedViewModel)
                     case .paymentMethods(let orderFees):
-                        PaymentView(orderFees: orderFees)
+                        let paymentVM = container.resolve(PaymentViewModel.self)
+                        PaymentView(vm: paymentVM, path: $path, orderFees: orderFees)
 
                     case .invoice(let fee, let total ,let location, let phone):
                         InvoiceView(
@@ -66,6 +68,8 @@ struct ContentView: View {
                     case .wishlist:
                         let wishlistVM = self.container.resolve(WishlistViewModel.self)
                         WishlistView(viewModel: wishlistVM, path: $path)
+                    case .home:
+                        MainTabView(path: $path, homeVM: homeVM, categoriesVM: categoryVM)
                     case .updateAddress(let address, let lat, let lon):
                         UpdateAddressMap(
                             selectedAddress: address,
@@ -82,6 +86,7 @@ struct ContentView: View {
                                 )
                             }
                         }
+                        
                     }
                 }
         }
