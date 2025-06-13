@@ -1,9 +1,3 @@
-//
-//  CartView.swift
-//  Shoprenia
-//
-//  Created by Yara Mohamed on 09/06/2025.
-//
 
 import SwiftUI
 import MobileBuySDK
@@ -13,6 +7,7 @@ struct CartView: View {
     @StateObject var viewModel = CartViewModel(cartUsecase: CartUsecase())
     @State var showAlert: Bool = false
     @State var lineIdToDelete: String?
+    @State var showNotAvailableAlert: Bool = false
 
     var body: some View {
         VStack {
@@ -26,14 +21,20 @@ struct CartView: View {
             if viewModel.cart != nil {
                 List {
                     ForEach(viewModel.cartLines) { line in
+
                         CartProductView(
                             line: line,
+
                             onIncrease: {
-                                viewModel.updateCartQuantity(
-                                    lineId: line.id,
-                                    newQuantity: line.quantity + 1
-                                )
-                            },
+                                    if line.quantity < 5 {
+                                        viewModel.checkVariantAvailability(variantId: line.variantId)
+                                                let isAvailable = viewModel.isVariantAvailable
+                                                 if isAvailable ?? false {
+                                                        viewModel.updateCartQuantity(lineId: line.id,newQuantity: line.quantity + 1)
+                                                } else {showNotAvailableAlert = true }
+                                       
+                                    } else { showNotAvailableAlert = true}
+                                         },
                             onDecrease: {
                                 if line.quantity > 1 {
                                     viewModel.updateCartQuantity(
@@ -75,13 +76,19 @@ struct CartView: View {
                         RoundedRectangle(cornerRadius: 30).fill(.blue)
                     }
                 }
+                   
                 
             } else {
                 ProgressView("Loading Cart...")
             }
         }
+        .alert("You've reached the limit for this product.", isPresented: $showNotAvailableAlert) {
+            Button("OK", role: .cancel) { }
+        }
         .onAppear {
             viewModel.fetchCart()
+         
+
         }
         .alert("Are you sure to delete this item?", isPresented: $showAlert) {
             Button("No", role: .cancel) {}

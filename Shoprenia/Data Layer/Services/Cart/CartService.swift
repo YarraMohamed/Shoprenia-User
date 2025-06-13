@@ -370,4 +370,33 @@ class CartService: CartServiceProtocol {
             }
         }
     }
+    
+    func checkVariantAvailability(variantId: String,completion: @escaping (Result<Bool, Error>) -> Void) {
+        let query = Storefront.buildQuery { $0
+            .node(id: GraphQL.ID(rawValue: variantId)) { $0
+                .onProductVariant { $0
+                    .id()
+                    .availableForSale()
+                }
+            }
+        }
+
+        GraphQLClientService.shared.client.queryGraphWith(query) { result, error in
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+
+            if let variant = result?.node as? Storefront.ProductVariant {
+                completion(.success(variant.availableForSale))
+            } else {
+                completion(.failure(NSError(
+                    domain: "ShopifyError",
+                    code: -1,
+                    userInfo: [NSLocalizedDescriptionKey: "Variant not found or wrong type"]
+                )))
+            }
+        }.resume()
+    }
+
 }

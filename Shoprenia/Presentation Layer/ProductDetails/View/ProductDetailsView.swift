@@ -157,7 +157,7 @@ struct ProductDetailsView: View {
                     Button("Add to cart") {
                         if let matchedVariant = viewModel.getMatchingVariant(selectedSize: selectedSize, selectedColor: selectedColor) {
                             viewModel.addToCart(variantId: matchedVariant.id.rawValue, quantity: 1)
-                            toastMessage = "🎉 Added successfully.\nYou can select the quantity in the shopping cart."
+                            toastMessage = "Added successfully.\nYou can select the quantity in the shopping cart."
 
                             showToast = true
                         }
