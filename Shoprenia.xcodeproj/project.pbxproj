@@ -7,25 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		DC769EE0AEB750F2CA3ED30D /* Pods_Shoprenia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44C993D19009905576EF988C /* Pods_Shoprenia.framework */; };
+		52E370D2446F5ABA7B3D148A /* Pods_Shoprenia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA94A0BBA83BA9F0D724DDB4 /* Pods_Shoprenia.framework */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		50ED497F2DF9E9B600478147 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = C112175A2DE6390C00C7C2B8 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = C11217612DE6390C00C7C2B8;
-			remoteInfo = Shoprenia;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXFileReference section */
-		089093F698C585148612436E /* Pods-Shoprenia.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Shoprenia.debug.xcconfig"; path = "Target Support Files/Pods-Shoprenia/Pods-Shoprenia.debug.xcconfig"; sourceTree = "<group>"; };
-		44C993D19009905576EF988C /* Pods_Shoprenia.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Shoprenia.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		50ED497B2DF9E9B600478147 /* ShopreniaTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ShopreniaTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		8E1BE9698CAA3123A8D7F94A /* Pods-Shoprenia.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Shoprenia.debug.xcconfig"; path = "Target Support Files/Pods-Shoprenia/Pods-Shoprenia.debug.xcconfig"; sourceTree = "<group>"; };
 		C11217622DE6390C00C7C2B8 /* Shoprenia.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Shoprenia.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		C5546D0F3E42B1526F7E7331 /* Pods-Shoprenia.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Shoprenia.release.xcconfig"; path = "Target Support Files/Pods-Shoprenia/Pods-Shoprenia.release.xcconfig"; sourceTree = "<group>"; };
+		EA94A0BBA83BA9F0D724DDB4 /* Pods_Shoprenia.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Shoprenia.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FF4585A60A499C91E6254FD0 /* Pods-Shoprenia.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Shoprenia.release.xcconfig"; path = "Target Support Files/Pods-Shoprenia/Pods-Shoprenia.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -39,11 +28,6 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		50ED497C2DF9E9B600478147 /* ShopreniaTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = ShopreniaTests;
-			sourceTree = "<group>";
-		};
 		C11217642DE6390C00C7C2B8 /* Shoprenia */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
@@ -55,40 +39,24 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		50ED49782DF9E9B600478147 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		C112175F2DE6390C00C7C2B8 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DC769EE0AEB750F2CA3ED30D /* Pods_Shoprenia.framework in Frameworks */,
+				52E370D2446F5ABA7B3D148A /* Pods_Shoprenia.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		6C893B76FFE32E4814304D40 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				44C993D19009905576EF988C /* Pods_Shoprenia.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 		C11217592DE6390C00C7C2B8 = {
 			isa = PBXGroup;
 			children = (
 				C11217642DE6390C00C7C2B8 /* Shoprenia */,
-				50ED497C2DF9E9B600478147 /* ShopreniaTests */,
 				C11217632DE6390C00C7C2B8 /* Products */,
 				DCBDC20924A25473DD6B37B2 /* Pods */,
-				6C893B76FFE32E4814304D40 /* Frameworks */,
+				F2C2A6B53F266847B736B159 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -96,7 +64,6 @@
 			isa = PBXGroup;
 			children = (
 				C11217622DE6390C00C7C2B8 /* Shoprenia.app */,
-				50ED497B2DF9E9B600478147 /* ShopreniaTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -104,45 +71,32 @@
 		DCBDC20924A25473DD6B37B2 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				089093F698C585148612436E /* Pods-Shoprenia.debug.xcconfig */,
-				C5546D0F3E42B1526F7E7331 /* Pods-Shoprenia.release.xcconfig */,
+				8E1BE9698CAA3123A8D7F94A /* Pods-Shoprenia.debug.xcconfig */,
+				FF4585A60A499C91E6254FD0 /* Pods-Shoprenia.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		F2C2A6B53F266847B736B159 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				EA94A0BBA83BA9F0D724DDB4 /* Pods_Shoprenia.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		50ED497A2DF9E9B600478147 /* ShopreniaTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 50ED49832DF9E9B600478147 /* Build configuration list for PBXNativeTarget "ShopreniaTests" */;
-			buildPhases = (
-				50ED49772DF9E9B600478147 /* Sources */,
-				50ED49782DF9E9B600478147 /* Frameworks */,
-				50ED49792DF9E9B600478147 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				50ED49802DF9E9B600478147 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				50ED497C2DF9E9B600478147 /* ShopreniaTests */,
-			);
-			name = ShopreniaTests;
-			productName = ShopreniaTests;
-			productReference = 50ED497B2DF9E9B600478147 /* ShopreniaTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 		C11217612DE6390C00C7C2B8 /* Shoprenia */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = C112176D2DE6390E00C7C2B8 /* Build configuration list for PBXNativeTarget "Shoprenia" */;
 			buildPhases = (
-				648335DE981C9DA5B5811048 /* [CP] Check Pods Manifest.lock */,
+				07F8A85B2D1C5FF2ED95DA1D /* [CP] Check Pods Manifest.lock */,
 				C112175E2DE6390C00C7C2B8 /* Sources */,
 				C112175F2DE6390C00C7C2B8 /* Frameworks */,
 				C11217602DE6390C00C7C2B8 /* Resources */,
-				7ECABC5FAAA3F7B16B424DB4 /* [CP] Embed Pods Frameworks */,
+				270C85A047E61DD95CE6BC21 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -163,13 +117,9 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1640;
+				LastSwiftUpdateCheck = 1630;
 				LastUpgradeCheck = 1630;
 				TargetAttributes = {
-					50ED497A2DF9E9B600478147 = {
-						CreatedOnToolsVersion = 16.4;
-						TestTargetID = C11217612DE6390C00C7C2B8;
-					};
 					C11217612DE6390C00C7C2B8 = {
 						CreatedOnToolsVersion = 16.3;
 					};
@@ -190,19 +140,11 @@
 			projectRoot = "";
 			targets = (
 				C11217612DE6390C00C7C2B8 /* Shoprenia */,
-				50ED497A2DF9E9B600478147 /* ShopreniaTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		50ED49792DF9E9B600478147 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		C11217602DE6390C00C7C2B8 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -213,7 +155,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		648335DE981C9DA5B5811048 /* [CP] Check Pods Manifest.lock */ = {
+		07F8A85B2D1C5FF2ED95DA1D /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -235,7 +177,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		7ECABC5FAAA3F7B16B424DB4 /* [CP] Embed Pods Frameworks */ = {
+		270C85A047E61DD95CE6BC21 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -259,13 +201,6 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		50ED49772DF9E9B600478147 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		C112175E2DE6390C00C7C2B8 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -275,59 +210,7 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
-/* Begin PBXTargetDependency section */
-		50ED49802DF9E9B600478147 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = C11217612DE6390C00C7C2B8 /* Shoprenia */;
-			targetProxy = 50ED497F2DF9E9B600478147 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
-
 /* Begin XCBuildConfiguration section */
-		50ED49812DF9E9B600478147 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
-				MACOSX_DEPLOYMENT_TARGET = 15.5;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = ITI.ShopreniaTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,7";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Shoprenia.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Shoprenia";
-				XROS_DEPLOYMENT_TARGET = 2.5;
-			};
-			name = Debug;
-		};
-		50ED49822DF9E9B600478147 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
-				MACOSX_DEPLOYMENT_TARGET = 15.5;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = ITI.ShopreniaTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,7";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Shoprenia.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Shoprenia";
-				XROS_DEPLOYMENT_TARGET = 2.5;
-			};
-			name = Release;
-		};
 		C112176B2DE6390E00C7C2B8 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -449,14 +332,13 @@
 		};
 		C112176E2DE6390E00C7C2B8 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 089093F698C585148612436E /* Pods-Shoprenia.debug.xcconfig */;
+			baseConfigurationReference = 8E1BE9698CAA3123A8D7F94A /* Pods-Shoprenia.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = GV332GP2NF;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -475,7 +357,6 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = ITI.Shoprenia;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -484,14 +365,13 @@
 		};
 		C112176F2DE6390E00C7C2B8 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C5546D0F3E42B1526F7E7331 /* Pods-Shoprenia.release.xcconfig */;
+			baseConfigurationReference = FF4585A60A499C91E6254FD0 /* Pods-Shoprenia.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = GV332GP2NF;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -510,7 +390,6 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = ITI.Shoprenia;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -520,15 +399,6 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		50ED49832DF9E9B600478147 /* Build configuration list for PBXNativeTarget "ShopreniaTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				50ED49812DF9E9B600478147 /* Debug */,
-				50ED49822DF9E9B600478147 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		C112175D2DE6390C00C7C2B8 /* Build configuration list for PBXProject "Shoprenia" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
