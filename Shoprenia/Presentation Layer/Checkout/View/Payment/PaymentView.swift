@@ -11,10 +11,13 @@ struct PaymentView: View {
     @ObservedObject var vm : PaymentViewModel
     @Binding var path : NavigationPath
     let orderFees : Double
+    var shipping: Int
+    var code : String?
+    var discount : Double
     @State private var selectedOption = "COD"
     
     var availableOptions: [String] {
-        orderFees > 5000 ? ["Apple Pay"] : ["COD", "Apple Pay"]
+        orderFees > 1000 ? ["Apple Pay"] : ["COD", "Apple Pay"]
     }
     
     var body: some View {
@@ -39,7 +42,7 @@ struct PaymentView: View {
             .pickerStyle(.segmented)
             .padding(.horizontal, 50)
             .onChange(of: orderFees) { _ in
-                if orderFees > 5000 && selectedOption == "COD" {
+                if orderFees > 1000 && selectedOption == "COD" {
                     selectedOption = "Apple Pay"
                 }
             }
@@ -55,7 +58,7 @@ struct PaymentView: View {
             .padding(.vertical, 30)
             
             Button("Confirm Order") {
-                vm.confirmOrder()
+                vm.confirmOrder(shipping: shipping, code: code, discount: discount)
             }
             .font(.system(size: 16, weight: .semibold))
             .foregroundStyle(.white)
@@ -64,6 +67,12 @@ struct PaymentView: View {
                 RoundedRectangle(cornerRadius: 30)
                     .fill(.blue)
             }
+        }
+        .onAppear{
+            print("order fees is \(orderFees)")
+            print("shipping is \(shipping)")
+            print("code is \(code)")
+            print("discount is \(discount)")
         }
         .alert("Order Confirmed", isPresented: $vm.isSuccess, actions: {
             Button("OK") {

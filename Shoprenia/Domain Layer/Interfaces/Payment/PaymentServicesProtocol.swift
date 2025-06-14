@@ -8,6 +8,9 @@
 import Foundation
 
 protocol PaymentServicesProtocol {
-    func placeOrder(completion: @escaping (Result<Bool, Error>) -> Void)
+    //func placeOrder(completion: @escaping (Result<Bool, Error>) -> Void)
+    
+    func placeOrder(shipping:Int, code:String? , discount:Double?, completion: @escaping (Result<Bool, Error>) -> Void)
+    
     
 }

@@ -15,9 +15,9 @@ class PaymentViewModel : ObservableObject{
         self.usecase = usecase
     }
     
-    func confirmOrder(){
-        usecase.placeOrder { [weak self] result in
-            switch result{
+    func confirmOrder(shipping:Int, code:String?, discount:Double?){
+        usecase.placeOrder(shipping: shipping, code: code, discount: discount) { [weak self] result in
+            switch result {
             case .success(_) :
                 self?.isSuccess = true
             case .failure(_) :

@@ -14,8 +14,8 @@ class PaymentRepository : PaymentRepoProtocol{
         self.service = service
     }
     
-    func placeOrder(completion: @escaping (Result<Bool, any Error>) -> Void) {
-        service.placeOrder(completion: completion)
+    func placeOrder(shipping:Int, code:String? , discount:Double?, completion: @escaping (Result<Bool, Error>) -> Void)  {
+        service.placeOrder(shipping:shipping, code:code , discount:discount, completion:completion)
     }
     
 }

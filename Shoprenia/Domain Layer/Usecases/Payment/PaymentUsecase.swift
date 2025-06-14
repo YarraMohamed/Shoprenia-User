@@ -13,7 +13,7 @@ class PaymentUsecase : PaymentUsecaseProtocol{
         self.repo = repo
     }
     
-    func placeOrder(completion: @escaping (Result<Bool, any Error>) -> Void) {
-        repo.placeOrder(completion: completion)
+    func placeOrder(shipping:Int, code:String? , discount:Double?, completion: @escaping (Result<Bool, Error>) -> Void)  {
+        repo.placeOrder(shipping:shipping, code:code , discount:discount, completion:completion)
     }
 }

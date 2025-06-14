@@ -8,6 +8,7 @@ struct InvoiceView: View {
     let fee: Int
     let location: String
     let phone: String
+    @State private var discountAmount : Double = 0.0
     @State private var orderFees: Double = 0.0
     @State private var discountMessage = ""
     @State private var isCodeApplied = false
@@ -35,7 +36,7 @@ struct InvoiceView: View {
             .frame(maxWidth: .infinity, maxHeight: 250)
             
             HStack {
-                Text("Cart subtotal:")
+                Text("Subtotal:")
                     .font(.system(size: 18, weight: .medium))
                 Spacer()
                 Text("\(calculateCartSubtotal()) \(viewModel.cartLines.first?.currency ?? "")")
@@ -83,6 +84,7 @@ struct InvoiceView: View {
                             var saved: Double = 0
                             
                             if code == "SUMMER15" {
+                                discountAmount = 0.15
                                 discount = subtotal * 0.15
                                 orderFees = (subtotal - discount) + Double(fee)
                                 saved = discount
@@ -90,6 +92,7 @@ struct InvoiceView: View {
                                 isCodeApplied = true
                             }
                             else if code == "SUMMER10" {
+                                discountAmount = 0.10
                                 discount = subtotal * 0.10
                                 orderFees = (subtotal - discount) + Double(fee)
                                 saved = discount
@@ -97,6 +100,7 @@ struct InvoiceView: View {
                                 isCodeApplied = true
                             }
                             else if code == "WELCOME50" {
+                                discountAmount = 50
                                 discount = 50.0
                                 orderFees = (subtotal - discount) + Double(fee)
                                 saved = discount
@@ -164,7 +168,7 @@ struct InvoiceView: View {
             .padding(.vertical, 15)
             
             Button("Place Order") {
-                path.append(AppRouter.paymentMethods(orderFees: orderFees))
+                path.append(AppRouter.paymentMethods(orderFees: orderFees, shipping: fee, code: viewModel.discountCode, discount: discountAmount))
             }
             .font(.system(size: 16, weight: .semibold))
             .foregroundStyle(.white)

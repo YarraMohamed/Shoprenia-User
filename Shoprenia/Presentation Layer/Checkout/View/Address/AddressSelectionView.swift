@@ -50,7 +50,7 @@ struct AddressSelectionView: View {
                         selectedViewModel.addAddressToCart(address: selected)
 
                         
-                        let location = selected.firstName ?? "No location"
+                        let location = selected.address1 ?? "No location"
                         
                         let phone = selected.phone ?? "No phone"
                         let cityRaw = selected.city

@@ -12,7 +12,7 @@ import Alamofire
 
 class PaymentService : PaymentServicesProtocol {
     
-    func placeOrder(completion: @escaping (Result<Bool, any Error>) -> Void) {
+    func placeOrder(shipping:Int, code:String? , discount:Double?, completion: @escaping (Result<Bool, Error>) -> Void) {
         CartServiceManager.shared.getCartId { cartId in
             
             guard let cartId = cartId else {
@@ -52,13 +52,39 @@ class PaymentService : PaymentServicesProtocol {
                 }
                 
                 if let cart = result?.cart {
-                    self.createOrder(from: cart) { result in
-                        switch result{
-                        case .success(let orderId):
-                            CartServiceManager.shared.clearCart()
-                            print("✅ Order created with ID: \(orderId)")
-                        case .failure(let error):
-                            print("❌ Failed to create order: \(error.localizedDescription)")
+                    if code == "" {
+                        self.createOrder(from: cart,shipping: shipping) { result in
+                            switch result{
+                            case .success(let orderId):
+                                CartServiceManager.shared.clearCart()
+                                print("✅ Order created with ID: \(orderId)")
+                            case .failure(let error):
+                                print("❌ Failed to create order: \(error.localizedDescription)")
+                            }
+                        }
+                    }else{
+                        if let code = code, let discount = discount {
+                            if code == "WELCOME50" {
+                                self.createOrderWithFixedDiscount(from: cart,shipping: shipping,discountAmount: discount,discountCode: code){ result in
+                                    switch result{
+                                    case .success(let orderId):
+                                        CartServiceManager.shared.clearCart()
+                                        print("✅ Order created with ID: \(orderId)")
+                                    case .failure(let error):
+                                        print("❌ Failed to create order: \(error.localizedDescription)")
+                                    }
+                                }
+                            }else{
+                                self.createOrderWithPercentageDiscount(from: cart, shipping: shipping, discountAmount: discount, discountCode: code) {  result in
+                                    switch result{
+                                    case .success(let orderId):
+                                        CartServiceManager.shared.clearCart()
+                                        print("✅ Order created with ID: \(orderId)")
+                                    case .failure(let error):
+                                        print("❌ Failed to create order: \(error.localizedDescription)")
+                                    }
+                                }
+                            }
                         }
                     }
                     completion(.success(true))
@@ -87,14 +113,11 @@ class PaymentService : PaymentServicesProtocol {
             return nil
         }
         
-        print("user email is \(customerId)")
-        print("item is \(items.first?.quantity ?? -1)")
-        print("item is \(items.first?.variantId ?? "")")
-        print("item is \(items.count)")
         return (customerId, items)
     }
     
-    private func createOrder(from cart: Storefront.Cart, completion: @escaping (Result<String, Error>) -> Void) {
+    private func createOrder(from cart: Storefront.Cart, shipping: Int, completion: @escaping (Result<String, Error>) -> Void) {
+        print("in create order")
             let (customerId, lineItems) = prepareOrderInput(from: cart)
             let lineItemsString = lineItems?.compactMap { item in
                 guard let item = item else { return nil }
@@ -106,33 +129,140 @@ class PaymentService : PaymentServicesProtocol {
                 """
             }.joined(separator: ",") ?? ""
             
-            let mutation = """
-            mutation OrderCreate {
-                orderCreate(
-                    order: {
-                        lineItems: [\(lineItemsString)]
-                        customer: {
-                            toAssociate: {
-                                id: "\(customerId)"
-                            }
+        let mutation = """
+        mutation OrderCreate {
+            orderCreate(
+                order: {
+                    lineItems: [\(lineItemsString)]
+                    customer: {
+                        toAssociate: {
+                            id: "\(customerId)"
                         }
                     }
-                    options: {
-                        inventoryBehaviour: DECREMENT_IGNORING_POLICY
-                        sendReceipt: true
-                        sendFulfillmentReceipt: true
-                    }
-                ) {
-                    order {
-                        id
-                    }
-                    userErrors {
-                        field
-                        message
-                    }
+                    shippingLines: [
+                        {
+                            title: "Delivery"
+                            priceSet: {
+                                shopMoney: {
+                                    amount: "\(shipping)"
+                                    currencyCode: EGP
+                                }
+                            }
+                        }
+                    ]
+                }
+                options: {
+                    inventoryBehaviour: DECREMENT_IGNORING_POLICY
+                    sendReceipt: true
+                    sendFulfillmentReceipt: true
+                }
+            ) {
+                order {
+                    id
+                }
+                userErrors {
+                    field
+                    message
                 }
             }
-            """
+        }
+        """
+        
+            let parameters: [String: Any] = [
+                "query": mutation
+            ]
+        
+            let headers: HTTPHeaders = [
+                "X-Shopify-Access-Token": "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",
+                "Content-Type": "application/json"
+            ]
+        
+            let url = "https://mad45-ios1-sv.myshopify.com/admin/api/2025-04/graphql.json"
+
+            AF.request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers)
+                .validate()
+                .responseDecodable(of: GraphQLResponse.self) { response in
+                    switch response.result {
+                    case .success(let graphResponse):
+                        print("success")
+                        if let orderId = graphResponse.data?.orderCreate?.order?.id {
+                            completion(.success(orderId))
+                        } else if let error = graphResponse.data?.orderCreate?.userErrors.first {
+                            print(error.message)
+                            completion(.failure(NSError(domain: "OrderCreateError", code: -1, userInfo: [NSLocalizedDescriptionKey: error.message])))
+                        } else {
+                            print("error")
+                            completion(.failure(NSError(domain: "OrderCreateError", code: -2, userInfo: [NSLocalizedDescriptionKey: "Unknown error"])))
+                        }
+                    case .failure(let error):
+                        print(error.localizedDescription)
+                        completion(.failure(error))
+                    }
+                }
+        }
+    
+    private func createOrderWithFixedDiscount(from cart: Storefront.Cart,shipping: Int, discountAmount:Double, discountCode:String,completion: @escaping (Result<String, Error>) -> Void) {
+            let (customerId, lineItems) = prepareOrderInput(from: cart)
+            let lineItemsString = lineItems?.compactMap { item in
+                guard let item = item else { return nil }
+                return """
+                {
+                    variantId: "\(item.variantId)"
+                    quantity: \(item.quantity)
+                }
+                """
+            }.joined(separator: ",") ?? ""
+            
+        let mutation = """
+        mutation OrderCreate {
+            orderCreate(
+                order: {
+                    lineItems: [\(lineItemsString)]
+                    customer: {
+                        toAssociate: {
+                            id: "\(customerId)"
+                        }
+                    }
+                    shippingLines: [
+                        {
+                            title: "Delivery"
+                            priceSet: {
+                                shopMoney: {
+                                    amount: "\(shipping)"
+                                    currencyCode: EGP
+                                }
+                            }
+                        }
+                    ]
+                    discountCode: {
+                        itemFixedDiscountCode: {
+                            amountSet: {
+                                shopMoney: {
+                                    amount: "\(discountAmount)"
+                                    currencyCode: EGP
+                                }
+                            }
+                            code: "\(discountCode)"
+                        }
+                    }
+                }
+                options: {
+                    inventoryBehaviour: DECREMENT_IGNORING_POLICY
+                    sendReceipt: true
+                    sendFulfillmentReceipt: true
+                }
+            ) {
+                order {
+                    id
+                }
+                userErrors {
+                    field
+                    message
+                }
+            }
+        }
+        """
+        
             let parameters: [String: Any] = [
                 "query": mutation
             ]
@@ -161,6 +291,95 @@ class PaymentService : PaymentServicesProtocol {
                     }
                 }
         }
+    
+    private func createOrderWithPercentageDiscount(from cart: Storefront.Cart,shipping: Int, discountAmount:Double, discountCode:String, completion: @escaping (Result<String, Error>) -> Void) {
+            let (customerId, lineItems) = prepareOrderInput(from: cart)
+            let lineItemsString = lineItems?.compactMap { item in
+                guard let item = item else { return nil }
+                return """
+                {
+                    variantId: "\(item.variantId)"
+                    quantity: \(item.quantity)
+                }
+                """
+            }.joined(separator: ",") ?? ""
+            
+        let mutation = """
+        mutation OrderCreate {
+            orderCreate(
+                order: {
+                    lineItems: [\(lineItemsString)]
+                    customer: {
+                        toAssociate: {
+                            id: "\(customerId)"
+                        }
+                    }
+                    shippingLines: [
+                        {
+                            title: "Delivery"
+                            priceSet: {
+                                shopMoney: {
+                                    amount: "\(shipping)"
+                                    currencyCode: EGP
+                                }
+                            }
+                        }
+                    ]
+                    discountCode: {
+                        itemPercentageDiscountCode: {
+                            code: "\(discountCode)"
+                            percentage: \(discountAmount * 100 )
+                        }
+                    }
+                }
+                options: {
+                    inventoryBehaviour: DECREMENT_OBEYING_POLICY
+                    sendReceipt: true
+                    sendFulfillmentReceipt: true
+                }
+            ) {
+                order {
+                    id
+                }
+                userErrors {
+                    field
+                    message
+                }
+            }
+        }
+        """
+
+        
+            let parameters: [String: Any] = [
+                "query": mutation
+            ]
+        
+            let headers: HTTPHeaders = [
+                "X-Shopify-Access-Token": "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",
+                "Content-Type": "application/json"
+            ]
+        
+            let url = "https://mad45-ios1-sv.myshopify.com/admin/api/2025-04/graphql.json"
+
+            AF.request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers)
+                .validate()
+                .responseDecodable(of: GraphQLResponse.self) { response in
+                    switch response.result {
+                    case .success(let graphResponse):
+                        if let orderId = graphResponse.data?.orderCreate?.order?.id {
+                            completion(.success(orderId))
+                        } else if let error = graphResponse.data?.orderCreate?.userErrors.first {
+                            completion(.failure(NSError(domain: "OrderCreateError", code: -1, userInfo: [NSLocalizedDescriptionKey: error.message])))
+                        } else {
+                            completion(.failure(NSError(domain: "OrderCreateError", code: -2, userInfo: [NSLocalizedDescriptionKey: "Unknown error"])))
+                        }
+                    case .failure(let error):
+                        completion(.failure(error))
+                    }
+                }
+        }
+    
+    
 }
 
 
