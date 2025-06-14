@@ -35,4 +35,10 @@ class CartUsecase: CartUsecaseProtocol {
         repository.setAddressInCart(address: address, completion: completion)
     }
     
+    func checkVariantAvailability(variantId: String,completion: @escaping (Result<Bool, Error>) -> Void) {
+        repository.checkVariantAvailability(variantId: variantId, completion: completion)
+    }
+    
+    
+    
 }
