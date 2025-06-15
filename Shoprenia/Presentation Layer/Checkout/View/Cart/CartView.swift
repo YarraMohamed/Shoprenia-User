@@ -5,6 +5,7 @@ import MobileBuySDK
 struct CartView: View {
     @Binding var path: NavigationPath
     @StateObject var viewModel = CartViewModel(cartUsecase: CartUsecase())
+    @AppStorage("selectedCurrency") var selectedCurrency: String = "EGP"
     @State var showAlert: Bool = false
     @State var lineIdToDelete: String?
     @State var showNotAvailableAlert: Bool = false
@@ -39,7 +40,10 @@ struct CartView: View {
                 .scrollContentBackground(.hidden)
                 .padding(.bottom, 20)
 
-                Text("Total is: \(calculateTotal()) \(viewModel.cartLines.first?.currency ?? "")")
+                Text( selectedCurrency == "USD" ?
+                    "Total is: \(calculateTotal()) USD"
+                    : "Total is: \(calculateTotal()) EGP"
+                )
                     .font(.title2)
                     .fontWeight(.semibold)
                     .padding(.bottom, 10)
@@ -87,8 +91,10 @@ struct CartView: View {
         let total = viewModel.cartLines.reduce(Decimal(0)) { result, line in
             result + line.price
         }
-
-        let doubleTotal = NSDecimalNumber(decimal: total).doubleValue
+        var doubleTotal = NSDecimalNumber(decimal: total).doubleValue
+        if selectedCurrency == "USD"{
+           doubleTotal = convertEGPToUSD(doubleTotal)
+        }
         return String(format: "%.2f", doubleTotal)
     }
 
@@ -120,4 +126,8 @@ struct CartView: View {
         showAlert = true
     }
 
+    private func convertEGPToUSD(_ amount: Double) -> Double {
+        let exchangeRate: Double = 1.0 / 49.71
+        return amount * exchangeRate
+    }
 }

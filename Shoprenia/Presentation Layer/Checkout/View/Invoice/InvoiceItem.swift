@@ -9,6 +9,8 @@ import SwiftUI
 
 struct InvoiceItem: View {
     let line: CartLineItem
+    @State private var convertedPrice: Double? = nil
+    @AppStorage("selectedCurrency") var selectedCurrency: String = "EGP"
     
     var body: some View {
         HStack(spacing: 10) {
@@ -27,7 +29,11 @@ struct InvoiceItem: View {
                     .font(.system(size: 16))
                     .minimumScaleFactor(0.5)
 
-                Text("Total Price: \(line.price) \(line.currency)")
+                Text(
+                    selectedCurrency == "USD"
+                     ? "Total Price: \(String(format: "%.2f", convertedPrice ?? 0)) USD"
+                    : "Total Price: \(String(describing: line.price)) EGP"
+                 )
                     .font(.system(size: 14))
 
                 Text("Size and color: \(line.variantTitle)")
@@ -41,6 +47,13 @@ struct InvoiceItem: View {
                 }
             }
         }
+        .onAppear{
+            if selectedCurrency == "USD" {
+                let priceEGP = line.price
+                let priceDouble = NSDecimalNumber(decimal: priceEGP).doubleValue
+                convertedPrice = convertEGPToUSD(priceDouble)
+            }
+        }
         .padding()
         .frame(width: 350, height: 180)
         .overlay {
@@ -48,5 +61,10 @@ struct InvoiceItem: View {
                 .stroke(Color.blue.opacity(0.5), lineWidth: 0.5)
                 .shadow(radius: 2)
         }
+    }
+    
+    private func convertEGPToUSD(_ amount: Double) -> Double {
+        let exchangeRate: Double = 1.0 / 49.71
+        return amount * exchangeRate
     }
 }

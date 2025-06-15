@@ -50,7 +50,7 @@ struct ProductDetailsView: View {
                         Text(
                             selectedCurrency == "USD"
                              ? "\(String(format: "%.2f", convertedPrice ?? 0)) USD"
-                             : "\(String(describing: viewModel.productDetails?.variants.nodes[0].price.amount)) EGP"
+                             : "\(String(describing: viewModel.productDetails?.variants.nodes[0].price.amount ?? 0)) EGP"
                          )
                                 .foregroundStyle(.blue)
                                 .font(.system(size: 16,weight: .semibold))

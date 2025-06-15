@@ -15,10 +15,19 @@ struct PaymentView: View {
     var code : String?
     var discount : Double
     @State private var selectedOption = "COD"
+    @AppStorage("selectedCurrency") var selectedCurrency: String = "EGP"
     
     var availableOptions: [String] {
-        orderFees > 1000 ? ["Apple Pay"] : ["COD", "Apple Pay"]
+        if orderFees > 2000 {
+            ["Apple Pay"]
+        }else if orderFees < 100 {
+            ["COD"]
+        }else {
+            ["COD", "Apple Pay"]
+        }
     }
+    
+    
     
     var body: some View {
         VStack {
@@ -51,14 +60,21 @@ struct PaymentView: View {
                 Text("Total Price")
                     .font(.title2)
                     .fontWeight(.bold)
-                Text("\(orderFees, specifier: "%.2f")")
+                Text(selectedCurrency == "USD" ?
+                     "\(orderFees, specifier: "%.2f") USD"
+                     : "\(orderFees, specifier: "%.2f") EGP"
+                )
                     .font(.title2)
                     .foregroundColor(Color.app)
             }
             .padding(.vertical, 30)
             
             Button("Confirm Order") {
-                vm.confirmOrder(shipping: shipping, code: code, discount: discount)
+                if selectedOption == "Apple Pay" {
+                    vm.startApplePay(amount: orderFees,currency: selectedCurrency)
+                } else {
+                    vm.confirmOrder(shipping: shipping, code: code, discount: discount)
+                }
             }
             .font(.system(size: 16, weight: .semibold))
             .foregroundStyle(.white)
@@ -68,11 +84,8 @@ struct PaymentView: View {
                     .fill(.blue)
             }
         }
-        .onAppear{
-            print("order fees is \(orderFees)")
-            print("shipping is \(shipping)")
-            print("code is \(code)")
-            print("discount is \(discount)")
+        .onChange(of: vm.paymentSuccess){
+            vm.confirmOrder(shipping: shipping, code: code, discount: discount)
         }
         .alert("Order Confirmed", isPresented: $vm.isSuccess, actions: {
             Button("OK") {
@@ -84,6 +97,7 @@ struct PaymentView: View {
         .padding()
         .navigationBarTitle("Payment")
     }
+    
 }
 
 

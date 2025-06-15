@@ -10,11 +10,15 @@ import MobileBuySDK
 
 struct OrderItem: View {
     var order : Storefront.Order?
+    @AppStorage("selectedCurrency") var selectedCurrency: String = "EGP"
     var body: some View {
         HStack{
             VStack(alignment: .leading,spacing: 5){
                 OrderText(title: "Order Id:", value: order?.name ?? " ")
-                OrderText(title: "Total:", value: "\(String(describing: order?.totalPrice.amount ?? 0)) EGP")
+                OrderText(title: "Total:",
+                          value: selectedCurrency == "USD" ?
+                          "\(String(describing: order?.totalPrice.amount ?? 0)) USD"
+                          :"\(String(describing: order?.totalPrice.amount ?? 0)) EGP")
                 OrderText(title: "Order Date:", value: String(String(describing: order?.processedAt ?? Date()).split(separator: " ").first ?? " "))
             }
             Spacer()

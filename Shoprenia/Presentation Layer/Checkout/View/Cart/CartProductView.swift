@@ -9,6 +9,10 @@ import SwiftUI
 import MobileBuySDK
 
 struct CartProductView: View {
+    
+    @State private var convertedPrice: Double? = nil
+    @AppStorage("selectedCurrency") var selectedCurrency: String = "EGP"
+    
     let line: CartLineItem
     var onIncrease: () -> Void
     var onDecrease: () -> Void
@@ -33,7 +37,11 @@ struct CartProductView: View {
                             .font(.system(size: 16))
                             .minimumScaleFactor(0.5).offset(y:15)
                         
-                        Text("Total Price : \(line.price) \(line.currency)")
+                        Text(
+                            selectedCurrency == "USD"
+                             ? "Total Price: \(String(format: "%.2f", convertedPrice ?? 0)) USD"
+                            : "Total Price: \(String(describing: line.price)) EGP"
+                         )
                             .font(.system(size: 14)).offset(y:15)
                         
                         Text("Size and color : \(line.variantTitle)").font(.system(size: 14)).offset(y:15)
@@ -80,8 +88,20 @@ struct CartProductView: View {
                 .padding(10)
             }
             .buttonStyle(.plain)
-        }
+            .onAppear{
+                if selectedCurrency == "USD" {
+                    let priceEGP = line.price
+                    let priceDouble = NSDecimalNumber(decimal: priceEGP).doubleValue
+                    convertedPrice = convertEGPToUSD(priceDouble)
+                }
+            }
     }
+    
+    private func convertEGPToUSD(_ amount: Double) -> Double {
+        let exchangeRate: Double = 1.0 / 49.71
+        return amount * exchangeRate
+    }
+}
 
 
 

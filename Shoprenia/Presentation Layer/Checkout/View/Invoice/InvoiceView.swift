@@ -1,23 +1,28 @@
-
-
+//
+//  InvoiceItem.swift
+//  Shoprenia
+//
+//  Created by Yara Mohamed on 10/06/2025.
+//
 
 import SwiftUI
+
 struct InvoiceView: View {
     @Binding var path: NavigationPath
-    let total : Double
+    let total: Double
     let fee: Int
     let location: String
     let phone: String
-    @State private var discountAmount : Double = 0.0
+    
+    @State private var discountAmount: Double = 0.0
     @State private var orderFees: Double = 0.0
     @State private var discountMessage = ""
     @State private var isCodeApplied = false
     @State private var discount: Double = 0.0
     
-    
-    
-    
     @StateObject var viewModel = CartViewModel(cartUsecase: CartUsecase())
+    
+    @AppStorage("selectedCurrency") var selectedCurrency: String = "EGP"
     
     let rows: [GridItem] = [GridItem(.flexible())]
     
@@ -37,83 +42,35 @@ struct InvoiceView: View {
             
             HStack {
                 Text("Subtotal:")
-                    .font(.system(size: 18, weight: .medium))
                 Spacer()
-                Text("\(calculateCartSubtotal()) \(viewModel.cartLines.first?.currency ?? "")")
-                    .font(.system(size: 18, weight: .medium))
+                Text("\(String(format: "%.2f", calculateCartSubtotalConverted())) \(selectedCurrency)")
                     .foregroundColor(.blue)
             }
+            .font(.system(size: 18, weight: .medium))
             .padding(.horizontal)
             .padding(.vertical, 15)
             
             HStack {
                 Text("Delivery Fee:")
-                    .font(.system(size: 18, weight: .medium))
                 Spacer()
-                Text("\(fee) \(viewModel.cartLines.first?.currency ?? "")")
-                    .font(.system(size: 18, weight: .medium))
+                Text("\(String(format: "%.2f", convertAmountIfNeeded(Double(fee)))) \(selectedCurrency)")
                     .foregroundColor(.blue)
             }
+            .font(.system(size: 18, weight: .medium))
             .padding(.horizontal)
             .padding(.vertical, 15)
             
             VStack(alignment: .leading, spacing: 8) {
-                
                 HStack(spacing: 10) {
                     Text("Discount Code:")
-                        .font(.system(size: 18, weight: .medium))
                     Spacer()
                     
                     TextField("Enter Code", text: $viewModel.discountCode)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                         .frame(width: 120)
                         .foregroundColor(.blue)
-                    //    Spacer()
-                    Button(action: {
-                        if isCodeApplied {
-                            let subtotal = calculateCartSubtotalValue()
-                            orderFees = subtotal + Double(fee)
-                            discountMessage = ""
-                            viewModel.discountCode = ""
-                            isCodeApplied = false
-                        } else {
-                            
-                            print("Verify discount code: \(viewModel.discountCode)")
-                            let subtotal = calculateCartSubtotalValue()
-                            let code = viewModel.discountCode.uppercased()
-                            var saved: Double = 0
-                            
-                            if code == "SUMMER15" {
-                                discountAmount = 0.15
-                                discount = subtotal * 0.15
-                                orderFees = (subtotal - discount) + Double(fee)
-                                saved = discount
-                                discountMessage = String(format: "You saved %.2f \(viewModel.cartLines.first?.currency ?? "")", saved)
-                                isCodeApplied = true
-                            }
-                            else if code == "SUMMER10" {
-                                discountAmount = 0.10
-                                discount = subtotal * 0.10
-                                orderFees = (subtotal - discount) + Double(fee)
-                                saved = discount
-                                discountMessage = String(format: "You saved %.2f \(viewModel.cartLines.first?.currency ?? "")", saved)
-                                isCodeApplied = true
-                            }
-                            else if code == "WELCOME50" {
-                                discountAmount = 50
-                                discount = 50.0
-                                orderFees = (subtotal - discount) + Double(fee)
-                                saved = discount
-                                discountMessage = String(format: "You saved %.2f \(viewModel.cartLines.first?.currency ?? "")", saved)
-                                isCodeApplied = true
-                            }
-                            else {
-                                orderFees = subtotal + Double(fee)
-                                discountMessage = "Coupon not valid"
-                                isCodeApplied = false
-                            }
-                        }
-                    }) {
+                    
+                    Button(action: applyDiscountCode) {
                         Text(isCodeApplied ? "Remove" : "Apply")
                             .font(.system(size: 16, weight: .semibold))
                             .padding(.horizontal)
@@ -122,53 +79,51 @@ struct InvoiceView: View {
                             .foregroundColor(.white)
                             .cornerRadius(8)
                     }
-                }.padding(.horizontal, 15)
+                }
+                .font(.system(size: 18, weight: .medium))
+                .padding(.horizontal, 15)
                 
                 if !discountMessage.isEmpty {
                     Text(discountMessage)
                         .font(.footnote)
                         .foregroundColor(discountMessage.contains("saved") ? .green : .red)
                         .padding(.top, 4)
-                        .padding(.horizontal , 15)
+                        .padding(.horizontal, 15)
                 }
             }
             
-            
             HStack {
                 Text("Total:")
-                    .font(.system(size: 18, weight: .medium))
                 Spacer()
-                Text(String(format: "%.2f", orderFees) + " \(viewModel.cartLines.first?.currency ?? "")")
-                    .font(.system(size: 18, weight: .medium))
+                Text(String(format: "%.2f", orderFees) + " \(selectedCurrency)")
                     .foregroundColor(.blue)
             }
+            .font(.system(size: 18, weight: .medium))
             .padding(.horizontal)
             .padding(.vertical, 15)
             
             HStack {
                 Text("Location:")
-                    .font(.system(size: 18, weight: .medium))
                 Spacer()
                 Text(location)
-                    .font(.system(size: 18, weight: .medium))
                     .foregroundColor(.blue)
             }
+            .font(.system(size: 18, weight: .medium))
             .padding(.horizontal)
             .padding(.vertical, 15)
             
             HStack {
                 Text("Phone:")
-                    .font(.system(size: 18, weight: .medium))
                 Spacer()
                 Text(phone)
-                    .font(.system(size: 18, weight: .medium))
                     .foregroundColor(.blue)
             }
+            .font(.system(size: 18, weight: .medium))
             .padding(.horizontal)
             .padding(.vertical, 15)
             
             Button("Place Order") {
-                path.append(AppRouter.paymentMethods(orderFees: orderFees, shipping: fee, code: viewModel.discountCode, discount: discountAmount))
+                path.append(AppRouter.paymentMethods(orderFees: orderFees, shipping: Int(convertAmountIfNeeded(Double(fee))), code: viewModel.discountCode, discount: discountAmount))
             }
             .font(.system(size: 16, weight: .semibold))
             .foregroundStyle(.white)
@@ -186,26 +141,78 @@ struct InvoiceView: View {
         .onAppear {
             viewModel.fetchCart()
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                let subtotal = calculateCartSubtotalValue()
-                orderFees = isCodeApplied
-                ? subtotal + Double(fee) - discount
-                : subtotal + Double(fee)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                updateOrderFees()
             }
-        }
-    }
-        
-        func calculateCartSubtotal() -> String {
-            let total = calculateCartSubtotalValue()
-            return String(format: "%.2f", total)
-        }
-        
-        func calculateCartSubtotalValue() -> Double {
-            let total = viewModel.cartLines.reduce(Decimal(0)) { result, line in
-                result + line.price
-            }
-            return NSDecimalNumber(decimal: total).doubleValue
         }
     }
     
-
+    // MARK: - Conversion Helpers
+    
+    private func convertEGPToUSD(_ amount: Double) -> Double {
+        let exchangeRate: Double = 1.0 / 49.71
+        return amount * exchangeRate
+    }
+    
+    private func convertAmountIfNeeded(_ amount: Double) -> Double {
+        return selectedCurrency == "USD" ? convertEGPToUSD(amount) : amount
+    }
+    
+    private func calculateCartSubtotalValue() -> Double {
+        let total = viewModel.cartLines.reduce(Decimal(0)) { result, line in
+            result + line.price
+        }
+        return NSDecimalNumber(decimal: total).doubleValue
+    }
+    
+    private func calculateCartSubtotalConverted() -> Double {
+        let subtotal = calculateCartSubtotalValue()
+        return convertAmountIfNeeded(subtotal)
+    }
+    
+    // MARK: - Discount
+    
+    private func applyDiscountCode() {
+        let subtotal = calculateCartSubtotalValue()
+        var saved: Double = 0
+        let code = viewModel.discountCode.uppercased()
+        
+        if isCodeApplied {
+            orderFees = convertAmountIfNeeded(subtotal + Double(fee))
+            viewModel.discountCode = ""
+            discountMessage = ""
+            discountAmount = 0
+            discount = 0
+            isCodeApplied = false
+            return
+        }
+        
+        if code == "SUMMER15" {
+            discountAmount = 0.15
+            discount = subtotal * 0.15
+        } else if code == "SUMMER10" {
+            discountAmount = 0.10
+            discount = subtotal * 0.10
+        } else if code == "WELCOME50" {
+            discountAmount = 50.0
+            discount = 50.0
+        } else {
+            orderFees = convertAmountIfNeeded(subtotal + Double(fee))
+            discountMessage = "Coupon not valid"
+            isCodeApplied = false
+            return
+        }
+        
+        saved = discount
+        orderFees = convertAmountIfNeeded((subtotal - discount) + Double(fee))
+        discountMessage = String(format: "You saved %.2f \(selectedCurrency)", convertAmountIfNeeded(saved))
+        isCodeApplied = true
+    }
+    
+    private func updateOrderFees() {
+        let subtotal = calculateCartSubtotalValue()
+        orderFees = isCodeApplied
+            ? convertAmountIfNeeded((subtotal - discount) + Double(fee))
+            : convertAmountIfNeeded(subtotal + Double(fee))
+    }
+}

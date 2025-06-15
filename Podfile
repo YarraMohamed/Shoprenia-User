@@ -14,4 +14,6 @@ target 'Shoprenia' do
         pod 'Swinject'
 	pod 'FirebaseFirestore'
         pod 'Alamofire'
+        pod 'Stripe'
+        pod 'StripePaymentsUI'
 end
