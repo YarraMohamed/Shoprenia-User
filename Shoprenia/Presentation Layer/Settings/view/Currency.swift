@@ -1,17 +1,10 @@
-//
-//  Currency.swift
-//  Demo SWPro
-//
-//  Created by Reham on 29/05/2025.
-//
-
 import SwiftUI
 
 struct CurrencyPicker: View {
-    @Binding var selectedCurrency: String
     var title: String
+    @AppStorage("selectedCurrency") private var selectedCurrency: String = "EGP"
     @State private var showingCurrencyPicker = false
-        
+
     var body: some View {
         Button(action: {
             showingCurrencyPicker = true
@@ -20,10 +13,9 @@ struct CurrencyPicker: View {
                 Text(title)
                     .font(.system(size: 16, weight: .medium))
                     .foregroundStyle(.blue)
-                    
-                
+
                 Spacer()
-                
+
                 Text(selectedCurrency)
                     .font(.system(size: 14, weight: .regular))
                     .foregroundColor(.gray)

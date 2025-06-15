@@ -11,6 +11,8 @@ struct ProductDetailsView: View {
     @State var showAlert = false
     @State private var toastMessage = ""
     @Binding var path : NavigationPath
+    @State private var convertedPrice: Double? = nil
+    @AppStorage("selectedCurrency") var selectedCurrency: String = "EGP"
 
     @EnvironmentObject var authViewModel: AuthenticationViewModel
     @ObservedObject var viewModel : ProductDetailsViewModel
@@ -45,7 +47,11 @@ struct ProductDetailsView: View {
                     HStack{
                         Spacer()
                         
-                        Text("Price : \(viewModel.productDetails?.variants.nodes[0].price.amount ?? 100) \(viewModel.productDetails?.variants.nodes[0].price.currencyCode ?? Storefront.CurrencyCode.egp)")
+                        Text(
+                            selectedCurrency == "USD"
+                             ? "\(String(format: "%.2f", convertedPrice ?? 0)) USD"
+                             : "\(String(describing: viewModel.productDetails?.variants.nodes[0].price.amount ?? 0)) EGP"
+                         )
                                 .foregroundStyle(.blue)
                                 .font(.system(size: 16,weight: .semibold))
                                 .padding(.trailing,16)
@@ -157,7 +163,7 @@ struct ProductDetailsView: View {
                     Button("Add to cart") {
                         if let matchedVariant = viewModel.getMatchingVariant(selectedSize: selectedSize, selectedColor: selectedColor) {
                             viewModel.addToCart(variantId: matchedVariant.id.rawValue, quantity: 1)
-                            toastMessage = "🎉 Added successfully.\nYou can select the quantity in the shopping cart."
+                            toastMessage = "Added successfully.\nYou can select the quantity in the shopping cart."
 
                             showToast = true
                         }
@@ -205,6 +211,13 @@ struct ProductDetailsView: View {
         
         .onAppear{
             viewModel.getProductDetails(id: GraphQL.ID(rawValue: productId))
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                    if selectedCurrency == "USD",
+                       let priceDecimal = viewModel.productDetails?.variants.nodes[0].price.amount {
+                        let priceDouble = NSDecimalNumber(decimal: priceDecimal).doubleValue
+                        convertedPrice = convertEGPToUSD(priceDouble)
+                    }
+                }
         }
         .overlay(
             VStack {
@@ -231,20 +244,12 @@ struct ProductDetailsView: View {
 
 
     }
+    
+    private func convertEGPToUSD(_ amount: Double) -> Double {
+        let exchangeRate: Double = 1.0 / 49.71
+        return amount * exchangeRate
+    }
 
 }
 
-//#Preview {
-//
-//    ProductDetailsView(
-//productId: "gid://shopify/Product/7936016351306",
-//viewModel:ProductDetailsViewModel(
-//    productDetailsCase: GetProductDetailsUseCase(
-//        repo: ProductDetailsRepository(service: ProductDetailsService())
-//    ),
-//    cartUseCase: <#CartUsecase#>
-//),
-//                       path: .constant(NavigationPath())
-//)
-//
-//}
+

@@ -1188,6 +1188,7 @@ PODS:
     - abseil/meta/type_traits
     - abseil/xcprivacy
   - abseil/xcprivacy (1.20240722.0)
+  - Alamofire (5.10.2)
   - AppAuth (1.7.6):
     - AppAuth/Core (= 1.7.6)
     - AppAuth/ExternalUserAgent (= 1.7.6)
@@ -1379,19 +1380,43 @@ PODS:
   - nanopb/encode (3.30910.0)
   - PromisesObjC (2.4.0)
   - RecaptchaInterop (101.0.0)
+  - Stripe (24.15.0):
+    - StripeApplePay (= 24.15.0)
+    - StripeCore (= 24.15.0)
+    - StripePayments (= 24.15.0)
+    - StripePaymentsUI (= 24.15.0)
+    - StripeUICore (= 24.15.0)
+  - StripeApplePay (24.15.0):
+    - StripeCore (= 24.15.0)
+  - StripeCore (24.15.0)
+  - StripePayments (24.15.0):
+    - StripeCore (= 24.15.0)
+    - StripePayments/Stripe3DS2 (= 24.15.0)
+  - StripePayments/Stripe3DS2 (24.15.0):
+    - StripeCore (= 24.15.0)
+  - StripePaymentsUI (24.15.0):
+    - StripeCore (= 24.15.0)
+    - StripePayments (= 24.15.0)
+    - StripeUICore (= 24.15.0)
+  - StripeUICore (24.15.0):
+    - StripeCore (= 24.15.0)
   - Swinject (2.9.1)
 
 DEPENDENCIES:
+  - Alamofire
   - FirebaseAuth
   - FirebaseFirestore
   - GoogleSignIn
   - Kingfisher (~> 7.0)
   - Mobile-Buy-SDK
+  - Stripe
+  - StripePaymentsUI
   - Swinject
 
 SPEC REPOS:
   trunk:
     - abseil
+    - Alamofire
     - AppAuth
     - AppCheckCore
     - BoringSSL-GRPC
@@ -1416,10 +1441,17 @@ SPEC REPOS:
     - nanopb
     - PromisesObjC
     - RecaptchaInterop
+    - Stripe
+    - StripeApplePay
+    - StripeCore
+    - StripePayments
+    - StripePaymentsUI
+    - StripeUICore
     - Swinject
 
 SPEC CHECKSUMS:
   abseil: a05cc83bf02079535e17169a73c5be5ba47f714b
+  Alamofire: 7193b3b92c74a07f85569e1a6c4f4237291e7496
   AppAuth: d4f13a8fe0baf391b2108511793e4b479691fb73
   AppCheckCore: cc8fd0a3a230ddd401f326489c99990b013f0c4f
   BoringSSL-GRPC: dded2a44897e45f28f08ae87a55ee4bcd19bc508
@@ -1444,8 +1476,14 @@ SPEC CHECKSUMS:
   nanopb: fad817b59e0457d11a5dfbde799381cd727c1275
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
   RecaptchaInterop: 11e0b637842dfb48308d242afc3f448062325aba
+  Stripe: 6f0047bdd52bbeecc3c87a9c0d429bf5bb2b1b86
+  StripeApplePay: e7a2f5fa07cbdba9c56cb7586cbfd4e7e32ed895
+  StripeCore: 224f995bb108e3be3bdf6cfab918657edf325559
+  StripePayments: 07ad9e3c5f22e0b068874c47c2ec37663f1b7aa5
+  StripePaymentsUI: d0549558424d3884b3fb7b8f3905ea685e750600
+  StripeUICore: dbd893086aa4fe697517624af2f1f0cea3218ac8
   Swinject: a827d508c6270da03ec74e558e728917a888fa9b
 
-PODFILE CHECKSUM: aa065dc1f1737ac1085d009fd60dfdeb15de0fd1
+PODFILE CHECKSUM: 85015a2441f7512a0d4b825e2fc4ae7c5ab26cae
 
 COCOAPODS: 1.16.2

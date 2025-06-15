@@ -12,6 +12,9 @@ final class CartViewModel: ObservableObject {
     @Published var cart: Storefront.Cart?
     @Published var errorMessage: String?
     @Published var cartLines: [CartLineItem] = []
+    @Published var discountCode: String = ""
+    @Published var isVariantAvailable: Bool?
+
 
     
     private let cartUsecase: CartUsecaseProtocol
@@ -46,6 +49,8 @@ final class CartViewModel: ObservableObject {
                                   let variant = cartLine.merchandise as? Storefront.ProductVariant else {
                                 return nil
                             }
+                            
+                            let productId = variant.product.id.rawValue
 
                             return CartLineItem(
                                 id: cartLine.id.rawValue,
@@ -54,9 +59,16 @@ final class CartViewModel: ObservableObject {
                                 imageURL: variant.image?.url,
                                 quantity: Int(cartLine.quantity),
                                 price: cartLine.cost.totalAmount.amount,
-                                currency: cartLine.cost.totalAmount.currencyCode.rawValue
+                                currency: cartLine.cost.totalAmount.currencyCode.rawValue,
+                                variantId: variant.id.rawValue,
+                                productId: productId
                             )
                         }
+                        self?.cartLines.forEach { line in
+                                            if line.quantity > 5 {
+                                                self?.updateCartQuantity(lineId: line.id, newQuantity: 5)
+                                            }
+                                        }
 
                     case .failure(let error):
                         print("Error fetching cart: \(error.localizedDescription)")
@@ -92,6 +104,22 @@ final class CartViewModel: ObservableObject {
             }
         }
     }
+    
+    func checkVariantAvailability(variantId: String) {
+            cartUsecase.checkVariantAvailability(variantId: variantId) { [weak self] result in
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success(let isAvailable):
+                        self?.isVariantAvailable = isAvailable
+                        print("Variant availability: \(isAvailable)")
+                    case .failure(let error):
+                        self?.errorMessage = error.localizedDescription
+                        self?.isVariantAvailable = false
+                        print("Error checking availability: \(error.localizedDescription)")
+                    }
+                }
+            }
+        }
 
     
 }

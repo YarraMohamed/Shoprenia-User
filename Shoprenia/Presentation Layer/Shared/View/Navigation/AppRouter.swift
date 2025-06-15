@@ -19,8 +19,8 @@ enum AppRouter: Hashable {
     case settings
     case pastOrders
     case shippingAddresses
-    case invoice
-    case paymentMethods
+    case invoice(fee: Int, total : Double ,  location: String, phone: String)
+    case paymentMethods(orderFees : Double, shipping :Int, code:String?, discount:Double)
     case AboutUs
     case HelpCenter
     case addresses

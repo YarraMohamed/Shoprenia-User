@@ -15,4 +15,7 @@ struct CartLineItem: Identifiable {
     var quantity: Int
     let price: Decimal
     let currency: String
+    let variantId: String
+    var productId: String 
+    
 }

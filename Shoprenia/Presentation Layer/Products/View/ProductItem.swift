@@ -10,6 +10,9 @@ import MobileBuySDK
 
 struct ProductItem: View {
     var product : Storefront.Product?
+    @State private var convertedPrice: Double? = nil
+    @AppStorage("selectedCurrency") var selectedCurrency: String = "EGP"
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 5) {
             ZStack(alignment: .topTrailing) {
@@ -47,7 +50,11 @@ struct ProductItem: View {
                     .foregroundColor(.black)
                     .lineLimit(3)
                     .minimumScaleFactor(0.5)
-                Text("\(String(describing: product?.variants.nodes.first?.price.amount ?? 0)) EGP")
+                Text(
+                    selectedCurrency == "USD"
+                     ? "\(String(format: "%.2f", convertedPrice ?? 0)) USD"
+                     : "\(String(describing: product?.variants.nodes.first?.price.amount ?? 0)) EGP"
+                 )
                     .font(.caption)
                     .fontWeight(.semibold)
                     .foregroundColor(.blue)
@@ -60,6 +67,14 @@ struct ProductItem: View {
 
             
         }
+        .onAppear {
+            if selectedCurrency == "USD" {
+                let priceEGP = product?.variants.nodes.first?.price.amount ?? 0
+                let priceDouble = NSDecimalNumber(decimal: priceEGP).doubleValue
+                convertedPrice = convertEGPToUSD(priceDouble)
+            }
+        }
+
         .edgesIgnoringSafeArea(.all)
         .frame(width: 180, height: 240)
         .background(.appGrey)
@@ -69,7 +84,14 @@ struct ProductItem: View {
         .shadow(radius:4)
         
     }
+    
+    private func convertEGPToUSD(_ amount: Double) -> Double {
+        let exchangeRate: Double = 1.0 / 49.71
+        return amount * exchangeRate
+    }
+        
 }
+
 
 #Preview {
     ProductItem()

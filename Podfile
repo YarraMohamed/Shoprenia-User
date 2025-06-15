@@ -13,4 +13,7 @@ target 'Shoprenia' do
 	pod 'GoogleSignIn'
         pod 'Swinject'
 	pod 'FirebaseFirestore'
+        pod 'Alamofire'
+        pod 'Stripe'
+        pod 'StripePaymentsUI'
 end

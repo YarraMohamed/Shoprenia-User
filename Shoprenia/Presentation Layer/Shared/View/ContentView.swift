@@ -37,14 +37,25 @@ struct ContentView: View {
                         let addressVM = container.resolve(AddressViewModel.self)
                         SettingsView(viewModel : addressVM, path:$path)
                     case .pastOrders:
-                        OrderHistory()
+                        let ordersVM = container.resolve(OrderHistoryViewModel.self)
+                        OrderHistory(viewModel: ordersVM)
                     case .shippingAddresses:
                         let selectedViewModel = container.resolve(SelectedAddressViewModel.self)
                         AddressSelectionView(path: $path, viewModel: addressVM, selectedViewModel: selectedViewModel)
-                    case .paymentMethods:
-                        PaymentView()
-                    case .invoice:
-                        InvoiceView(path:$path)
+                    case .paymentMethods(let orderFees, let shipping, let code, let discount):
+                        let paymentVM = container.resolve(PaymentViewModel.self)
+                        PaymentView(vm: paymentVM,
+                                    path: $path,orderFees: orderFees, shipping: shipping, code: code, discount: discount)
+
+                    case .invoice(let fee, let total ,let location, let phone):
+                        InvoiceView(
+                            path: $path,
+                            total : total,
+                            fee: fee ,
+                            location: location,
+                            phone: phone
+                        )
+
                     case .AboutUs:
                         AboutUs()
                     case .HelpCenter:

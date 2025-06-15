@@ -11,6 +11,8 @@ struct Addresses: View {
     @State private var selectedAddressID: String?
     @State private var navigationTarget: NavigationTarget?
     @State private var showImageAfterDelay = false
+    @State private var showLastAddressAlert = false
+
 
     
     private struct NavigationTarget {
@@ -62,6 +64,12 @@ struct Addresses: View {
             } message: {
                 Text("Are you sure you want to delete this address?")
             }
+            .alert("Sorry", isPresented: $showLastAddressAlert) {
+                Button("OK", role: .cancel) {}
+            } message: {
+                Text("You should keep at least one address.")
+            }
+
         
         .navigationViewStyle(.stack)
     }
@@ -111,8 +119,13 @@ struct Addresses: View {
                             }
                         },
                         onDelete: {
-                            selectedAddressID = add.id.rawValue
-                            showDeleteAlert = true
+                            if viewModel.addresses.count > 1 {
+                                selectedAddressID = add.id.rawValue
+                                showDeleteAlert = true
+                            } else {
+                                showLastAddressAlert = true
+                            }
+
                         }
                     )
                     .background(Color.white)
@@ -124,32 +137,6 @@ struct Addresses: View {
             .padding(.vertical, 10)
         }
     }
-    
-//    private var navigationLink: some View {
-//        NavigationLink(
-//            destination: Group {
-//                if let target = navigationTarget {
-//                    UpdateAddressMap(
-//                        selectedAddress: target.address,
-//                        initialLatitude: target.latitude,
-//                        initialLongitude: target.longitude
-//                    )
-//                    .onDisappear {
-//                        navigationTarget = nil
-//                    }
-//                }
-//            },
-//            isActive: Binding(
-//                get: { navigationTarget != nil },
-//                set: { newValue in
-//                    if !newValue { navigationTarget = nil }
-//                }
-//            ),
-//            label: { EmptyView() }
-//        )
-//        .hidden()
-//    }
-//    
     
     private func parseCoordinates(from zip: String?) -> (latitude: Double, longitude: Double)? {
         guard let zip = zip,  let decodedData = Data(base64Encoded: zip) , let decodedString = String(data: decodedData, encoding: .utf8)
@@ -164,22 +151,6 @@ struct Addresses: View {
         let coordinates = (values[0], values[1])
         return coordinates
     }
-
-    
-//    private func prepareForNavigation(with mailingAddress: Storefront.MailingAddress) {
-//        navigationTarget = nil
-//        
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-//           guard let coordinates = parseCoordinates(from: mailingAddress.zip) , let customerAddress = convertToCustomerAddress(mailingAddress, coordinates: coordinates) else {
-//                return
-//            }
-//            navigationTarget = NavigationTarget(
-//                address: customerAddress,
-//                latitude: coordinates.latitude,
-//                longitude: coordinates.longitude
-//            )
-//        }
-//    }
 
     private func convertToCustomerAddress(_ mailingAddress: Storefront.MailingAddress,
                                           coordinates: (latitude: Double, longitude: Double)) -> CustomerAddress? {

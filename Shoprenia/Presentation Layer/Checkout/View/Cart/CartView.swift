@@ -1,9 +1,3 @@
-//
-//  CartView.swift
-//  Shoprenia
-//
-//  Created by Yara Mohamed on 09/06/2025.
-//
 
 import SwiftUI
 import MobileBuySDK
@@ -11,8 +5,10 @@ import MobileBuySDK
 struct CartView: View {
     @Binding var path: NavigationPath
     @StateObject var viewModel = CartViewModel(cartUsecase: CartUsecase())
+    @AppStorage("selectedCurrency") var selectedCurrency: String = "EGP"
     @State var showAlert: Bool = false
     @State var lineIdToDelete: String?
+    @State var showNotAvailableAlert: Bool = false
 
     var body: some View {
         VStack {
@@ -26,39 +22,28 @@ struct CartView: View {
             if viewModel.cart != nil {
                 List {
                     ForEach(viewModel.cartLines) { line in
+
                         CartProductView(
                             line: line,
-                            onIncrease: {
-                                viewModel.updateCartQuantity(
-                                    lineId: line.id,
-                                    newQuantity: line.quantity + 1
-                                )
-                            },
-                            onDecrease: {
-                                if line.quantity > 1 {
-                                    viewModel.updateCartQuantity(
-                                        lineId: line.id,
-                                        newQuantity: line.quantity - 1
-                                    )
-                                } else {
-                                    lineIdToDelete = line.id
-                                    showAlert = true
-                                }
-                            },
-                            onDelete: {
-                                   lineIdToDelete = line.id
-                                
-                                   showAlert = true
-                               }
-                            
+                            onIncrease: { handleIncrease(line: line) },
+                            onDecrease: { handleDecrease(line: line) },
+                            onDelete: { handleDelete(line: line) },
+                            onTap: {
+                                path.append(AppRouter.productDetails(productId: line.productId))
+                            }
                         )
+                    
                     }
                 }
+        
                 .listStyle(.plain)
                 .scrollContentBackground(.hidden)
                 .padding(.bottom, 20)
 
-                Text("Total is: \(calculateTotal()) \(viewModel.cartLines.first?.currency ?? "")")
+                Text( selectedCurrency == "USD" ?
+                    "Total is: \(calculateTotal()) USD"
+                    : "Total is: \(calculateTotal()) EGP"
+                )
                     .font(.title2)
                     .fontWeight(.semibold)
                     .padding(.bottom, 10)
@@ -75,13 +60,20 @@ struct CartView: View {
                         RoundedRectangle(cornerRadius: 30).fill(.blue)
                     }
                 }
+                  
+                   
                 
             } else {
                 ProgressView("Loading Cart...")
             }
         }
+        .alert("You've reached the limit for this product.", isPresented: $showNotAvailableAlert) {
+            Button("OK", role: .cancel) { }
+        }
         .onAppear {
             viewModel.fetchCart()
+         
+
         }
         .alert("Are you sure to delete this item?", isPresented: $showAlert) {
             Button("No", role: .cancel) {}
@@ -99,9 +91,43 @@ struct CartView: View {
         let total = viewModel.cartLines.reduce(Decimal(0)) { result, line in
             result + line.price
         }
-
-        let doubleTotal = NSDecimalNumber(decimal: total).doubleValue
+        var doubleTotal = NSDecimalNumber(decimal: total).doubleValue
+        if selectedCurrency == "USD"{
+           doubleTotal = convertEGPToUSD(doubleTotal)
+        }
         return String(format: "%.2f", doubleTotal)
     }
 
+    func handleIncrease( line: CartLineItem) {
+        if line.quantity < 5 {
+            viewModel.checkVariantAvailability(variantId: line.variantId)
+            let isAvailable = viewModel.isVariantAvailable
+            if isAvailable ?? false {
+                viewModel.updateCartQuantity(lineId: line.id, newQuantity: line.quantity + 1)
+            } else {
+                showNotAvailableAlert = true
+            }
+        } else {
+            showNotAvailableAlert = true
+        }
+    }
+
+    func handleDecrease( line: CartLineItem) {
+        if line.quantity > 1 {
+            viewModel.updateCartQuantity(lineId: line.id, newQuantity: line.quantity - 1)
+        } else {
+            lineIdToDelete = line.id
+            showAlert = true
+        }
+    }
+
+    func handleDelete( line: CartLineItem) {
+        lineIdToDelete = line.id
+        showAlert = true
+    }
+
+    private func convertEGPToUSD(_ amount: Double) -> Double {
+        let exchangeRate: Double = 1.0 / 49.71
+        return amount * exchangeRate
+    }
 }

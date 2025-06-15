@@ -17,7 +17,7 @@ struct SettingsView: View {
                 .offset(x : -130  )
             
             UserProfile(userName: vm.getUserName() ?? "")
-                .offset(x : -70 , y : 20)
+                .offset(x : -70 , y : 40)
                 .padding(.leading , 150)
             
             SettingList(viewModel :viewModel, path: $path )
