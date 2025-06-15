@@ -17,6 +17,8 @@ final class RegistarationViewModel : ObservableObject {
     @Published var phoneEdited = false
     @Published var showVerificationAlert = false
     @Published var isLoggedIn : Bool = false
+    @Published var showRegisteredAlert = false
+    
     private let registrationRepo : RegistrationRepoProtocol
     private let credentialValidator : CredentialsValidationProtocol
     private let userDefaultsManager : UserDefaultsManagerProtocol
@@ -52,8 +54,14 @@ final class RegistarationViewModel : ObservableObject {
     
     func createUser(){
         registrationRepo.createFirebaseUser(email: email, password: password, firstname: firstName, lastname: lastName){[weak self] showAlert in
-            self?.showVerificationAlert = showAlert
-            self?.createShopifyCustomer()
+            
+            switch showAlert{
+            case true:
+                self?.showVerificationAlert = true
+                self?.createShopifyCustomer()
+            case false:
+                self?.showRegisteredAlert = true
+            }
         }
     }
     

@@ -54,7 +54,7 @@ struct LoginView: View {
                             
                             viewModel.signFirebaseUserIn()
                             
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
                                 if viewModel.isLoggedIn{
                                     print("\(viewModel.isLoggedIn)")
                                     path.append(AppRouter.home)

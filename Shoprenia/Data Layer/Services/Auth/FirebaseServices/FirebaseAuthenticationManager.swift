@@ -16,6 +16,7 @@ final class FirebaseAuthenticationManager : FirebaseManagerProtocol{
             
             if let error = error {
                 print("Error registering new user : \(error.localizedDescription)")
+                completion(false)
                 return
             }
             

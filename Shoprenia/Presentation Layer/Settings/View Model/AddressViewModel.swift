@@ -14,7 +14,7 @@ class AddressViewModel: ObservableObject {
     private let googleSignoutUseCase: LogoutFromGoogleUseCaseProtocol
     private let firebaseSignoutUseCase: LogoutFromFirebaseUseCaseProtocol
     private let removeDefaults: RemoveAllUserDefaultsValuesUseCaseProtocol
-    @Published var isSignedOut: Bool = false
+    @Published var showAlert: Bool = false
     @Published var reloadAddress = false
     @Published var defaultAddressID: String? = nil
     @Published var address = CustomerAddress(
@@ -145,7 +145,6 @@ class AddressViewModel: ObservableObject {
     
     func googleSignOut() {
         googleSignoutUseCase.execute()
-        self.isSignedOut = true
     }
     
     func firebaseSignOut() {

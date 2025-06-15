@@ -182,13 +182,11 @@ struct RegisterationView: View {
         } message: {
             Text("We've sent a verification email to \(viewModel.email) . Please check your inbox, click the verification link and login.")
         }
-//        .onChange(of: viewModel.isLoggedIn){ isLogged in
-//            if isLogged {
-//                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-//                    path.removeLast()
-//                }
-//            }
-//        }
+        .alert("Invalid Registeration", isPresented: $viewModel.showRegisteredAlert) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text("The email address is already in use by another account.")
+        }
         .toolbar{
             ToolbarItem(placement: .topBarTrailing) {
                     VStack {
