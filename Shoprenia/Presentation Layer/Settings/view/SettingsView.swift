@@ -27,9 +27,13 @@ struct SettingsView: View {
             BigButton(buttonText: "Logout")
                 .offset(y: -70)
                 .onTapGesture {
-                    viewModel.showAlert = true
+                    if !vm.isAuth {
+                        viewModel.showErrorAlert = true
+                    }else{
+                        viewModel.showLogoutAlert = true
+                    }
                 }
-                .alert("Sure you want to logout?", isPresented: $viewModel.showAlert) {
+                .alert("Sure you want to logout?", isPresented: $viewModel.showLogoutAlert) {
                     Button("Cancel",role: .cancel){}
                     Button ("Logout", role: .destructive){
                         viewModel.firebaseSignOut()
@@ -38,6 +42,9 @@ struct SettingsView: View {
                         vm.isAuth = false
                         path.append(AppRouter.register)
                     }
+                }
+                .alert("Must be logged in to logout", isPresented: $viewModel.showErrorAlert) {
+                    Button("Ok",role: .cancel){}
                 }
             Spacer()
         }

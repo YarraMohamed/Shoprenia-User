@@ -14,7 +14,8 @@ class AddressViewModel: ObservableObject {
     private let googleSignoutUseCase: LogoutFromGoogleUseCaseProtocol
     private let firebaseSignoutUseCase: LogoutFromFirebaseUseCaseProtocol
     private let removeDefaults: RemoveAllUserDefaultsValuesUseCaseProtocol
-    @Published var showAlert: Bool = false
+    @Published var showLogoutAlert: Bool = false
+    @Published var showErrorAlert: Bool = false
     @Published var reloadAddress = false
     @Published var defaultAddressID: String? = nil
     @Published var address = CustomerAddress(
