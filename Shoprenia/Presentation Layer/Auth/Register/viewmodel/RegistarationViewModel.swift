@@ -16,7 +16,7 @@ final class RegistarationViewModel : ObservableObject {
     @Published var passwordEdited = false
     @Published var phoneEdited = false
     @Published var showVerificationAlert = false
-    @Published var isLoggedIn : Bool = false
+    @Published var isAccountCreated : Bool = false
     @Published var showRegisteredAlert = false
     
     private let registrationRepo : RegistrationRepoProtocol
@@ -91,7 +91,6 @@ final class RegistarationViewModel : ObservableObject {
             
             switch result {
             case .success(let googleUser):
-                self.isLoggedIn = true
                 self.createShopifyCustomerWithoutPhone(user: googleUser)
             case .failure(let error):
                 print("ERR in g sign in \(error.localizedDescription)")
@@ -103,68 +102,17 @@ final class RegistarationViewModel : ObservableObject {
         registrationRepo.createCustomerWithoutPhone(email: user.email ?? "No mail",
                                              password: "Password123",
                                                     firstName: user.displayName ?? "no first name",
-                                                    lastName: ""){result in
+                                                    lastName: ""){[weak self] result in
             
             switch result {
             case .success(let customer):
                 
                 print("In Regist ViewModel shopify customer created using google with name : \(customer.displayName)")
                 print("In Regist ViewModel shopify customer created using google with email : \(customer.email ?? "no mail")")
-                
-                self.createCustomerAccessToken(mail: customer.email ?? "no mail", pass: "Password123")
+                self?.isAccountCreated = true
             case .failure(let error):
                 print("In regist Viewmodel Error: \(error)")
             }
         }
-    }
-    
-    func createCustomerAccessToken(mail:String, pass:String){
-        registrationRepo.createCustomerAccessToken(email: mail, password: pass){[weak self] result in
-            
-            switch result {
-            case .success(let accessToken):
-                print("In Regis ViewModel Access Token created: \(accessToken)")
-                self?.getCustomerByAccessToken(accessToken: accessToken)
-            case .failure(let error):
-                print("In Regis Viewmodel Error: \(error)")
-            }
-        }
-    }
-    
-    func getCustomerByAccessToken(accessToken : String){
-
-        registrationRepo.getCustomerByAccessToken(accessToken: accessToken){[weak self]result in
-            switch result {
-                
-            case .success(let customer):
-                print("Fetched Customer")
-                print("id: \(customer.id)")
-                print("email: \(customer.email ?? "no mail")")
-                print("phone: \(customer.phone ?? "no phone")")
-                self?.isLoggedIn = true
-                self?.insertInUserDefaultsWithoutPhone(accessToken, customer)
-                
-            case .failure(let error):
-                print("In Regis Viewmodel Error: \(error)")
-            }
-        }
-    }
-    
-    func insertInUserDefaultsWithoutPhone(_ accessToken : String,_ customer : Storefront.Customer){
-        guard let email = customer.email else {return}
-        userDefaultsManager.insertShopifyCustomerId(customer.id.rawValue)
-        userDefaultsManager.insertShopifyCustomerEmail(email)
-        userDefaultsManager.insertShopifyCustomerAccessToken(accessToken)
-        userDefaultsManager.insertShopifyCustomerDisplayName(customer.displayName)
-    }
-    
-    func insertInUserDefaults(_ accessToken : String,_ customer : Storefront.Customer){
-        guard let email = customer.email else {return}
-        guard let phone = customer.phone else {return}
-        userDefaultsManager.insertShopifyCustomerId(customer.id.rawValue)
-        userDefaultsManager.insertShopifyCustomerEmail(email)
-        userDefaultsManager.insertShopifyCustomerPhoneNumber(phone)
-        userDefaultsManager.insertShopifyCustomerAccessToken(accessToken)
-        userDefaultsManager.insertShopifyCustomerDisplayName(customer.displayName)
     }
 }

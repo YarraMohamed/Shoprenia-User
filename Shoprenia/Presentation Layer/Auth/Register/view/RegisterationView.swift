@@ -128,9 +128,7 @@ struct RegisterationView: View {
                         
                         if viewModel.allValidation()
                             {
-                            
                             viewModel.createUser()
-                            
                         }
                     }
                     .font(.system(size: 16, weight: .semibold))
@@ -150,12 +148,6 @@ struct RegisterationView: View {
                     
                     Button(action:{
                         viewModel.googleSignIn(rootController: getRootViewController())
-                            
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
-                            
-                            path.append(AppRouter.home)
-                            
-                        }
                     }){
                         Image("g")
                             .resizable()
@@ -186,6 +178,13 @@ struct RegisterationView: View {
             Button("OK", role: .cancel) {}
         } message: {
             Text("The email address is already in use by another account.")
+        }
+        .alert("Account created using Google", isPresented: $viewModel.isAccountCreated) {
+            Button("Ok", role: .cancel) {
+                path.append(AppRouter.login)
+            }
+        } message: {
+            Text("Please proceed to login page to sign in")
         }
         .toolbar{
             ToolbarItem(placement: .topBarTrailing) {

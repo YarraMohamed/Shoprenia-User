@@ -50,7 +50,7 @@ struct LoginView: View {
                         if viewModel.isValidEmail() && viewModel.isValidPassword(){
                             
                             viewModel.createCustomerAccessToken(mail: viewModel.email,
-                                pass: viewModel.password)
+                                pass: viewModel.password,signInMethod: "regular")
                             
                             viewModel.signFirebaseUserIn()
                             
@@ -90,11 +90,8 @@ struct LoginView: View {
                                 print("\(viewModel.isLoggedIn)")
                                 path.append(AppRouter.home)
                                 viewModel.isLoggedIn = false
-                            }else{
-                                viewModel.showAlert = true
                             }
                         }
-                        
                     }){
                         Image("g")
                             .resizable()

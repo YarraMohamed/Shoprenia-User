@@ -33,27 +33,27 @@ class LoginViewModel: ObservableObject {
             switch result {
             case .success(let googleUser):
                 guard let email = googleUser.email else { return }
-                self?.createCustomerAccessToken(mail: email, pass: "Password123")
+                self?.createCustomerAccessToken(mail: email, pass: "Password123",signInMethod: "google")
             case .failure(let error):
                 print("ERR in g sign in \(error.localizedDescription)")
             }
         }
     }
     
-    func createCustomerAccessToken(mail:String, pass:String){
+    func createCustomerAccessToken(mail:String,pass:String,signInMethod: String){
         loginRepo.createCustomerAccessToken(email: mail, password: pass){[weak self] result in
             
             switch result {
             case .success(let accessToken):
                 print("In Login ViewModel Access Token created: \(accessToken)")
-                self?.getCustomerByAccessToken(accessToken: accessToken)
+                self?.getCustomerByAccessToken(accessToken: accessToken,signInMethod: signInMethod)
             case .failure(let error):
                 print("In Login Viewmodel Error: \(error)")
             }
         }
     }
     
-    func getCustomerByAccessToken(accessToken : String){
+    func getCustomerByAccessToken(accessToken : String,signInMethod: String){
 
         loginRepo.getCustomerByAccessToken(accessToken: accessToken){[weak self]result in
             switch result {
@@ -63,7 +63,17 @@ class LoginViewModel: ObservableObject {
                 print("email: \(customer.email ?? "no mail")")
                 print("phone: \(customer.phone ?? "no phone")")
                 self?.isLoggedIn = true
-                self?.insertInUserDefaultsWithoutPhone(accessToken, customer)
+                switch signInMethod {
+                case "google":
+                    print("case google inserted in userdefaults without phone")
+                    self?.insertInUserDefaultsWithoutPhone(accessToken, customer)
+                case "regular":
+                    print("case regular inserted in userdefaults with phone")
+                    self?.insertInUserDefaults(accessToken, customer)
+                default:
+                    print("Nothing to do")
+                }
+                
             case .failure(let error):
                 print("In Login Viewmodel Error: \(error)")
             }
