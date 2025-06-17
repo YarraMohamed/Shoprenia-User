@@ -143,8 +143,7 @@ final class DIContainer {
             }
             container.register(RegistarationViewModel.self) { resolver in
                 RegistarationViewModel(credentialValidator: resolver.resolve(CredentialsValidation.self)!,
-                                       registraionRepo: resolver.resolve(RegistrationRepo.self)!,
-                                       userDefaultsManager: UserDefaultsManager.shared)
+                                       registraionRepo: resolver.resolve(RegistrationRepo.self)!)
             }
         }
     }

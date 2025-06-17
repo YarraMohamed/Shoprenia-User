@@ -21,15 +21,12 @@ final class RegistarationViewModel : ObservableObject {
     
     private let registrationRepo : RegistrationRepoProtocol
     private let credentialValidator : CredentialsValidationProtocol
-    private let userDefaultsManager : UserDefaultsManagerProtocol
     
     init(credentialValidator : CredentialsValidationProtocol,
-         registraionRepo : RegistrationRepoProtocol,
-         userDefaultsManager : UserDefaultsManagerProtocol){
+         registraionRepo : RegistrationRepoProtocol){
         
         self.credentialValidator = credentialValidator
         self.registrationRepo = registraionRepo
-        self.userDefaultsManager = userDefaultsManager
     }
     
     func isValidName(_ name : String) -> Bool {
