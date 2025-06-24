@@ -62,9 +62,6 @@ struct CustomNavigationBar: View {
     }
 }
 
-
-
 #Preview {
     CustomNavigationBar(path:.constant(NavigationPath()))
 }
-

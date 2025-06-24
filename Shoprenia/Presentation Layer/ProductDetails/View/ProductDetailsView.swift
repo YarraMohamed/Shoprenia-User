@@ -7,6 +7,7 @@ struct ProductDetailsView: View {
     @State var selectedSize = "Select size"
     @State var selectedColor = "Select color"
     @State var showAlert = false
+    @State var selectedImageIndex = 0
     
     @ObservedObject var viewModel : ProductDetailsViewModel
     @EnvironmentObject var authViewModel: AuthenticationViewModel
@@ -21,15 +22,32 @@ struct ProductDetailsView: View {
         ScrollView{
             VStack{
                 
-                ZStack{
-                    KFImage(viewModel.productDetails?.featuredImage?.url)
-                        .resizable()
-                        .placeholder{
-                            ProgressView()
-                        }
-                        .aspectRatio(contentMode: .fit)
-                        .frame(height: 310)
+                TabView(selection: $selectedImageIndex) {
+                    ForEach(0..<(viewModel.productDetails?.media.nodes.count ?? 0), id: \.self) { index in
+                        
+                        KFImage(viewModel.productDetails?.media.nodes[index].previewImage?.url)
+                                               .resizable()
+                                               .placeholder{
+                                                   ProgressView()
+                                               }
+                                               .aspectRatio(contentMode: .fit)
+                                               .frame(height: 310)
+                        
+                    }
                 }
+                .tabViewStyle(PageTabViewStyle(indexDisplayMode: .automatic))
+                .frame(height: 330)
+                
+                
+//                ZStack{
+//                    KFImage(viewModel.productDetails?.featuredImage?.url)
+//                        .resizable()
+//                        .placeholder{
+//                            ProgressView()
+//                        }
+//                        .aspectRatio(contentMode: .fit)
+//                        .frame(height: 310)
+//                }
                  
                     HStack{
                         Text(viewModel.productDetails?.title ?? "No Name")
@@ -94,7 +112,9 @@ struct ProductDetailsView: View {
                 
                 HStack {
                     Menu {
-                        ForEach(viewModel.productDetails?.options.first?.optionValues ?? [], id: \.id) { sizeObj in
+                        ForEach(viewModel.productDetails?.options.first(where: {
+                            $0.name.lowercased() == "Size".lowercased()
+                        })?.optionValues ?? [], id: \.id) { sizeObj in
                             
                             Button(sizeObj.name) {
                                 self.selectedSize = sizeObj.name
@@ -126,7 +146,9 @@ struct ProductDetailsView: View {
                 
                 HStack{
                     Menu{
-                        ForEach(viewModel.productDetails?.options[1].optionValues ?? [],id:\.id){ colorObj in
+                        ForEach(viewModel.productDetails?.options.first(where: {
+                            $0.name.lowercased() == "Color".lowercased()
+                        })?.optionValues ?? [],id:\.id){ colorObj in
                             
                             Button(colorObj.name){
                                 self.selectedColor = colorObj.name

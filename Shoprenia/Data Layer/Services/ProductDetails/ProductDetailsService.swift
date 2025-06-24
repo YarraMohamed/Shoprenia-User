@@ -52,6 +52,13 @@ class ProductDetailsService: ProductDetailsServiceProtocol {
                     .featuredImage { $0
                         .url()
                     }
+                    .media(first: 5) { $0
+                        .nodes { $0
+                            .previewImage { $0
+                                .url()
+                            }
+                        }
+                    }
                 }
             }
             
@@ -65,7 +72,6 @@ class ProductDetailsService: ProductDetailsServiceProtocol {
                 let productDetails: Storefront.Product = details
                 completion(.success(productDetails))
             }.resume()
-            
     }
     
     func saveToFirestoreIfProductNotExist(product: FirestoreShopifyProduct) {

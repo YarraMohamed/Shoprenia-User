@@ -2,7 +2,6 @@
 import XCTest
 import MobileBuySDK
 
-
 final class ShopreniaTests: XCTestCase {
 
     var productDetailsService: ProductDetailsServiceProtocol!
