@@ -7,9 +7,9 @@
 
 import XCTest
 @testable import Shoprenia
-@testable import MobileBuySDK
+import MobileBuySDK
 
-final class AddressTests: XCTestCase {
+final class AddressServicesTests: XCTestCase {
     
     override func setUpWithError() throws {
     }
