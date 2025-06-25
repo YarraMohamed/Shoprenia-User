@@ -23,20 +23,39 @@ struct SettingsView: View {
             SettingList(viewModel :viewModel, path: $path )
                 .offset(y : 40)
                 .padding(.bottom)
-                
+            
             BigButton(buttonText: "Logout")
                 .offset(y: -70)
                 .onTapGesture {
-                    viewModel.firebaseSignOut()
-                    viewModel.googleSignOut()
-                    viewModel.removeAllUserDataFromDefaults()
-                    vm.isAuth = false
-                    path.removeLast(1)
-                   // path.append(AppRouter.register)
+                    if !vm.isAuth {
+                        viewModel.showErrorAlert = true
+                    }else{
+                        viewModel.showLogoutAlert = true
+                    }
+                    //                    viewModel.showAlert = true
+                    //                    viewModel.firebaseSignOut()
+                    //                    viewModel.googleSignOut()
+                    //                    viewModel.removeAllUserDataFromDefaults()
+                    //                    vm.isAuth = false
+                    //                    path.removeLast(1)
+                    // path.append(AppRouter.register)
                 }
-            
-            Spacer()
+                .alert("Sure you want to logout?", isPresented: $viewModel.showLogoutAlert) {
+                    Button("Cancel",role: .cancel){}
+                    Button ("Logout", role: .destructive){
+                        viewModel.firebaseSignOut()
+                        viewModel.googleSignOut()
+                        viewModel.removeAllUserDataFromDefaults()
+                        vm.isAuth = false
+                        path.removeLast(1)
+                    }
+                    .alert("Must be logged in to logout", isPresented: $viewModel.showErrorAlert) {
+                        Button("Ok",role: .cancel){}
+                    }
+                    
+                    Spacer()
+                }
+                .padding(.top)
         }
-        .padding(.top)
     }
 }

@@ -31,7 +31,7 @@ struct LoginView: View {
                     .padding()
                     .background(Color.gray.opacity(0.4))
                     .clipShape(RoundedRectangle(cornerRadius: 10))
-                    
+                
                 SecureField("Password",text: $viewModel.password)
                     .textInputAutocapitalization(.never)
                     .autocorrectionDisabled()
@@ -42,40 +42,40 @@ struct LoginView: View {
             }
             .padding()
             
-               HStack{
-                    Button("Login"){
+            HStack{
+                Button("Login"){
+                    
+                    
+                    if viewModel.isValidEmail() && viewModel.isValidPassword(){
                         
+                        viewModel.createCustomerAccessToken(mail: viewModel.email,
+                                                            pass: viewModel.password)
                         
-                        if viewModel.isValidEmail() && viewModel.isValidPassword(){
-                            
-                            viewModel.createCustomerAccessToken(mail: viewModel.email,
-                                pass: viewModel.password)
-                            
-                            viewModel.signFirebaseUserIn()
-                            
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-                                if viewModel.isLoggedIn{
-                                    print("\(viewModel.isLoggedIn)")
-                                    //path.append(AppRouter.home)
-                                    path.removeLast(1)
-                                    viewModel.isLoggedIn = false
-                                }else{
-                                    viewModel.showAlert = true
-                                }
+                        viewModel.signFirebaseUserIn()
+                        
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+                            if viewModel.isLoggedIn{
+                                print("\(viewModel.isLoggedIn)")
+                                //path.append(AppRouter.home)
+                                path.removeLast(1)
+                                viewModel.isLoggedIn = false
+                            }else{
+                                viewModel.showAlert = true
                             }
-                        }else{
-                            viewModel.showAlert = true
                         }
-                    }
-                    .font(.system(size: 16, weight: .semibold))
-                    .foregroundStyle(.white)
-                    .frame(width: 343, height: 48)
-                    .background {
-                        RoundedRectangle(cornerRadius: 30)
-                            .fill(.blue)
+                    }else{
+                        viewModel.showAlert = true
                     }
                 }
-                .padding(.vertical)
+                .font(.system(size: 16, weight: .semibold))
+                .foregroundStyle(.white)
+                .frame(width: 343, height: 48)
+                .background {
+                    RoundedRectangle(cornerRadius: 30)
+                        .fill(.blue)
+                }
+            }
+            .padding(.vertical)
             
             
             VStack{
@@ -84,15 +84,23 @@ struct LoginView: View {
                 HStack(spacing: 10) {
                     Button(action: {
                         viewModel.googleSignIn(rootController: getRootViewController())
-
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
-                            if viewModel.isLoggedIn {
-                                if !path.isEmpty {
-                                    path.removeLast(1)
-                                }
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 12.0) {
+                            if viewModel.isLoggedIn{
+                                print("\(viewModel.isLoggedIn)")
+                                path.removeLast(1)
                                 viewModel.isLoggedIn = false
+                            }else{
+                                viewModel.showAlert = true
                             }
                         }
+                        //                        DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
+                        //                            if viewModel.isLoggedIn {
+                        //                                if !path.isEmpty {
+                        //                                    path.removeLast(1)
+                        //                                }
+                        //                                viewModel.isLoggedIn = false
+                        //                            }
+                        //                        }
                     }) {
                         Image("g")
                             .resizable()
@@ -105,17 +113,17 @@ struct LoginView: View {
                     }
                 }
             }
-
+            
             Spacer()
         }
         .toolbar{
             ToolbarItem(placement: .topBarTrailing) {
-                    VStack {
-                        Text("Shoprenia")
-                            .font(.system(size: 20,weight: .semibold))
-                            .foregroundColor(.blue)
-                    }
+                VStack {
+                    Text("Shoprenia")
+                        .font(.system(size: 20,weight: .semibold))
+                        .foregroundColor(.blue)
                 }
+            }
         }
         .alert("Please insert valid credentials", isPresented: $viewModel.showAlert) {
             Button("Ok",role: .cancel){
@@ -126,5 +134,5 @@ struct LoginView: View {
 }
 
 #Preview {
-   // LoginView()
+    // LoginView()
 }

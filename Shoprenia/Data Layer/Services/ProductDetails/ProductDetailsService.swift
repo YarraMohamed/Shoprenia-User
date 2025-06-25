@@ -57,6 +57,13 @@ class ProductDetailsService: ProductDetailsServiceProtocol {
                     .featuredImage { $0
                         .url()
                     }
+                    .media(first: 5) { $0
+                        .nodes { $0
+                            .previewImage { $0
+                                .url()
+                            }
+                        }
+                    }
                 }
             }
             
@@ -71,53 +78,53 @@ class ProductDetailsService: ProductDetailsServiceProtocol {
                 for variant in productDetails.variants.nodes {
                     print("Variant ID: \(variant.id.rawValue)")
                 }
-              
+                
                 completion(.success(productDetails))
             }.resume()
             
         }
     
     func saveToFirestoreIfProductNotExist(product: FirestoreShopifyProduct) {
-    
+        
         db.collection("users")
             .document(userId)
             .collection("wishlist")
             .whereField("id", isEqualTo: product.id)
             .getDocuments {[weak self] (querySnapshot, error) in
-                        if let error = error {
-                            print("Error getting documents: \(error)")
-                            return
-                        }
-                            
-                        if let documents = querySnapshot?.documents, !documents.isEmpty {
-                                print("Product exists // not saving")
-                                return
-                        } else {
-                                print("No product found // saving")
-                                self?.saveToFireStore(product: product)
-                        }
+                if let error = error {
+                    print("Error getting documents: \(error)")
+                    return
+                }
+                
+                if let documents = querySnapshot?.documents, !documents.isEmpty {
+                    print("Product exists // not saving")
+                    return
+                } else {
+                    print("No product found // saving")
+                    self?.saveToFireStore(product: product)
+                }
             }
     }
     
     func saveToFireStore(product: FirestoreShopifyProduct) {
         
-            do{
-               
-                try db.collection("users")
-                            .document(userId)
-                            .collection("wishlist")
-                            .addDocument(from: product) { error in
-                                if let error = error {
-                                    print("Error saving: \(error)")
-                                    
-                                } else {
-                                    print("Saved \(product.title)")
-                                    
-                                }
-                            }
-            }catch {
-                    print("Error encoding product: \(error)")
-                    
+        do{
+            
+            try db.collection("users")
+                .document(userId)
+                .collection("wishlist")
+                .addDocument(from: product) { error in
+                    if let error = error {
+                        print("Error saving: \(error)")
+                        
+                    } else {
+                        print("Saved \(product.title)")
+                        
+                    }
                 }
+        }catch {
+            print("Error encoding product: \(error)")
+            
+        }
     }
 }

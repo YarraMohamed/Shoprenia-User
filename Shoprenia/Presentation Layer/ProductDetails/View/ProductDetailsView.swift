@@ -9,11 +9,12 @@ struct ProductDetailsView: View {
     @State private var isInCart = false
     @State private var showToast = false
     @State var showAlert = false
+    @State var selectedImageIndex = 0
     @State private var toastMessage = ""
     @Binding var path : NavigationPath
     @State private var convertedPrice: Double? = nil
     @AppStorage("selectedCurrency") var selectedCurrency: String = "EGP"
-
+    
     @EnvironmentObject var authViewModel: AuthenticationViewModel
     @ObservedObject var viewModel : ProductDetailsViewModel
     
@@ -26,37 +27,52 @@ struct ProductDetailsView: View {
         ScrollView{
             VStack{
                 Divider()
-                ZStack{
-                    KFImage(viewModel.productDetails?.featuredImage?.url)
-                        .resizable()
-                        .placeholder{
-                            ProgressView()
-                        }
-                        .aspectRatio(contentMode: .fit)
-                        .frame(height: 310)
+                //                ZStack{
+                //                    KFImage(viewModel.productDetails?.featuredImage?.url)
+                //                        .resizable()
+                //                        .placeholder{
+                //                            ProgressView()
+                //                        }
+                //                        .aspectRatio(contentMode: .fit)
+                //                        .frame(height: 310)
+                //                }
+                TabView(selection: $selectedImageIndex) {
+                    ForEach(0..<(viewModel.productDetails?.media.nodes.count ?? 0), id: \.self) { index in
+                        
+                        KFImage(viewModel.productDetails?.media.nodes[index].previewImage?.url)
+                            .resizable()
+                            .placeholder{
+                                ProgressView()
+                            }
+                            .aspectRatio(contentMode: .fit)
+                            .frame(height: 310)
+                        
+                    }
                 }
-                 
-                    HStack{
-                        Text(viewModel.productDetails?.title ?? "No Name")
-                            .font(.system(size: 20,weight: .semibold))
-                            .padding(.leading,16)
-                        
-                        Spacer()
-                    }
+                .tabViewStyle(PageTabViewStyle(indexDisplayMode: .automatic))
+                .frame(height: 330)
+                
+                HStack{
+                    Text(viewModel.productDetails?.title ?? "No Name")
+                        .font(.system(size: 20,weight: .semibold))
+                        .padding(.leading,16)
                     
-                    HStack{
-                        Spacer()
-                        
-                        Text(
-                            selectedCurrency == "USD"
-                             ? "\(String(format: "%.2f", convertedPrice ?? 0)) USD"
-                             : "\(String(describing: viewModel.productDetails?.variants.nodes[0].price.amount ?? 0)) EGP"
-                         )
-                                .foregroundStyle(.blue)
-                                .font(.system(size: 16,weight: .semibold))
-                                .padding(.trailing,16)
-                                
-                    }
+                    Spacer()
+                }
+                
+                HStack{
+                    Spacer()
+                    
+                    Text(
+                        selectedCurrency == "USD"
+                        ? "\(String(format: "%.2f", convertedPrice ?? 0)) USD"
+                        : "\(String(describing: viewModel.productDetails?.variants.nodes[0].price.amount ?? 0)) EGP"
+                    )
+                    .foregroundStyle(.blue)
+                    .font(.system(size: 16,weight: .semibold))
+                    .padding(.trailing,16)
+                    
+                }
                 
                 
                 HStack{
@@ -65,18 +81,18 @@ struct ProductDetailsView: View {
                         .scaledToFit()
                         .frame(height: 30)
                     
-                        Text("\(reviews.randomElement() ?? "1")")
-                            .font(.system(size: 12,weight: .semibold))
+                    Text("\(reviews.randomElement() ?? "1")")
+                        .font(.system(size: 12,weight: .semibold))
                     
-                        Text("(\(numberOfReviews.randomElement() ?? "1") Reviews)")
+                    Text("(\(numberOfReviews.randomElement() ?? "1") Reviews)")
                         .foregroundStyle(.gray)
-                            .font(.system(size: 12,weight: .semibold))
-                        
+                        .font(.system(size: 12,weight: .semibold))
+                    
                     
                     Spacer()
                 }
                 .padding(.horizontal)
-                    
+                
                 HStack{
                     Text("Description")
                         .font(.system(size: 16,weight: .semibold))
@@ -89,7 +105,7 @@ struct ProductDetailsView: View {
                         Text(viewModel.productDetails?.description ?? "No Description")
                             .foregroundColor(Color(hex: "4C4B4B"))
                             .padding(.horizontal,16)
-                            
+                        
                     }
                     Spacer()
                 }.frame(height: 100)
@@ -104,8 +120,10 @@ struct ProductDetailsView: View {
                 
                 HStack {
                     Menu {
-                        ForEach(viewModel.productDetails?.options.first?.optionValues ?? [], id: \.id) { sizeObj in
-                            
+                        //                        ForEach(viewModel.productDetails?.options.first?.optionValues ?? [], id: \.id) { sizeObj in
+                        ForEach(viewModel.productDetails?.options.first(where: {
+                            $0.name.lowercased() == "Size".lowercased()
+                        })?.optionValues ?? [], id: \.id) { sizeObj in
                             Button(sizeObj.name) {
                                 self.selectedSize = sizeObj.name
                             }
@@ -125,7 +143,7 @@ struct ProductDetailsView: View {
                 }
                 .padding(.horizontal,16)
                 .frame(maxWidth: .infinity)
-                    
+                
                 
                 HStack{
                     Text("Color")
@@ -136,7 +154,10 @@ struct ProductDetailsView: View {
                 
                 HStack{
                     Menu{
-                        ForEach(viewModel.productDetails?.options[1].optionValues ?? [],id:\.id){ colorObj in
+                        //                        ForEach(viewModel.productDetails?.options[1].optionValues ?? [],id:\.id){ colorObj in
+                        ForEach(viewModel.productDetails?.options.first(where: {
+                            $0.name.lowercased() == "Color".lowercased()
+                        })?.optionValues ?? [],id:\.id){ colorObj in
                             
                             Button(colorObj.name){
                                 self.selectedColor = colorObj.name
@@ -164,13 +185,13 @@ struct ProductDetailsView: View {
                         if let matchedVariant = viewModel.getMatchingVariant(selectedSize: selectedSize, selectedColor: selectedColor) {
                             viewModel.addToCart(variantId: matchedVariant.id.rawValue, quantity: 1)
                             toastMessage = "Added successfully.\nYou can select the quantity in the shopping cart."
-
+                            
                             showToast = true
                         }
                     }
-
-
-
+                    
+                    
+                    
                     .font(.system(size: 16, weight: .semibold))
                     .foregroundStyle(.white)
                     .frame(width: 245, height: 48)
@@ -183,41 +204,41 @@ struct ProductDetailsView: View {
                 Spacer()
             }
             .toolbar{
-                            ToolbarItem(placement: .topBarTrailing) {
-                                Button("", image: .heartUnfilled) {
-                                    if authViewModel.isAuthenticated(){
-                                        guard let product = viewModel.productDetails else{
-                                            return
-                                        }
-                                        viewModel.saveShopifyProduct(product)
-                                    }else{
-                                        self.showAlert = true
-                                    }
-                                }
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("", image: .heartUnfilled) {
+                        if authViewModel.isAuthenticated(){
+                            guard let product = viewModel.productDetails else{
+                                return
                             }
-                        }
-                        .alert(isPresented: $showAlert) {
-                            Alert(
-                                title: Text("You need to login"),
-                                message: Text("Please login to continue."),
-                                primaryButton: .default(Text("Ok"), action: {
-                                    path.append(AppRouter.register)
-                                }),
-                                secondaryButton: .cancel()
-                            )
+                            viewModel.saveShopifyProduct(product)
+                        }else{
+                            self.showAlert = true
                         }
                     }
+                }
+            }
+            .alert(isPresented: $showAlert) {
+                Alert(
+                    title: Text("You need to login"),
+                    message: Text("Please login to continue."),
+                    primaryButton: .default(Text("Ok"), action: {
+                        path.append(AppRouter.register)
+                    }),
+                    secondaryButton: .cancel()
+                )
+            }
+        }
         
         
         .onAppear{
             viewModel.getProductDetails(id: GraphQL.ID(rawValue: productId))
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
-                    if selectedCurrency == "USD",
-                       let priceDecimal = viewModel.productDetails?.variants.nodes[0].price.amount {
-                        let priceDouble = NSDecimalNumber(decimal: priceDecimal).doubleValue
-                        convertedPrice = convertEGPToUSD(priceDouble)
-                    }
+                if selectedCurrency == "USD",
+                   let priceDecimal = viewModel.productDetails?.variants.nodes[0].price.amount {
+                    let priceDouble = NSDecimalNumber(decimal: priceDecimal).doubleValue
+                    convertedPrice = convertEGPToUSD(priceDouble)
                 }
+            }
         }
         .overlay(
             VStack {
@@ -238,18 +259,18 @@ struct ProductDetailsView: View {
                         }
                 }
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .animation(.easeInOut, value: showToast)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .animation(.easeInOut, value: showToast)
         )
-
-
+        
+        
     }
     
     private func convertEGPToUSD(_ amount: Double) -> Double {
         let exchangeRate: Double = 1.0 / 49.71
         return amount * exchangeRate
     }
-
+    
 }
 
 

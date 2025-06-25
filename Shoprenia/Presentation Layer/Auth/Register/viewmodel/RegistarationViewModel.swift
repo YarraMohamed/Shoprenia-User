@@ -16,6 +16,7 @@ final class RegistarationViewModel : ObservableObject {
     @Published var passwordEdited = false
     @Published var phoneEdited = false
     @Published var showVerificationAlert = false
+    @Published var showRegisteredAlert = false
     @Published var isLoggedIn : Bool = false
     private let registrationRepo : RegistrationRepoProtocol
     private let credentialValidator : CredentialsValidationProtocol
@@ -50,12 +51,27 @@ final class RegistarationViewModel : ObservableObject {
         return credentialValidator.isValidEmail(email: self.email) && credentialValidator.isValidName(firstName) && credentialValidator.isValidName(lastName) && credentialValidator.isValidPassword(password: self.password) && credentialValidator.isValidPhoneNumber(phoneNumber: self.phoneNumber)
     }
     
+//    func createUser(){
+//        registrationRepo.createFirebaseUser(email: email, password: password, firstname: firstName, lastname: lastName){[weak self] showAlert in
+//            self?.showVerificationAlert = showAlert
+//            self?.createShopifyCustomer()
+//        }
+//    }
+    
     func createUser(){
         registrationRepo.createFirebaseUser(email: email, password: password, firstname: firstName, lastname: lastName){[weak self] showAlert in
-            self?.showVerificationAlert = showAlert
-            self?.createShopifyCustomer()
+                self?.showVerificationAlert = showAlert
+                self?.createShopifyCustomer()
+                
+                switch showAlert{
+                case true:
+                    self?.showVerificationAlert = true
+                    self?.createShopifyCustomer()
+                case false:
+                    self?.showRegisteredAlert = true
+                }
+            }
         }
-    }
     
     func createShopifyCustomer(){
         
