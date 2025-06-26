@@ -18,3 +18,4 @@ protocol AddressServiceProtocol {
     func googleSignOut()
     func removeAllUserDefaultsValues()
 }
+

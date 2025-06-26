@@ -16,4 +16,5 @@ target 'Shoprenia' do
         pod 'Alamofire'
         pod 'Stripe'
         pod 'StripePaymentsUI'
+        pod 'lottie-ios'
 end

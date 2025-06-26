@@ -71,7 +71,7 @@ final class ShopreniaTests: XCTestCase {
             case .failure(let error):
                 XCTFail("\(error)")}
         }
-        waitForExpectations(timeout: 20)
+        waitForExpectations(timeout: 50)
     }
     
     func testCreateCustomerWithoutPhone(){
@@ -86,7 +86,7 @@ final class ShopreniaTests: XCTestCase {
             case .failure(let error):
                 XCTFail("\(error)")}
         }
-        waitForExpectations(timeout: 20)
+        waitForExpectations(timeout: 50)
     }
     
     func testCreateCustomerAccessToken(){

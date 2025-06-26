@@ -152,8 +152,8 @@ struct RegisterationView: View {
                             
                             
                         DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
-                            
-                            path.append(AppRouter.home)
+                            path.removeLast(1)
+//                            path.append(AppRouter.home)
                             
                         }
                     }){
@@ -177,7 +177,8 @@ struct RegisterationView: View {
         }
         .alert("Verify Your Email", isPresented: $viewModel.showVerificationAlert) {
             Button("OK", role: .cancel) {
-                path.append(AppRouter.login)
+                path.removeLast(1)
+//                path.append(AppRouter.login)
             }
         } message: {
             Text("We've sent a verification email to \(viewModel.email) . Please check your inbox, click the verification link and login.")
@@ -189,6 +190,11 @@ struct RegisterationView: View {
 //                }
 //            }
 //        }
+        .alert("Invalid Registeration", isPresented: $viewModel.showRegisteredAlert) {
+                    Button("OK", role: .cancel) {}
+                } message: {
+                    Text("The email address is already in use by another account.")
+                }
         .toolbar{
             ToolbarItem(placement: .topBarTrailing) {
                     VStack {

@@ -11,10 +11,22 @@
 		C12D3C1F2DFE60CE003FAE56 /* StripePaymentsUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C12D3C1E2DFE60CE003FAE56 /* StripePaymentsUI.framework */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		C13E17CF2E0B17B300B61AB2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C112175A2DE6390C00C7C2B8 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C11217612DE6390C00C7C2B8;
+			remoteInfo = Shoprenia;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		8E1BE9698CAA3123A8D7F94A /* Pods-Shoprenia.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Shoprenia.debug.xcconfig"; path = "Target Support Files/Pods-Shoprenia/Pods-Shoprenia.debug.xcconfig"; sourceTree = "<group>"; };
 		C11217622DE6390C00C7C2B8 /* Shoprenia.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Shoprenia.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C12D3C1E2DFE60CE003FAE56 /* StripePaymentsUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = StripePaymentsUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C13E17CB2E0B17B300B61AB2 /* ShopreniaTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ShopreniaTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		C16F45BF2E0D6B5600DE852A /* Lottie.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Lottie.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C1942CB32DFE54430031F8D3 /* Stripe.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Stripe.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C1942CB42DFE54430031F8D3 /* StripeApplePay.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = StripeApplePay.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C1942CB52DFE54430031F8D3 /* StripeCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = StripeCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -44,6 +56,11 @@
 			path = Shoprenia;
 			sourceTree = "<group>";
 		};
+		C13E17CC2E0B17B300B61AB2 /* ShopreniaTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = ShopreniaTests;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +73,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		C13E17C82E0B17B300B61AB2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -63,6 +87,7 @@
 			isa = PBXGroup;
 			children = (
 				C11217642DE6390C00C7C2B8 /* Shoprenia */,
+				C13E17CC2E0B17B300B61AB2 /* ShopreniaTests */,
 				C11217632DE6390C00C7C2B8 /* Products */,
 				DCBDC20924A25473DD6B37B2 /* Pods */,
 				F2C2A6B53F266847B736B159 /* Frameworks */,
@@ -73,6 +98,7 @@
 			isa = PBXGroup;
 			children = (
 				C11217622DE6390C00C7C2B8 /* Shoprenia.app */,
+				C13E17CB2E0B17B300B61AB2 /* ShopreniaTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -89,6 +115,7 @@
 		F2C2A6B53F266847B736B159 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C16F45BF2E0D6B5600DE852A /* Lottie.framework */,
 				C12D3C1E2DFE60CE003FAE56 /* StripePaymentsUI.framework */,
 				C1942CB32DFE54430031F8D3 /* Stripe.framework */,
 				C1942CB42DFE54430031F8D3 /* StripeApplePay.framework */,
@@ -126,6 +153,27 @@
 			productReference = C11217622DE6390C00C7C2B8 /* Shoprenia.app */;
 			productType = "com.apple.product-type.application";
 		};
+		C13E17CA2E0B17B300B61AB2 /* ShopreniaTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C13E17D12E0B17B300B61AB2 /* Build configuration list for PBXNativeTarget "ShopreniaTests" */;
+			buildPhases = (
+				C13E17C72E0B17B300B61AB2 /* Sources */,
+				C13E17C82E0B17B300B61AB2 /* Frameworks */,
+				C13E17C92E0B17B300B61AB2 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				C13E17D02E0B17B300B61AB2 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				C13E17CC2E0B17B300B61AB2 /* ShopreniaTests */,
+			);
+			name = ShopreniaTests;
+			productName = ShopreniaTests;
+			productReference = C13E17CB2E0B17B300B61AB2 /* ShopreniaTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -133,11 +181,15 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1630;
+				LastSwiftUpdateCheck = 1640;
 				LastUpgradeCheck = 1630;
 				TargetAttributes = {
 					C11217612DE6390C00C7C2B8 = {
 						CreatedOnToolsVersion = 16.3;
+					};
+					C13E17CA2E0B17B300B61AB2 = {
+						CreatedOnToolsVersion = 16.4;
+						TestTargetID = C11217612DE6390C00C7C2B8;
 					};
 				};
 			};
@@ -156,12 +208,20 @@
 			projectRoot = "";
 			targets = (
 				C11217612DE6390C00C7C2B8 /* Shoprenia */,
+				C13E17CA2E0B17B300B61AB2 /* ShopreniaTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		C11217602DE6390C00C7C2B8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C13E17C92E0B17B300B61AB2 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -224,7 +284,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		C13E17C72E0B17B300B61AB2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		C13E17D02E0B17B300B61AB2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C11217612DE6390C00C7C2B8 /* Shoprenia */;
+			targetProxy = C13E17CF2E0B17B300B61AB2 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		C112176B2DE6390E00C7C2B8 /* Debug */ = {
@@ -413,6 +488,50 @@
 			};
 			name = Release;
 		};
+		C13E17D22E0B17B300B61AB2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				MACOSX_DEPLOYMENT_TARGET = 15.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = ITI.ShopreniaTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,7";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Shoprenia.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Shoprenia";
+				XROS_DEPLOYMENT_TARGET = 2.5;
+			};
+			name = Debug;
+		};
+		C13E17D32E0B17B300B61AB2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				MACOSX_DEPLOYMENT_TARGET = 15.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = ITI.ShopreniaTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,7";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Shoprenia.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Shoprenia";
+				XROS_DEPLOYMENT_TARGET = 2.5;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -430,6 +549,15 @@
 			buildConfigurations = (
 				C112176E2DE6390E00C7C2B8 /* Debug */,
 				C112176F2DE6390E00C7C2B8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C13E17D12E0B17B300B61AB2 /* Build configuration list for PBXNativeTarget "ShopreniaTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C13E17D22E0B17B300B61AB2 /* Debug */,
+				C13E17D32E0B17B300B61AB2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

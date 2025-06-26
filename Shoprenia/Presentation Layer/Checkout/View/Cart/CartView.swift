@@ -102,7 +102,7 @@ struct CartView: View {
         if line.quantity < 5 {
             viewModel.checkVariantAvailability(variantId: line.variantId)
             let isAvailable = viewModel.isVariantAvailable
-            if isAvailable ?? false {
+            if isAvailable ?? true {
                 viewModel.updateCartQuantity(lineId: line.id, newQuantity: line.quantity + 1)
             } else {
                 showNotAvailableAlert = true
