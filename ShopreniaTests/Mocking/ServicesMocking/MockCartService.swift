@@ -5,9 +5,11 @@
 //  Created by ٍReham on 25/06/2025.
 //
 import Foundation
+@testable import Shoprenia
 import MobileBuySDK
 
 class MockCartService: MockCartServiceProtocol {
+    
     var shouldReturnError = false
     var mockCart: MockCart?
     var mockSelectableAddress: MockCartSelectableAddress?
@@ -70,5 +72,7 @@ class MockCartService: MockCartServiceProtocol {
             completion(.success(mockAvailability))
         }
     }
+    
+
 }
 

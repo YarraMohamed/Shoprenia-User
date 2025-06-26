@@ -9,6 +9,7 @@ struct ProductDetailsView: View {
     @State private var isInCart = false
     @State private var showToast = false
     @State var showAlert = false
+    @State var showCartAlert = false
     @State var selectedImageIndex = 0
     @State private var toastMessage = ""
     @Binding var path : NavigationPath
@@ -182,12 +183,17 @@ struct ProductDetailsView: View {
                 
                 HStack{
                     Button("Add to cart") {
-                        if let matchedVariant = viewModel.getMatchingVariant(selectedSize: selectedSize, selectedColor: selectedColor) {
-                            viewModel.addToCart(variantId: matchedVariant.id.rawValue, quantity: 1)
-                            toastMessage = "Added successfully.\nYou can select the quantity in the shopping cart."
-                            
-                            showToast = true
+                        if authViewModel.isAuthenticated() && selectedSize != "Select size" && selectedColor != "Select Color" {
+                            if let matchedVariant = viewModel.getMatchingVariant(selectedSize: selectedSize, selectedColor: selectedColor) {
+                                viewModel.addToCart(variantId: matchedVariant.id.rawValue, quantity: 1)
+                                toastMessage = "Added successfully.\nYou can select the quantity in the shopping cart."
+                                
+                                showToast = true
+                            }
+                        }else{
+                            showCartAlert = true
                         }
+                        
                     }
                     
                     
@@ -223,6 +229,15 @@ struct ProductDetailsView: View {
                     message: Text("Please login to continue."),
                     primaryButton: .default(Text("Ok"), action: {
                         path.append(AppRouter.register)
+                    }),
+                    secondaryButton: .cancel()
+                )
+            }
+            .alert(isPresented: $showCartAlert) {
+                Alert(
+                    title: Text("Cannot complete this operation"),
+                    message: Text("Make sure you're logged in and have chosen size and color"),
+                    primaryButton: .default(Text("Ok"), action: {
                     }),
                     secondaryButton: .cancel()
                 )
