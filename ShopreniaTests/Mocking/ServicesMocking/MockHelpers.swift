@@ -22,6 +22,19 @@ struct MockMailingAddress {
     let phone: String
 }
 
+
+struct MockCartLineItem {
+    let id: String
+    let title: String
+    let variantTitle: String
+    let imageURL: URL?
+    let quantity: Int
+    let price: Decimal
+    let currency: String
+    let variantId: String
+    let productId: String
+}
+
 protocol MockCartServiceProtocol {
     func addVariantToCart(variantId: String, quantity: Int, completion: @escaping (Result<MockCart, Error>) -> Void)
     func removeFromCart(lineId: String, completion: @escaping (Result<MockCart, Error>) -> Void)
@@ -30,3 +43,4 @@ protocol MockCartServiceProtocol {
     func setAddressInCart(address: MockMailingAddress, completion: @escaping (Result<MockCartSelectableAddress, Error>) -> Void)
     func checkVariantAvailability(variantId: String, completion: @escaping (Result<Bool, Error>) -> Void)
 }
+

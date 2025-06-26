@@ -26,6 +26,7 @@
 		C11217622DE6390C00C7C2B8 /* Shoprenia.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Shoprenia.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C12D3C1E2DFE60CE003FAE56 /* StripePaymentsUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = StripePaymentsUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C13E17CB2E0B17B300B61AB2 /* ShopreniaTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ShopreniaTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		C16F45BF2E0D6B5600DE852A /* Lottie.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Lottie.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C1942CB32DFE54430031F8D3 /* Stripe.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Stripe.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C1942CB42DFE54430031F8D3 /* StripeApplePay.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = StripeApplePay.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C1942CB52DFE54430031F8D3 /* StripeCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = StripeCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -114,6 +115,7 @@
 		F2C2A6B53F266847B736B159 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C16F45BF2E0D6B5600DE852A /* Lottie.framework */,
 				C12D3C1E2DFE60CE003FAE56 /* StripePaymentsUI.framework */,
 				C1942CB32DFE54430031F8D3 /* Stripe.framework */,
 				C1942CB42DFE54430031F8D3 /* StripeApplePay.framework */,
@@ -168,8 +170,6 @@
 				C13E17CC2E0B17B300B61AB2 /* ShopreniaTests */,
 			);
 			name = ShopreniaTests;
-			packageProductDependencies = (
-			);
 			productName = ShopreniaTests;
 			productReference = C13E17CB2E0B17B300B61AB2 /* ShopreniaTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";

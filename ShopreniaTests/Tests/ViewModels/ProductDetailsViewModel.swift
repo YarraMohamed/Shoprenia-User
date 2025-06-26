@@ -34,4 +34,45 @@ final class ProductDetailsViewModelTest: XCTestCase {
         
         XCTAssertEqual(viewModel.productDetails?.title, "Test Product")
     }
+    
+    func testGetMatchingVariantReturnsCorrectVariant() {
+        let productRaw: [String: Any] = [
+            "id": "gid://shopify/Product/123",
+            "title": "Test Product",
+            "vendor": "MockVendor",
+            "variants": [
+                "nodes": [
+                    [
+                        "id": "gid://shopify/ProductVariant/111",
+                        "price": [
+                            "amount": "100.00",
+                            "currencyCode": "EGP"
+                        ],
+                        "selectedOptions": [
+                            ["name": "Size", "value": "M"],
+                            ["name": "Color", "value": "Red"]
+                        ]
+                    ],
+                    [
+                        "id": "gid://shopify/ProductVariant/222",
+                        "price": [
+                            "amount": "120.00",
+                            "currencyCode": "EGP"
+                        ],
+                        "selectedOptions": [
+                            ["name": "Size", "value": "L"],
+                            ["name": "Color", "value": "Blue"]
+                        ]
+                    ]
+                ]
+            ]
+        ]
+
+        let dummyProduct = Storefront.Product(rawValue: productRaw)
+        viewModel.productDetails = dummyProduct
+
+        let matchedVariant = viewModel.getMatchingVariant(selectedSize: "M", selectedColor: "Red")
+        XCTAssertEqual(matchedVariant?.id.rawValue, "gid://shopify/ProductVariant/111")
+    }
+
 }

@@ -58,39 +58,68 @@ final class RegistarationViewModel : ObservableObject {
 //        }
 //    }
     
-    func createUser(){
-        registrationRepo.createFirebaseUser(email: email, password: password, firstname: firstName, lastname: lastName){[weak self] showAlert in
-                self?.showVerificationAlert = showAlert
-                self?.createShopifyCustomer()
-                
-                switch showAlert{
-                case true:
-                    self?.showVerificationAlert = true
-                    self?.createShopifyCustomer()
-                case false:
-                    self?.showRegisteredAlert = true
-                }
-            }
-        }
+//    func createUser(){
+//        registrationRepo.createFirebaseUser(email: email, password: password, firstname: firstName, lastname: lastName){[weak self] showAlert in
+//                self?.showVerificationAlert = showAlert
+//                self?.createShopifyCustomer()
+//                
+//                switch showAlert{
+//                case true:
+//                    self?.showVerificationAlert = true
+//                    self?.createShopifyCustomer()
+//                case false:
+//                    self?.showRegisteredAlert = true
+//                }
+//            }
+//        }
     
-    func createShopifyCustomer(){
-        
-        registrationRepo.createCustomer(email: email, password: password, firstName: firstName, lastName: lastName, phone: phoneNumber){ result in
-            switch result{
-            case .success(let customer):
-                print("shopify customer created")
-                print("first name: \(customer.firstName ?? "No name")")
-                print("last name: \(customer.lastName ?? "No name")")
-                print("phone: \(customer.phone ?? "No phone")")
-                print("created at: \(customer.createdAt)")
-                print("id: \(customer.id)")
-                print("email: \(customer.email ?? "No mail")")
-                
-            case .failure(let failure):
-                print(failure.localizedDescription)
+    func createUser() {
+        registrationRepo.createFirebaseUser(email: email, password: password, firstname: firstName, lastname: lastName) { [weak self] showAlert in
+            guard let self = self else { return }
+
+            if showAlert {
+                self.showVerificationAlert = true
+                self.createShopifyCustomer()
+            } else {
+                self.showRegisteredAlert = true
+                print("Firebase user creation failed or user already exists.")
             }
         }
     }
+
+    func createShopifyCustomer() {
+        registrationRepo.createCustomer(email: email, password: password, firstName: firstName, lastName: lastName, phone: phoneNumber) { result in
+            switch result {
+            case .success(let customer):
+                print("✅ Shopify customer created:")
+                print("first name: \(customer.firstName ?? "No name")")
+                print("last name: \(customer.lastName ?? "No name")")
+                print("phone: \(customer.phone ?? "No phone")")
+                print("email: \(customer.email ?? "No mail")")
+
+            case .failure(let error):
+                print("❌ Shopify customer creation failed: \(error.localizedDescription)")
+            }
+        }
+    }
+
+    
+//    func createShopifyCustomer() {
+//        registrationRepo.createCustomer(email: email, password: password, firstName: firstName, lastName: lastName, phone: phoneNumber) { result in
+//            switch result {
+//            case .success(let customer):
+//                print("✅ Shopify customer created:")
+//                print("first name: \(customer.firstName ?? "No name")")
+//                print("last name: \(customer.lastName ?? "No name")")
+//                print("phone: \(customer.phone ?? "No phone")")
+//                print("email: \(customer.email ?? "No mail")")
+//
+//            case .failure(let error):
+//                print("❌ Shopify customer creation failed: \(error.localizedDescription)")
+//            }
+//        }
+//    }
+
     
     
     func googleSignIn(rootController : UIViewController) {
