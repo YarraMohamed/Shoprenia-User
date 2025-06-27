@@ -2,10 +2,12 @@ import SwiftUI
 
 struct CouponsView: View {
     
-
+    
     @State private var selectedIndex = 0
     @State private var copiedMessage = ""
-
+    @State private var showAlert = false
+    @EnvironmentObject var vm: AuthenticationViewModel
+    
     var body: some View {
         VStack(spacing: 12) {
             TabView(selection: $selectedIndex) {
@@ -19,15 +21,20 @@ struct CouponsView: View {
                             .clipShape(RoundedRectangle(cornerRadius: 16))
                             .padding(.horizontal, 16)
                             .shadow(radius: 4)
-
+                        
                         Button(action: {
-                            let codeToCopy = codes[index]
-                            UIPasteboard.general.string = codeToCopy
-                            copiedMessage = "Code copied!"
-
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                                copiedMessage = ""
+                            if vm.isAuthenticated() {
+                                let codeToCopy = codes[index]
+                                UIPasteboard.general.string = codeToCopy
+                                copiedMessage = "Code copied!"
+                                showAlert = false
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                    copiedMessage = ""
+                                }
+                            }else{
+                                showAlert = true
                             }
+                            
                         }) {
                             Text("Copy Code")
                                 .font(.system(size: 14, weight: .semibold))
@@ -43,9 +50,13 @@ struct CouponsView: View {
                     .tag(index)
                 }
             }
+            .alert("You must login first", isPresented:$showAlert) {
+                Button("Ok",role: .cancel){
+                }
+            }
             .tabViewStyle(PageTabViewStyle(indexDisplayMode: .automatic))
             .frame(height: 250)
-
+            
             if !copiedMessage.isEmpty {
                 Text(copiedMessage)
                     .foregroundColor(.blue.opacity(0.5))
@@ -55,7 +66,7 @@ struct CouponsView: View {
             }
         }
     }
-
+    
     init() {
         UIPageControl.appearance().currentPageIndicatorTintColor = .app
         UIPageControl.appearance().pageIndicatorTintColor = UIColor.lightGray

@@ -8,6 +8,7 @@ struct ProductDetailsView: View {
     @State var selectedColor = "Select color"
     @State private var isInCart = false
     @State private var showToast = false
+    @State private var showSavedToast = false
     @State var showAlert = false
     @State var showCartAlert = false
     @State var selectedImageIndex = 0
@@ -187,10 +188,12 @@ struct ProductDetailsView: View {
                             if let matchedVariant = viewModel.getMatchingVariant(selectedSize: selectedSize, selectedColor: selectedColor) {
                                 viewModel.addToCart(variantId: matchedVariant.id.rawValue, quantity: 1)
                                 toastMessage = "Added successfully.\nYou can select the quantity in the shopping cart."
-                                
                                 showToast = true
                             }
+                        }else if authViewModel.isAuthenticated() == false {
+                            showAlert = true
                         }else{
+                            toastMessage = "Please choose size and color"
                             showCartAlert = true
                         }
                         
@@ -213,12 +216,16 @@ struct ProductDetailsView: View {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("", image: .heartUnfilled) {
                         if authViewModel.isAuthenticated(){
+                            print("ana user")
                             guard let product = viewModel.productDetails else{
                                 return
                             }
+                            toastMessage = "Added successfully in wishlist"
+                            showSavedToast = true
                             viewModel.saveShopifyProduct(product)
                         }else{
-                            self.showAlert = true
+                            print("ana hena not logged")
+                            showAlert = true
                         }
                     }
                 }
@@ -229,15 +236,6 @@ struct ProductDetailsView: View {
                     message: Text("Please login to continue."),
                     primaryButton: .default(Text("Ok"), action: {
                         path.append(AppRouter.register)
-                    }),
-                    secondaryButton: .cancel()
-                )
-            }
-            .alert(isPresented: $showCartAlert) {
-                Alert(
-                    title: Text("Cannot complete this operation"),
-                    message: Text("Make sure you're logged in and have chosen size and color"),
-                    primaryButton: .default(Text("Ok"), action: {
                     }),
                     secondaryButton: .cancel()
                 )
@@ -270,6 +268,36 @@ struct ProductDetailsView: View {
                             DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                                 withAnimation {
                                     showToast = false
+                                }
+                            }
+                        }
+                }else if showCartAlert{
+                    Text(toastMessage)
+                        .font(.subheadline)
+                        .padding()
+                        .background(Color.blue.opacity(0.9))
+                        .foregroundColor(.white)
+                        .cornerRadius(12)
+                        .transition(.opacity)
+                        .onAppear {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                withAnimation {
+                                    showCartAlert = false
+                                }
+                            }
+                        }
+                }else if showSavedToast{
+                    Text(toastMessage)
+                        .font(.subheadline)
+                        .padding()
+                        .background(Color.blue.opacity(0.9))
+                        .foregroundColor(.white)
+                        .cornerRadius(12)
+                        .transition(.opacity)
+                        .onAppear {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                withAnimation {
+                                    showSavedToast = false
                                 }
                             }
                         }

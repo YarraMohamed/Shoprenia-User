@@ -169,7 +169,8 @@ struct RegisterationView: View {
         }
         .alert("Verify Your Email", isPresented: $viewModel.showVerificationAlert) {
             Button("OK", role: .cancel) {
-                path.append(AppRouter.login)
+                //path.append(AppRouter.login)
+                path.removeLast(1)
             }
         } message: {
             Text("We've sent a verification email to \(viewModel.email) . Please check your inbox, click the verification link and login.")
@@ -181,7 +182,8 @@ struct RegisterationView: View {
         }
         .alert("Account created using Google", isPresented: $viewModel.isAccountCreated) {
             Button("Ok", role: .cancel) {
-                path.append(AppRouter.login)
+               // path.append(AppRouter.login)
+                path.removeLast(1)
             }
         } message: {
             Text("Please proceed to login page to sign in")
