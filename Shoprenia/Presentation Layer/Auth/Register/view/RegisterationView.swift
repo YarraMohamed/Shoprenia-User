@@ -4,6 +4,7 @@ import FirebaseAuth
 
 struct RegisterationView: View {
     @ObservedObject var viewModel: RegistarationViewModel
+    @EnvironmentObject var authVM : AuthenticationViewModel
     @Binding var path : NavigationPath
     
     var body: some View {
@@ -127,9 +128,7 @@ struct RegisterationView: View {
                         
                         if viewModel.allValidation()
                             {
-                            
                             viewModel.createUser()
-                            
                         }
                     }
                     .font(.system(size: 16, weight: .semibold))
@@ -149,13 +148,6 @@ struct RegisterationView: View {
                     
                     Button(action:{
                         viewModel.googleSignIn(rootController: getRootViewController())
-                            
-                            
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
-                            path.removeLast(1)
-//                            path.append(AppRouter.home)
-                            
-                        }
                     }){
                         Image("g")
                             .resizable()
@@ -177,24 +169,23 @@ struct RegisterationView: View {
         }
         .alert("Verify Your Email", isPresented: $viewModel.showVerificationAlert) {
             Button("OK", role: .cancel) {
-                path.removeLast(1)
-//                path.append(AppRouter.login)
+                path.append(AppRouter.login)
             }
         } message: {
             Text("We've sent a verification email to \(viewModel.email) . Please check your inbox, click the verification link and login.")
         }
-//        .onChange(of: viewModel.isLoggedIn){ isLogged in
-//            if isLogged {
-//                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-//                    path.removeLast()
-//                }
-//            }
-//        }
         .alert("Invalid Registeration", isPresented: $viewModel.showRegisteredAlert) {
-                    Button("OK", role: .cancel) {}
-                } message: {
-                    Text("The email address is already in use by another account.")
-                }
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text("The email address is already in use by another account.")
+        }
+        .alert("Account created using Google", isPresented: $viewModel.isAccountCreated) {
+            Button("Ok", role: .cancel) {
+                path.append(AppRouter.login)
+            }
+        } message: {
+            Text("Please proceed to login page to sign in")
+        }
         .toolbar{
             ToolbarItem(placement: .topBarTrailing) {
                     VStack {

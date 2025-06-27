@@ -16,19 +16,17 @@ final class RegistarationViewModel : ObservableObject {
     @Published var passwordEdited = false
     @Published var phoneEdited = false
     @Published var showVerificationAlert = false
+    @Published var isAccountCreated : Bool = false
     @Published var showRegisteredAlert = false
-    @Published var isLoggedIn : Bool = false
+    
     private let registrationRepo : RegistrationRepoProtocol
     private let credentialValidator : CredentialsValidationProtocol
-    private let userDefaultsManager : UserDefaultsManagerProtocol
     
     init(credentialValidator : CredentialsValidationProtocol,
-         registraionRepo : RegistrationRepoProtocol,
-         userDefaultsManager : UserDefaultsManagerProtocol){
+         registraionRepo : RegistrationRepoProtocol){
         
         self.credentialValidator = credentialValidator
         self.registrationRepo = registraionRepo
-        self.userDefaultsManager = userDefaultsManager
     }
     
     func isValidName(_ name : String) -> Bool {
@@ -51,75 +49,37 @@ final class RegistarationViewModel : ObservableObject {
         return credentialValidator.isValidEmail(email: self.email) && credentialValidator.isValidName(firstName) && credentialValidator.isValidName(lastName) && credentialValidator.isValidPassword(password: self.password) && credentialValidator.isValidPhoneNumber(phoneNumber: self.phoneNumber)
     }
     
-//    func createUser(){
-//        registrationRepo.createFirebaseUser(email: email, password: password, firstname: firstName, lastname: lastName){[weak self] showAlert in
-//            self?.showVerificationAlert = showAlert
-//            self?.createShopifyCustomer()
-//        }
-//    }
-    
-//    func createUser(){
-//        registrationRepo.createFirebaseUser(email: email, password: password, firstname: firstName, lastname: lastName){[weak self] showAlert in
-//                self?.showVerificationAlert = showAlert
-//                self?.createShopifyCustomer()
-//                
-//                switch showAlert{
-//                case true:
-//                    self?.showVerificationAlert = true
-//                    self?.createShopifyCustomer()
-//                case false:
-//                    self?.showRegisteredAlert = true
-//                }
-//            }
-//        }
-    
-    func createUser() {
-        registrationRepo.createFirebaseUser(email: email, password: password, firstname: firstName, lastname: lastName) { [weak self] showAlert in
-            guard let self = self else { return }
-
-            if showAlert {
-                self.showVerificationAlert = true
-                self.createShopifyCustomer()
-            } else {
-                self.showRegisteredAlert = true
-                print("Firebase user creation failed or user already exists.")
+    func createUser(){
+        registrationRepo.createFirebaseUser(email: email, password: password, firstname: firstName, lastname: lastName){[weak self] showAlert in
+            
+            switch showAlert{
+            case true:
+                self?.showVerificationAlert = true
+                self?.createShopifyCustomer()
+            case false:
+                self?.showRegisteredAlert = true
             }
         }
     }
-
-    func createShopifyCustomer() {
-        registrationRepo.createCustomer(email: email, password: password, firstName: firstName, lastName: lastName, phone: phoneNumber) { result in
-            switch result {
+    
+    func createShopifyCustomer(){
+        
+        registrationRepo.createCustomer(email: email, password: password, firstName: firstName, lastName: lastName, phone: phoneNumber){ result in
+            switch result{
             case .success(let customer):
-                print("✅ Shopify customer created:")
+                print("shopify customer created")
                 print("first name: \(customer.firstName ?? "No name")")
                 print("last name: \(customer.lastName ?? "No name")")
                 print("phone: \(customer.phone ?? "No phone")")
+                print("created at: \(customer.createdAt)")
+                print("id: \(customer.id)")
                 print("email: \(customer.email ?? "No mail")")
-
-            case .failure(let error):
-                print("❌ Shopify customer creation failed: \(error.localizedDescription)")
+                
+            case .failure(let failure):
+                print(failure.localizedDescription)
             }
         }
     }
-
-    
-//    func createShopifyCustomer() {
-//        registrationRepo.createCustomer(email: email, password: password, firstName: firstName, lastName: lastName, phone: phoneNumber) { result in
-//            switch result {
-//            case .success(let customer):
-//                print("✅ Shopify customer created:")
-//                print("first name: \(customer.firstName ?? "No name")")
-//                print("last name: \(customer.lastName ?? "No name")")
-//                print("phone: \(customer.phone ?? "No phone")")
-//                print("email: \(customer.email ?? "No mail")")
-//
-//            case .failure(let error):
-//                print("❌ Shopify customer creation failed: \(error.localizedDescription)")
-//            }
-//        }
-//    }
-
     
     
     func googleSignIn(rootController : UIViewController) {
@@ -128,7 +88,6 @@ final class RegistarationViewModel : ObservableObject {
             
             switch result {
             case .success(let googleUser):
-                self.isLoggedIn = true
                 self.createShopifyCustomerWithoutPhone(user: googleUser)
             case .failure(let error):
                 print("ERR in g sign in \(error.localizedDescription)")
@@ -140,67 +99,17 @@ final class RegistarationViewModel : ObservableObject {
         registrationRepo.createCustomerWithoutPhone(email: user.email ?? "No mail",
                                              password: "Password123",
                                                     firstName: user.displayName ?? "no first name",
-                                                    lastName: ""){result in
+                                                    lastName: ""){[weak self] result in
             
             switch result {
             case .success(let customer):
                 
                 print("In Regist ViewModel shopify customer created using google with name : \(customer.displayName)")
                 print("In Regist ViewModel shopify customer created using google with email : \(customer.email ?? "no mail")")
-                
-                self.createCustomerAccessToken(mail: customer.email ?? "no mail", pass: "Password123")
+                self?.isAccountCreated = true
             case .failure(let error):
                 print("In regist Viewmodel Error: \(error)")
             }
         }
-    }
-    
-    func createCustomerAccessToken(mail:String, pass:String){
-        registrationRepo.createCustomerAccessToken(email: mail, password: pass){[weak self] result in
-            
-            switch result {
-            case .success(let accessToken):
-                print("In Regis ViewModel Access Token created: \(accessToken)")
-                self?.getCustomerByAccessToken(accessToken: accessToken)
-            case .failure(let error):
-                print("In Regis Viewmodel Error: \(error)")
-            }
-        }
-    }
-    
-    func getCustomerByAccessToken(accessToken : String){
-
-        registrationRepo.getCustomerByAccessToken(accessToken: accessToken){[weak self]result in
-            switch result {
-                
-            case .success(let customer):
-                print("Fetched Customer")
-                print("id: \(customer.id)")
-                print("email: \(customer.email ?? "no mail")")
-                print("phone: \(customer.phone ?? "no phone")")
-                self?.insertInUserDefaultsWithoutPhone(accessToken, customer)
-                
-            case .failure(let error):
-                print("In Regis Viewmodel Error: \(error)")
-            }
-        }
-    }
-    
-    func insertInUserDefaultsWithoutPhone(_ accessToken : String,_ customer : Storefront.Customer){
-        guard let email = customer.email else {return}
-        userDefaultsManager.insertShopifyCustomerId(customer.id.rawValue)
-        userDefaultsManager.insertShopifyCustomerEmail(email)
-        userDefaultsManager.insertShopifyCustomerAccessToken(accessToken)
-        userDefaultsManager.insertShopifyCustomerDisplayName(customer.displayName)
-    }
-    
-    func insertInUserDefaults(_ accessToken : String,_ customer : Storefront.Customer){
-        guard let email = customer.email else {return}
-        guard let phone = customer.phone else {return}
-        userDefaultsManager.insertShopifyCustomerId(customer.id.rawValue)
-        userDefaultsManager.insertShopifyCustomerEmail(email)
-        userDefaultsManager.insertShopifyCustomerPhoneNumber(phone)
-        userDefaultsManager.insertShopifyCustomerAccessToken(accessToken)
-        userDefaultsManager.insertShopifyCustomerDisplayName(customer.displayName)
     }
 }

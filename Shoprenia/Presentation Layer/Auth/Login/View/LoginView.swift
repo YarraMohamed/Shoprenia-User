@@ -4,6 +4,7 @@ import FirebaseCore
 import FirebaseAuth
 struct LoginView: View {
     @ObservedObject var viewModel : LoginViewModel
+    @EnvironmentObject var authVm : AuthenticationViewModel
     @Binding var path : NavigationPath
     
     var body: some View {
@@ -31,7 +32,7 @@ struct LoginView: View {
                     .padding()
                     .background(Color.gray.opacity(0.4))
                     .clipShape(RoundedRectangle(cornerRadius: 10))
-                
+                    
                 SecureField("Password",text: $viewModel.password)
                     .textInputAutocapitalization(.never)
                     .autocorrectionDisabled()
@@ -42,88 +43,87 @@ struct LoginView: View {
             }
             .padding()
             
-            HStack{
-                Button("Login"){
-                    
-                    
-                    if viewModel.isValidEmail() && viewModel.isValidPassword(){
+               HStack{
+                    Button("Login"){
                         
-                        viewModel.createCustomerAccessToken(mail: viewModel.email,
-                                                            pass: viewModel.password)
                         
-                        viewModel.signFirebaseUserIn()
-                        
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-                            if viewModel.isLoggedIn{
-                                print("\(viewModel.isLoggedIn)")
-                                //path.append(AppRouter.home)
-                                path.removeLast(1)
-                                viewModel.isLoggedIn = false
-                            }else{
-                                viewModel.showAlert = true
+                        if viewModel.isValidEmail() && viewModel.isValidPassword(){
+                            
+                            viewModel.createCustomerAccessToken(mail: viewModel.email,
+                                pass: viewModel.password,signInMethod: "regular")
+                            
+                            viewModel.signFirebaseUserIn()
+                            
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+                                if viewModel.isLoggedIn{
+                                    path.append(AppRouter.home)
+                                    viewModel.isLoggedIn = false
+                                }else{
+                                    viewModel.showAlert = true
+                                }
                             }
+                        }else{
+                            viewModel.showAlert = true
                         }
-                    }else{
-                        viewModel.showAlert = true
+                    }
+                    .font(.system(size: 16, weight: .semibold))
+                    .foregroundStyle(.white)
+                    .frame(width: 343, height: 48)
+                    .background {
+                        RoundedRectangle(cornerRadius: 30)
+                            .fill(.blue)
                     }
                 }
-                .font(.system(size: 16, weight: .semibold))
-                .foregroundStyle(.white)
-                .frame(width: 343, height: 48)
-                .background {
-                    RoundedRectangle(cornerRadius: 30)
-                        .fill(.blue)
-                }
-            }
-            .padding(.vertical)
+                .padding(.vertical)
             
             
             VStack{
                 Spacer()
                 Text("Or Login with Google")
-                HStack(spacing: 10) {
-                    Button(action: {
+                HStack(spacing: 10){
+                    
+                    Button(action:{
                         viewModel.googleSignIn(rootController: getRootViewController())
+                        
                         DispatchQueue.main.asyncAfter(deadline: .now() + 12.0) {
                             if viewModel.isLoggedIn{
                                 print("\(viewModel.isLoggedIn)")
-                                path.removeLast(1)
+                                path.append(AppRouter.home)
                                 viewModel.isLoggedIn = false
-                            }else{
-                                viewModel.showAlert = true
                             }
                         }
-                        //                        DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
-                        //                            if viewModel.isLoggedIn {
-                        //                                if !path.isEmpty {
-                        //                                    path.removeLast(1)
-                        //                                }
-                        //                                viewModel.isLoggedIn = false
-                        //                            }
-                        //                        }
-                    }) {
+                    }){
                         Image("g")
                             .resizable()
                             .scaledToFit()
-                            .frame(width: 50, height: 50)
+                            .frame(width: 50,height: 50)
                             .overlay(
-                                RoundedRectangle(cornerRadius: 10)
-                                    .stroke(Color.black, lineWidth: 1)
-                            )
+                                        RoundedRectangle(cornerRadius: 10)
+                                            .stroke(Color.black,
+                                            lineWidth: 1
+                                        )
+                                    )
                     }
                 }
             }
             
             Spacer()
         }
+//        .onChange(of: viewModel.isLoggedIn){ isLogged in
+//            if isLogged {
+//                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+//                    pat
+//                }
+//            }
+//        }
         .toolbar{
             ToolbarItem(placement: .topBarTrailing) {
-                VStack {
-                    Text("Shoprenia")
-                        .font(.system(size: 20,weight: .semibold))
-                        .foregroundColor(.blue)
+                    VStack {
+                        Text("Shoprenia")
+                            .font(.system(size: 20,weight: .semibold))
+                            .foregroundColor(.blue)
+                    }
                 }
-            }
         }
         .alert("Please insert valid credentials", isPresented: $viewModel.showAlert) {
             Button("Ok",role: .cancel){
@@ -134,5 +134,5 @@ struct LoginView: View {
 }
 
 #Preview {
-    // LoginView()
+   // LoginView()
 }

@@ -242,6 +242,7 @@ struct ProductDetailsView: View {
                     secondaryButton: .cancel()
                 )
             }
+           
         }
         
         
