@@ -6,6 +6,8 @@ struct WishlistRow: View {
     var product : FirestoreShopifyProduct
     @EnvironmentObject var authViewModel: AuthenticationViewModel
     @Binding var path : NavigationPath
+    @State private var convertedPrice: Double? = nil
+    @AppStorage("selectedCurrency") var selectedCurrency: String = "EGP"
     var body: some View {
         HStack{
             KFImage(URL(string: product.imageUrl))
@@ -25,7 +27,12 @@ struct WishlistRow: View {
                     .foregroundStyle(.gray)
                     .padding(.vertical,3)
                 
-                Text("\(product.currencyName) \(product.price)")
+                Text(
+                    selectedCurrency == "USD"
+                     ? "USD \(String(format: "%.2f", convertedPrice ?? 0))"
+                    : "EGP \(String(describing: product.price))"
+                 )
+                //Text("\(product.currencyName) \(product.price)")
                     .font(.system(size: 12,weight: .semibold))
                     .foregroundStyle(.blue)
                 
@@ -45,11 +52,25 @@ struct WishlistRow: View {
             }
             
         }
+        .onAppear{
+            if selectedCurrency == "USD" {
+                let priceEGP = Double(product.price) ?? 0.0
+                let priceDouble = NSDecimalNumber(decimal: Decimal(priceEGP)).doubleValue
+                convertedPrice = convertEGPToUSD(priceDouble)
+            }
+        }
+
         .padding()
         .background(
             RoundedRectangle(cornerRadius: 10)
                 .fill(Color(hex: "EAEFEF"))
         )
+    }
+    
+    private func convertEGPToUSD(_ amount: Double) -> Double {
+        let exchangeRate: Double = 1.0 / 49.71
+        let result = amount * exchangeRate
+        return Double(round(100 * result) / 100)
     }
 }
 
